@@ -90,8 +90,8 @@ def test_settings_are_read_and_paths_resolved_against_the_root(project_dir):
     assert project.paper.main == project_dir / 'manuscript' / 'article.tex'
     assert project.paper.build_dir == project_dir / 'out'
     assert project.figures.profile == 'print'
-    assert project.figures.text_width_in == 5.5  # noqa: PLR2004
-    assert project.figures.dpi == 300  # noqa: PLR2004
+    assert project.figures.text_width_in == 5.5
+    assert project.figures.dpi == 300
     assert project.arxiv.engine == 'pdflatex'
 
 
@@ -158,7 +158,7 @@ def test_each_setting_records_where_it_came_from(project_dir):
 def test_explicit_arguments_beat_the_pyproject(project_dir):
     project = Project.from_pyproject(project_dir, figures=FigureSettings(profile='screen', dpi=72))
 
-    assert project.figures.dpi == 72  # noqa: PLR2004
+    assert project.figures.dpi == 72
     assert project.figures.profile == 'screen'
     assert project.sources['figures.*'] == 'argument'
     assert project.paper.main == project_dir / 'manuscript' / 'article.tex'
@@ -227,7 +227,7 @@ def test_an_integer_is_accepted_for_a_float_setting(tmp_path):
 
     project = Project.from_pyproject(tmp_path)
 
-    assert project.figures.text_width_in == 7.0  # noqa: PLR2004
+    assert project.figures.text_width_in == 7.0
     assert isinstance(project.figures.text_width_in, float)
 
 
@@ -267,4 +267,4 @@ def test_doctor_says_so_when_there_are_no_settings(tmp_path):
     report = Project.from_pyproject(tmp_path).doctor()
 
     assert 'none found' in report
-    assert 'defaults apply throughout' in report
+    assert 'Defaults apply throughout.' in report
