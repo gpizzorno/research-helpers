@@ -21,10 +21,10 @@ SETTINGS = """
 [tool.research-helpers.paper]
 main = "manuscript/article.tex"
 build-dir = "out"
+text-width-in = 5.5
 
 [tool.research-helpers.figures]
 profile = "print"
-text-width-in = 5.5
 dpi = 300
 
 [tool.research-helpers.arxiv]
@@ -90,7 +90,7 @@ def test_settings_are_read_and_paths_resolved_against_the_root(project_dir):
     assert project.paper.main == project_dir / 'manuscript' / 'article.tex'
     assert project.paper.build_dir == project_dir / 'out'
     assert project.figures.profile == 'print'
-    assert project.figures.text_width_in == 5.5
+    assert project.paper.text_width_in == 5.5
     assert project.figures.dpi == 300
     assert project.arxiv.engine == 'pdflatex'
 
@@ -221,14 +221,14 @@ def test_a_boolean_does_not_slip_through_as_an_integer(tmp_path):
 
 def test_an_integer_is_accepted_for_a_float_setting(tmp_path):
     (tmp_path / 'pyproject.toml').write_text(
-        '[tool.research-helpers.figures]\ntext-width-in = 7\n',
+        '[tool.research-helpers.paper]\ntext-width-in = 7\n',
         encoding='utf-8',
     )
 
     project = Project.from_pyproject(tmp_path)
 
-    assert project.figures.text_width_in == 7.0
-    assert isinstance(project.figures.text_width_in, float)
+    assert project.paper.text_width_in == 7.0
+    assert isinstance(project.paper.text_width_in, float)
 
 
 def test_an_unrecognised_profile_warns_and_falls_back(tmp_path):

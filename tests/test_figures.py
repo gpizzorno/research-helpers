@@ -22,9 +22,11 @@ from research_helpers.figures import (
 from research_helpers.project import FigureSettings, _load
 
 SETTINGS = """
+[tool.research-helpers.paper]
+text-width-in = 5.5
+
 [tool.research-helpers.figures]
 profile = "print"
-text-width-in = 5.5
 palette = "colorblind"
 font = "Helvetica"
 dpi = 300
@@ -69,7 +71,6 @@ def test_the_project_supplies_settings():
     settings = current_settings()
 
     assert settings.profile == 'print'
-    assert settings.text_width_in == 5.5
     assert settings.palette == 'colorblind'
     assert settings.dpi == 300
 
@@ -80,7 +81,7 @@ def test_explicit_arguments_beat_the_project():
 
     assert settings.palette == 'deep'
     assert settings.dpi == 72
-    assert settings.text_width_in == 5.5, 'unspecified settings still come from the project'
+    assert settings.font == 'Helvetica', 'unspecified settings still come from the project'
 
 
 @pytest.mark.usefixtures('configured')
@@ -89,7 +90,7 @@ def test_none_means_unspecified_rather_than_a_value():
 
 
 def test_an_unknown_setting_is_a_programming_error():
-    with pytest.raises(TypeError, match='unknown figure setting'):
+    with pytest.raises(TypeError, match='unknown setting'):
         current_settings(colour_scheme='dark')
 
 
