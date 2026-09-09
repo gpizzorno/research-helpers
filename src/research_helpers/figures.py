@@ -10,6 +10,7 @@ from '[tool.research-helpers]' and can be overridden per call.
 
 from __future__ import annotations
 
+import io
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -31,7 +32,7 @@ if TYPE_CHECKING:
     from matplotlib.axes import Axes
     from matplotlib.figure import Figure
 
-__all__ = ['apply_style', 'current_settings', 'fit_x', 'save', 'style']
+__all__ = ['apply_style', 'current_settings', 'fit_x', 'render', 'save', 'style']
 
 # screen profile
 SCREEN_FIGSIZE = (12.0, 6.0)
@@ -230,6 +231,26 @@ def save(
     cropping = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
     figure.savefig(destination, **cropping, **kwargs)
     return destination
+
+
+def render(figure: Figure, *, fmt: str = 'png', tight: bool = True, pad_inches: float = 0.02, **kwargs: Any) -> bytes:
+    """Return a figure as bytes, for an emitter registered with 'research_helpers.build'.
+
+    Arguments:
+        figure: the figure to render.
+        fmt: the file format, e.g. 'png' or 'pdf'.
+        tight: crop to the drawn content.
+        pad_inches: padding left around the content when 'tight'.
+        **kwargs: passed to 'Figure.savefig', e.g. 'dpi'.
+
+    Returns:
+        The encoded figure.
+
+    """
+    buffer = io.BytesIO()
+    cropping = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
+    figure.savefig(buffer, format=fmt, **cropping, **kwargs)
+    return buffer.getvalue()
 
 
 def fit_x(figure: Figure, ax: Axes, pad: float = 0.1, passes: int = 2) -> None:
