@@ -42,8 +42,10 @@ log = [
 latex = []
 
 dev = [
+  "research-helpers[figures,latex,log]",
   "factory_boy",
   "hypothesis",
+  "pillow",
   "pytest-cov",
   "pytest-mock",
   "pytest",
