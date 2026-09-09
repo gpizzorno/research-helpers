@@ -41,8 +41,15 @@ log = [
 # so that `pip install research-helpers[latex]` works and the capability is discoverable.
 latex = []
 
+# The sweep engine's core needs nothing: planning, running, and checking status are stdlib only.
+# pandas is needed to build the results table, and pyarrow to write it as parquet.
+sweep = [
+  "pandas",
+  "pyarrow",
+]
+
 dev = [
-  "research-helpers[figures,latex,log]",
+  "research-helpers[figures,latex,log,sweep]",
   "factory_boy",
   "hypothesis",
   "pillow",
@@ -67,6 +74,9 @@ research-helpers = "research_helpers.cli:main"
 
 [project.urls]
 Repository = "https://github.com/gpizzorno/research-helpers"
+
+[tool.setuptools.package-data]
+research_helpers = ["templates/*"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
