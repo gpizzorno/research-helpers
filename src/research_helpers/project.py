@@ -33,6 +33,7 @@ __all__ = [
     'PaperSettings',
     'Project',
     'ProjectRootNotFoundError',
+    'SweepSettings',
     'current_project',
     'find_project_root',
     'resolve',
@@ -96,6 +97,16 @@ class LogSettings:
 
 
 @dataclass(frozen=True)
+class SweepSettings:
+    """Where parameter sweeps run, and what to assume about a shared node."""
+
+    runs_dir: Path = Path('runs')  # directory holding one subdirectory per planned sweep
+    contention_factor: float | None = None  # how much slower a combination runs inside a full array vs. alone on a node
+    # deliberately unset by default: it depends on the partition, the array width and the workload,
+    # should be measured once by timing the same combinations alone and inside an array
+
+
+@dataclass(frozen=True)
 class ArxivSettings:
     """Facts about the submission target. These track the submission cycle, not the package."""
 
@@ -104,11 +115,17 @@ class ArxivSettings:
     bbl_format: str = '3.3'
 
 
-Settings = PaperSettings | FigureSettings | LogSettings | ArxivSettings
+Settings = PaperSettings | FigureSettings | LogSettings | SweepSettings | ArxivSettings
 SettingsT = TypeVar('SettingsT', bound='DataclassInstance')
 
 SECTIONS: Mapping[str, type[Settings]] = MappingProxyType(
-    {'paper': PaperSettings, 'figures': FigureSettings, 'log': LogSettings, 'arxiv': ArxivSettings},
+    {
+        'paper': PaperSettings,
+        'figures': FigureSettings,
+        'log': LogSettings,
+        'sweep': SweepSettings,
+        'arxiv': ArxivSettings,
+    },
 )
 
 
@@ -120,6 +137,7 @@ class Project:
     paper: PaperSettings = PaperSettings()
     figures: FigureSettings = FigureSettings()
     log: LogSettings = LogSettings()
+    sweep: SweepSettings = SweepSettings()
     arxiv: ArxivSettings = ArxivSettings()
     pyproject: Path | None = None  # the file the settings were read from, or None if they are pure defaults
     sources: Mapping[str, str] = field(
@@ -269,6 +287,7 @@ def _load(root: Path) -> Project:
     paper = PaperSettings(**read('paper', PaperSettings))
     figures = FigureSettings(**read('figures', FigureSettings))
     log = LogSettings(**read('log', LogSettings))
+    sweep = SweepSettings(**read('sweep', SweepSettings))
     arxiv = ArxivSettings(**read('arxiv', ArxivSettings))
 
     return Project(
@@ -276,6 +295,7 @@ def _load(root: Path) -> Project:
         paper=_resolve(paper, root),
         figures=_resolve(figures, root),
         log=_resolve(log, root),
+        sweep=_resolve(sweep, root),
         arxiv=_resolve(arxiv, root),
         pyproject=path if table else None,
         sources=MappingProxyType(sources),
