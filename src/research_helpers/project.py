@@ -32,7 +32,9 @@ __all__ = [
     'PaperSettings',
     'Project',
     'ProjectRootNotFoundError',
+    'current_project',
     'find_project_root',
+    'resolve',
 ]
 
 # an ancestor directory holding any of these is the project root. 'pyproject.toml' comes first
@@ -160,6 +162,41 @@ class Project:
                 lines.append(f'  {dotted:<{width}}  {value!s:<28}  [{source}]{note}')
             lines.append('')
         return '\n'.join(lines).rstrip() + '\n'
+
+
+def current_project() -> Project:
+    """Return the enclosing project, or one carrying pure defaults if there is no root above."""
+    try:
+        return Project.from_pyproject()
+    except ProjectRootNotFoundError:
+        return Project(root=Path.cwd())
+
+
+def resolve(settings: SettingsT, **overrides: Any) -> SettingsT:
+    """Return 'settings' with each override applied, ignoring any that is None.
+
+    None means 'not specified at this layer', so a caller may forward its own optional arguments
+    straight through without first filtering them.
+
+    Arguments:
+        settings: the settings object to start from.
+        **overrides: any field of that object.
+
+    Returns:
+        The settings, with the overrides applied.
+
+    Raises:
+        TypeError: if an override does not name a field of 'settings'.
+
+    """
+    known = {f.name for f in fields(settings)}
+    unknown = set(overrides) - known
+    if unknown:
+        msg = f'unknown setting(s): {", ".join(sorted(unknown))}. Expected {", ".join(sorted(known))}'
+        raise TypeError(msg)
+
+    given = {name: value for name, value in overrides.items() if value is not None}
+    return replace(settings, **given) if given else settings
 
 
 def find_project_root(start: Path | str | None = None) -> Path:
