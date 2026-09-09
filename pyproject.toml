@@ -41,12 +41,6 @@ log = [
 # so that `pip install research-helpers[latex]` works and the capability is discoverable.
 latex = []
 
-legacy-config = [
-  "pydantic",
-  "pydantic-settings",
-  "PyYAML",
-]
-
 dev = [
   "factory_boy",
   "hypothesis",
@@ -65,6 +59,9 @@ docs = [
     "sphinxcontrib-mermaid>=1.0.0",
     "myst-parser>=2.0.0",
 ]
+
+[project.scripts]
+research-helpers = "research_helpers.cli:main"
 
 [project.urls]
 Repository = "https://github.com/gpizzorno/research-helpers"
