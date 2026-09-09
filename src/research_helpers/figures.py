@@ -23,7 +23,7 @@ except ModuleNotFoundError as error:  # pragma: no cover - exercised by installi
     msg = "research_helpers.figures needs matplotlib and seaborn: pip install 'research-helpers[figures]'"
     raise ModuleNotFoundError(msg) from error
 
-from research_helpers.project import PROFILES, FigureSettings, Project, ProjectRootNotFoundError
+from research_helpers.project import PROFILES, FigureSettings, current_project, resolve
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -64,12 +64,9 @@ DEFAULT_CL_SPACE = 0.02
 # display resolution
 DISPLAY_DPI = 100
 
-# overridable settings
-SETTING_NAMES = tuple(FigureSettings.__dataclass_fields__)
-
 
 def current_settings(**overrides: Any) -> FigureSettings:
-    """Return the current figure settings, with 'overrides' applied on top.
+    """Return the current figure styling, with 'overrides' applied on top.
 
     Reads '[tool.research-helpers.figures]' from the enclosing project if there is one, and
     falls back to package defaults otherwise.
@@ -78,21 +75,10 @@ def current_settings(**overrides: Any) -> FigureSettings:
         **overrides: any field of 'FigureSettings'. A None is treated as 'not specified'.
 
     Returns:
-        The resolved settings.
+        The resolved styling.
 
     """
-    unknown = set(overrides) - set(SETTING_NAMES)
-    if unknown:
-        msg = f'unknown figure setting(s): {", ".join(sorted(unknown))}. Expected {", ".join(SETTING_NAMES)}'
-        raise TypeError(msg)
-
-    try:
-        base = Project.from_pyproject().figures
-    except ProjectRootNotFoundError:
-        base = FigureSettings()
-
-    given = {name: value for name, value in overrides.items() if value is not None}
-    return FigureSettings(**{**{n: getattr(base, n) for n in SETTING_NAMES}, **given})
+    return resolve(current_project().figures, **overrides)
 
 
 def apply_style(  # noqa: PLR0913
@@ -132,21 +118,16 @@ def apply_style(  # noqa: PLR0913
         ValueError: if 'profile' is not one of 'PROFILES'.
 
     """
-    settings = current_settings(
-        profile=profile,
-        palette=palette,
-        font=font,
-        dpi=dpi,
-        text_width_in=text_width_in,
-        column_width_in=column_width_in,
-    )
+    project = current_project()
+    settings = resolve(project.figures, profile=profile, palette=palette, font=font, dpi=dpi)
+    geometry = resolve(project.paper, text_width_in=text_width_in, column_width_in=column_width_in)
     if settings.profile not in PROFILES:
         msg = f'profile must be one of {PROFILES}, not {settings.profile!r}'
         raise ValueError(msg)
 
     printing = settings.profile == 'print'
     if figsize is None:
-        figsize = (settings.text_width_in, PRINT_HEIGHT_IN) if printing else SCREEN_FIGSIZE
+        figsize = (geometry.text_width_in, PRINT_HEIGHT_IN) if printing else SCREEN_FIGSIZE
     if font_size is None:
         font_size = PRINT_FONT_SIZE if printing else SCREEN_FONT_SIZE
 
