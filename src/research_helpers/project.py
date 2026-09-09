@@ -16,7 +16,7 @@ import os
 import tomllib
 import warnings
 from collections.abc import Mapping
-from dataclasses import dataclass, fields, replace
+from dataclasses import dataclass, field, fields, replace
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
@@ -122,7 +122,9 @@ class Project:
     log: LogSettings = LogSettings()
     arxiv: ArxivSettings = ArxivSettings()
     pyproject: Path | None = None  # the file the settings were read from, or None if they are pure defaults
-    sources: Mapping[str, str] = MappingProxyType({})  # dotted setting name to 'pyproject' or 'default'
+    sources: Mapping[str, str] = field(
+        default_factory=lambda: MappingProxyType({}),
+    )  # dotted setting name to 'pyproject' or 'default'
 
     @classmethod
     def from_pyproject(cls, start: Path | str | None = None, **overrides: Any) -> Project:
