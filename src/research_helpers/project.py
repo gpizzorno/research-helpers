@@ -64,15 +64,17 @@ class PaperSettings:
     figures_dir: Path = Path('tex/figures')
     bbl: Path = Path('tex/out_dir/paper.bbl')
     build_dir: Path = Path('build')
+    text_width_in: float = 6.45
+    """The document's '\\textwidth', in inches."""
+    column_width_in: float = 3.04
+    """The document's '\\columnwidth', in inches."""
 
 
 @dataclass(frozen=True)
 class FigureSettings:
-    """Figure styling. These are per-paper measurements, not package constants."""
+    """Figure styling."""
 
     profile: str = 'screen'
-    text_width_in: float = 6.45
-    column_width_in: float = 3.04
     palette: str = 'husl'
     font: str = 'DejaVu Sans'
     dpi: int = 150
