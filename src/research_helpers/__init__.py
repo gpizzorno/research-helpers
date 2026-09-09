@@ -2,7 +2,7 @@
 
 Submodules are deliberately not imported here. Most of them carry optional dependencies
 (matplotlib and seaborn for figures, structlog for logging), so importing this package must
-stay free of them; import the submodule you need directly.
+stay free of them.
 """
 
 from __future__ import annotations
