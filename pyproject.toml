@@ -1,0 +1,200 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-helpers"
+version = "0.1.0"
+description = "Research utilities"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Gabriel H. Pizzorno" }]
+keywords = [
+  "research", 
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+# The core package deliberately has no third-party dependencies: root discovery and settings
+# use tomllib (stdlib on 3.11+), and everything needing a library lives behind an extra below.
+dependencies = []
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+figures = [
+  "matplotlib",
+  "seaborn",
+]
+
+log = [
+  "colorama",
+  "structlog",
+  "tqdm",
+]
+
+# LaTeX table assembly and rendering need nothing beyond the standard library. The extra exists
+# so that `pip install research-helpers[latex]` works and the capability is discoverable.
+latex = []
+
+legacy-config = [
+  "pydantic",
+  "pydantic-settings",
+  "PyYAML",
+]
+
+dev = [
+  "factory_boy",
+  "hypothesis",
+  "pytest-cov",
+  "pytest-mock",
+  "pytest",
+  "ruff",
+  "ty",
+  "types-requests",
+]
+
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=1.25.0",
+    "sphinxcontrib-mermaid>=1.0.0",
+    "myst-parser>=2.0.0",
+]
+
+[project.urls]
+Repository = "https://github.com/gpizzorno/research-helpers"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["research_helpers*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"
+
+# https://github.com/charliermarsh/ruff#configuration
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-include = ["*.ipynb"]
+exclude = ["docs"]
+
+[tool.ruff.lint]
+ignore = [
+  "D100",   # missing docstring in public module
+  "D104",   # missing docstring in public package
+  "FBT002", # boolean default in function definition
+  "RUF012", # mutable-class-default annotated with ClassVar
+  "T201", # print statements
+  "PTH123", # use Pathlib instead of built in open
+]
+select = [
+  "A",
+  "ARG",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "COM",
+  "D",
+  "DTZ",
+  "DJ",
+  "E",
+  "EM",
+  "F",
+  "FBT",
+  "FLY",
+  "G",
+  "I",
+  "ICN",
+  "INP",
+  "INT",
+  "ISC",
+  "N",
+  "PGH",
+  "PIE",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "PT",
+  "PTH",
+  "Q",
+  "RET",
+  "RUF",
+  "RSE",
+  "SLF",
+  "SIM",
+  "T",
+  "T10",
+  "T20",
+  "TID",
+  "TRY",
+  "UP",
+  "W",
+]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.format]
+quote-style = "single" # Prefer single quotes over double quotes
+  
+[tool.ruff.lint.isort]
+section-order = [
+  "future",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"] # ignore import violations in init files
+"tests/*" = [
+  "D101",    # undocumented-public-class -- test classes are self-describing
+  "D102",    # undocumented-public-method -- ditto for test methods
+  "D103",    # undocumented-public-function
+  "B018",    # useless-expression
+  "B905",    # zip-without-explicit-strict
+  "INP001",  # implicit-namespace-package
+  "PLR0913", # too-many-arguments
+  "PLR2004", # magic-value-comparison -- expected values are the point of a test
+  "PLC0415", # import-outside-top-level -- the shim test imports on purpose
+  "S101",    # assert
+]
+"scripts/*" = [
+  "INP001",  # implicit-namespace-package -- these are entry points, not a package
+  "T201",    # print -- these are CLIs
+]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 130 # to detect extra-long lines that the formatter can't automatically split
+
+[tool.ty.environment]
+python-version = "3.11"
+python-platform = "linux"
+root = ["src"]
+
+[tool.ty.src]
+exclude = [
+  ".venv/",
+]
+
+[tool.coverage.run]
+omit = [
+  "*/tests/*",
+]
+
+[tool.coverage.report]
+exclude_also = [
+  "from __future__ import annotations",
+  "if T.TYPE_CHECKING:",
+  "if TYPE_CHECKING:",
+]
