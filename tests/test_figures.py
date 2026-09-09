@@ -242,3 +242,16 @@ def test_save_can_keep_the_full_figure_width(tmp_path):
 
     assert Image.open(full).size[0] == 500, 'width should be text_width_in * dpi'
     assert Image.open(cropped).size[0] < 500
+
+
+def test_render_returns_the_same_bytes_save_would_write(tmp_path):
+    """Build registries compare emitter output, so render() must agree with save()."""
+    from research_helpers.figures import render
+
+    apply_style(profile='print', dpi=100)
+    figure, ax = plt.subplots()
+    ax.plot([0, 1], [0, 1])
+
+    written = save(figure, tmp_path / 'f.png', dpi=100)
+
+    assert render(figure, dpi=100) == written.read_bytes()
