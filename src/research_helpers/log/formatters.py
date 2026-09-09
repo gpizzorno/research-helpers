@@ -1,18 +1,28 @@
-"""Custom formatters for console and file output."""
+"""Event rendering for a console or a file."""
 
-from typing import Any
+from __future__ import annotations
 
-from colorama import Fore, Style, init
-from structlog.types import EventDict
+from typing import TYPE_CHECKING, Any
 
-# Initialize colorama for cross-platform color support
-init(autoreset=True)
+from colorama import Fore, Style
+
+if TYPE_CHECKING:
+    from structlog.types import EventDict
+
+__all__ = ['Renderer']
+
+# a dotted module name longer than this is abbreviated to its first and last components
+MAX_MODULE = 30
+MIN_PARTS = 2
+
+# 'HH:MM:SS' from an ISO timestamp
+CLOCK = 8
 
 
-class ColoredConsoleRenderer:
-    """Colored console renderer with intuitive formatting."""
+class Renderer:
+    """Render one event as a line, with any traceback on the lines after it."""
 
-    LEVEL_COLORS = {
+    LEVEL_COLOURS = {
         'debug': Fore.CYAN,
         'info': Fore.GREEN,
         'warning': Fore.YELLOW,
@@ -20,58 +30,59 @@ class ColoredConsoleRenderer:
         'critical': Fore.RED + Style.BRIGHT,
     }
 
+    def __init__(self, *, colours: bool = False, clock_only: bool = False) -> None:
+        """Create a renderer.
+
+        Arguments:
+            colours: colour the level and module.
+            clock_only: show the time alone rather than the full timestamp.
+
+        """
+        self.colours = colours
+        self.clock_only = clock_only
+
     def __call__(self, _logger: Any, _name: str, event_dict: EventDict) -> str:
-        """Render a colored console message."""
-        level = event_dict.pop('level', 'info')
-        timestamp = event_dict.pop('timestamp', '')
-        module = event_dict.pop('module', 'unknown')
-        event = event_dict.pop('event', '')
+        """Render an event."""
+        level = str(event_dict.pop('level', 'info'))
+        timestamp = str(event_dict.pop('timestamp', ''))
+        event = str(event_dict.pop('event', ''))
+        # 'module' is set by add_module_name from the logger name
+        module = str(event_dict.pop('module', 'unknown'))
+        event_dict.pop('logger', None)
+        # the traceback goes below the line, not inside its context
+        exception = event_dict.pop('exception', None)
 
-        # Choose color
-        color = self.LEVEL_COLORS.get(level, '')
+        parts = [
+            self._level(level),
+            self._time(timestamp),
+            self._module(module),
+            event,
+        ]
+        context = ', '.join(f'{key}={value}' for key, value in event_dict.items() if not key.startswith('_'))
+        if context:
+            parts.append(f'({context})')
 
-        # Format level
-        level_str = f'{color}[{level.upper():8s}]{Style.RESET_ALL}'
+        line = ' '.join(part for part in parts if part)
+        return f'{line}\n{exception}' if exception else line
 
-        # Format timestamp (just time portion for brevity)
-        time_str = timestamp.split('T')[1][:8] if timestamp else '00:00:00'
+    def _level(self, level: str) -> str:
+        text = f'[{level.upper():8s}]'
+        if not self.colours:
+            return text
+        return f'{self.LEVEL_COLOURS.get(level, "")}{text}{Style.RESET_ALL}'
 
-        # Format module (abbreviate if too long)
-        if len(module) > 30:  # noqa: PLR2004
+    def _time(self, timestamp: str) -> str:
+        if not timestamp:
+            return ''
+        if not self.clock_only:
+            return timestamp
+        # fall back to the whole string if it is not an ISO timestamp
+        _, separator, time = timestamp.partition('T')
+        return (time if separator else timestamp)[:CLOCK]
+
+    def _module(self, module: str) -> str:
+        if len(module) > MAX_MODULE:
             parts = module.split('.')
-            if len(parts) > 2:  # noqa: PLR2004
+            if len(parts) > MIN_PARTS:
                 module = f'{parts[0]}...{parts[-1]}'
-        module_str = f'{Fore.BLUE}{module}{Style.RESET_ALL}'
-
-        # Build message
-        parts = [level_str, time_str, module_str, event]
-
-        # Add extra context
-        if event_dict:
-            context_parts = [f'{k}={v}' for k, v in event_dict.items() if not k.startswith('_')]
-            if context_parts:
-                parts.append(f'({", ".join(context_parts)})')
-
-        return ' '.join(parts)
-
-
-class PlainFileRenderer:
-    """Plain text renderer for file output (no colors)."""
-
-    def __call__(self, _logger: Any, _name: str, event_dict: EventDict) -> str:
-        """Render a plain text message for file output."""
-        level = event_dict.pop('level', 'info')
-        timestamp = event_dict.pop('timestamp', '')
-        module = event_dict.pop('module', 'unknown')
-        event = event_dict.pop('event', '')
-
-        # Build message
-        parts = [f'[{level.upper():8s}]', timestamp, module, event]
-
-        # Add extra context
-        if event_dict:
-            context_parts = [f'{k}={v}' for k, v in event_dict.items() if not k.startswith('_')]
-            if context_parts:
-                parts.append(f'({", ".join(context_parts)})')
-
-        return ' '.join(parts)
+        return f'{Fore.BLUE}{module}{Style.RESET_ALL}' if self.colours else module

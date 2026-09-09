@@ -1,65 +1,72 @@
-"""Custom logging handlers."""
+"""Handler for routing records to files by logger name."""
+
+from __future__ import annotations
 
 import logging
 from pathlib import Path
 
+__all__ = ['DEFAULT_FILENAME', 'MultiFileHandler']
+
+DEFAULT_FILENAME = 'app.log'
+
 
 class MultiFileHandler(logging.Handler):
-    """Handler that can route logs to different files based on logger name or context."""
+    """Write each record to the file its logger is mapped to or to a shared default."""
 
-    def __init__(self, base_dir: Path, level: str = 'DEBUG'):
-        """Initialize the MultiFileHandler."""
-        super().__init__(level=getattr(logging, level.upper()))
+    def __init__(self, base_dir: Path | str, level: int = logging.DEBUG) -> None:
+        """Create a handler writing under 'base_dir'.
+
+        Arguments:
+            base_dir: directory for the log files, created if absent.
+            level: minimum level written.
+
+        """
+        super().__init__(level=level)
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
 
-        # Map logger names to specific files
-        self._file_mapping: dict[str, Path] = {}
+        self._targets: dict[str, Path] = {}
+        self._default = self.base_dir / DEFAULT_FILENAME
+        self._handlers: dict[Path, logging.FileHandler] = {self._default: self._open(self._default)}
 
-        # Default file for all logs
-        self._default_file = self.base_dir / 'app.log'
-        self._default_handler = logging.FileHandler(self._default_file, mode='a')
-        self._default_handler.setLevel(self.level)
+    def _open(self, path: Path) -> logging.FileHandler:
+        """Return a handler for 'path'."""
+        handler = logging.FileHandler(path, mode='a', delay=True)
+        handler.setLevel(self.level)
+        if self.formatter:
+            handler.setFormatter(self.formatter)
+        return handler
 
-        # Cache of file handlers
-        self._handlers: dict[Path, logging.FileHandler] = {self._default_file: self._default_handler}
+    def set_target_file(self, logger_name: str, filename: str) -> Path:
+        """Route one logger's records to 'filename'.
 
-    def set_target_file(self, logger_name: str, filename: str) -> None:
-        """Map a logger name to a specific file."""
-        filepath = self.base_dir / filename
-        self._file_mapping[logger_name] = filepath
+        Arguments:
+            logger_name: the logger to route, as passed to 'get_logger'.
+            filename: name of the file, relative to the handler's directory.
 
-        if filepath not in self._handlers:
-            handler = logging.FileHandler(filepath, mode='a')
-            handler.setLevel(self.level)
-            if self.formatter:
-                handler.setFormatter(self.formatter)
-            self._handlers[filepath] = handler
+        Returns:
+            The path records will be written to.
+
+        """
+        path = self.base_dir / filename
+        self._targets[logger_name] = path
+        if path not in self._handlers:
+            self._handlers[path] = self._open(path)
+        return path
 
     def emit(self, record: logging.LogRecord) -> None:
-        """Emit a record to the appropriate file."""
-        # Determine target file
-        target_file = self._file_mapping.get(record.name, self._default_file)
-
-        # Get or create handler
-        if target_file not in self._handlers:
-            handler = logging.FileHandler(target_file, mode='a')
-            handler.setLevel(self.level)
-            if self.formatter:
-                handler.setFormatter(self.formatter)
-            self._handlers[target_file] = handler
-
-        # Emit to target handler
-        self._handlers[target_file].emit(record)
+        """Write a record to the file its logger is mapped to."""
+        self._handlers[self._targets.get(record.name, self._default)].emit(record)
 
     def setFormatter(self, fmt: logging.Formatter | None) -> None:  # noqa: N802
-        """Set formatter for all handlers."""
+        """Set the formatter on this handler and every file it writes."""
         super().setFormatter(fmt)
         for handler in self._handlers.values():
             handler.setFormatter(fmt)
 
     def close(self) -> None:
-        """Close all file handlers."""
+        """Close every open file."""
         for handler in self._handlers.values():
             handler.close()
+        self._handlers.clear()
         super().close()

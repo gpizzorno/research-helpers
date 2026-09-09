@@ -1,21 +1,32 @@
-"""Integration between tqdm progress bars and logging."""
+"""Progress bars."""
+
+from __future__ import annotations
 
 import sys
-from typing import Any
+from contextlib import contextmanager
+from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm as tqdm_auto
+from tqdm.contrib.logging import logging_redirect_tqdm
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+__all__ = ['LoggingTqdm', 'progress']
 
 
-class LoggingTqdm(tqdm_auto):
-    """tqdm wrapper that works with logging output.
+class LoggingTqdm(tqdm_auto):  # ty: ignore[unsupported-base]
+    """A tqdm writing to stdout and sizing itself to the terminal."""
 
-    Automatically detects Jupyter vs terminal and redirects writes
-    to avoid conflicts with log output.
-    """
-
-    def __init__(self, *args: Any, **kwargs: Any):
-        """Initialize the LoggingTqdm."""
-        # Force file to stdout to work with logging
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Create a progress bar, defaulting to stdout so it shares a stream with log output."""
         kwargs.setdefault('file', sys.stdout)
         kwargs.setdefault('dynamic_ncols', True)
         super().__init__(*args, **kwargs)
+
+
+@contextmanager
+def progress() -> Iterator[None]:
+    """Route log output through 'tqdm.write' for the duration."""
+    with logging_redirect_tqdm():
+        yield

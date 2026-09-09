@@ -20,7 +20,7 @@ from dataclasses import dataclass, fields, replace
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, TypeVar, get_type_hints
+from typing import TYPE_CHECKING, Any, TypeVar, get_args, get_type_hints
 
 if TYPE_CHECKING:
     from _typeshed import DataclassInstance
@@ -29,6 +29,7 @@ __all__ = [
     'ArxivSettings',
     'ConfigWarning',
     'FigureSettings',
+    'LogSettings',
     'PaperSettings',
     'Project',
     'ProjectRootNotFoundError',
@@ -47,6 +48,10 @@ ROOT_ENV_VAR = 'RESEARCH_HELPERS_ROOT'
 TOOL_TABLE = 'research-helpers'
 
 PROFILES = ('screen', 'print')
+COLOURS = ('auto', 'always', 'never')
+
+# settings whose value must be one of a fixed set, whatever section they appear in
+CHOICES: Mapping[str, tuple[str, ...]] = MappingProxyType({'profile': PROFILES, 'colour': COLOURS})
 
 
 class ConfigWarning(UserWarning):
@@ -66,10 +71,8 @@ class PaperSettings:
     figures_dir: Path = Path('tex/figures')
     bbl: Path = Path('tex/out_dir/paper.bbl')
     build_dir: Path = Path('build')
-    text_width_in: float = 6.45
-    """The document's '\\textwidth', in inches."""
-    column_width_in: float = 3.04
-    """The document's '\\columnwidth', in inches."""
+    text_width_in: float = 6.45  # the document's '\\textwidth', in inches
+    column_width_in: float = 3.04  # the document's '\\columnwidth', in inches
 
 
 @dataclass(frozen=True)
@@ -83,6 +86,16 @@ class FigureSettings:
 
 
 @dataclass(frozen=True)
+class LogSettings:
+    """Where logs go and how much of them. Every value stays overridable per call."""
+
+    directory: Path | None = None  # log directory, relative to the project root, None for console output only
+    console_level: str = 'INFO'
+    file_level: str = 'DEBUG'
+    colour: str = 'auto'  # console logging level, file logging level, and colour setting
+
+
+@dataclass(frozen=True)
 class ArxivSettings:
     """Facts about the submission target. These track the submission cycle, not the package."""
 
@@ -91,11 +104,11 @@ class ArxivSettings:
     bbl_format: str = '3.3'
 
 
-Settings = PaperSettings | FigureSettings | ArxivSettings
+Settings = PaperSettings | FigureSettings | LogSettings | ArxivSettings
 SettingsT = TypeVar('SettingsT', bound='DataclassInstance')
 
 SECTIONS: Mapping[str, type[Settings]] = MappingProxyType(
-    {'paper': PaperSettings, 'figures': FigureSettings, 'arxiv': ArxivSettings},
+    {'paper': PaperSettings, 'figures': FigureSettings, 'log': LogSettings, 'arxiv': ArxivSettings},
 )
 
 
@@ -106,11 +119,10 @@ class Project:
     root: Path
     paper: PaperSettings = PaperSettings()
     figures: FigureSettings = FigureSettings()
+    log: LogSettings = LogSettings()
     arxiv: ArxivSettings = ArxivSettings()
-    pyproject: Path | None = None
-    """The file the settings were read from, or None if they are pure defaults."""
-    sources: Mapping[str, str] = MappingProxyType({})
-    """Dotted setting name to 'pyproject' or 'default'. Populated by :meth:'from_pyproject'."""
+    pyproject: Path | None = None  # the file the settings were read from, or None if they are pure defaults
+    sources: Mapping[str, str] = MappingProxyType({})  # dotted setting name to 'pyproject' or 'default'
 
     @classmethod
     def from_pyproject(cls, start: Path | str | None = None, **overrides: Any) -> Project:
@@ -254,12 +266,14 @@ def _load(root: Path) -> Project:
     # built one by one rather than in a loop so each keeps its own type rather than their union
     paper = PaperSettings(**read('paper', PaperSettings))
     figures = FigureSettings(**read('figures', FigureSettings))
+    log = LogSettings(**read('log', LogSettings))
     arxiv = ArxivSettings(**read('arxiv', ArxivSettings))
 
     return Project(
         root=root,
         paper=_resolve(paper, root),
         figures=_resolve(figures, root),
+        log=_resolve(log, root),
         arxiv=_resolve(arxiv, root),
         pyproject=path if table else None,
         sources=MappingProxyType(sources),
@@ -290,15 +304,17 @@ def _section(
         values[name] = converted
         sources[f'{section}.{name}'] = 'pyproject'
 
-    if 'profile' in values and values['profile'] not in PROFILES:
-        _warn(f'{section}.profile must be one of {", ".join(PROFILES)}, not "{values.pop("profile")}"', path)
-        sources[f'{section}.profile'] = 'default'
+    for name, allowed in CHOICES.items():
+        if name in values and values[name] not in allowed:
+            _warn(f'{section}.{name} must be one of {", ".join(allowed)}, not "{values.pop(name)}"', path)
+            sources[f'{section}.{name}'] = 'default'
 
     return values, sources
 
 
 def _coerce(value: Any, target: type, dotted: str, path: Path) -> Any:
     """Return 'value' as 'target', or None if it cannot be."""
+    target = _required(target)
     # bool is a subclass of int, so it would otherwise pass an int field silently
     if isinstance(value, bool) or (target is Path and not isinstance(value, str)):
         _warn(f'{dotted} must be a {target.__name__}, not {type(value).__name__}', path)
@@ -311,6 +327,16 @@ def _coerce(value: Any, target: type, dotted: str, path: Path) -> Any:
         return value
     _warn(f'{dotted} must be a {target.__name__}, not {type(value).__name__}', path)
     return None
+
+
+def _required(target: Any) -> Any:
+    """Return the type inside an 'X | None' annotation, or 'target' unchanged.
+
+    TOML has no null, so a key that is present always carries a value of the wrapped type; None
+    means the key was absent and the default applies.
+    """
+    arguments = [argument for argument in get_args(target) if argument is not type(None)]
+    return arguments[0] if len(arguments) == 1 else target
 
 
 def _resolve(settings: SettingsT, root: Path) -> SettingsT:

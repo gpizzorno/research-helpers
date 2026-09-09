@@ -1,67 +1,69 @@
-"""Logging configuration and setup."""
+"""Set up structured logging over the standard library's logging module."""
+
+from __future__ import annotations
 
 import logging
 import sys
-from contextvars import ContextVar
-from pathlib import Path
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO
 
 import structlog
-from structlog.types import EventDict, WrappedLogger
 
-from .formatters import ColoredConsoleRenderer, PlainFileRenderer
-from .handlers import MultiFileHandler
+from research_helpers.log.formatters import Renderer
+from research_helpers.log.handlers import MultiFileHandler
+from research_helpers.project import current_project, resolve
 
-# Context-local configuration using contextvars
-_console_handler_var: ContextVar[logging.StreamHandler[TextIO | Any] | None] = ContextVar(
-    'console_handler',
-    default=None,
-)
-_file_handler_var: ContextVar[MultiFileHandler | None] = ContextVar('file_handler', default=None)
-_configured_var: ContextVar[bool] = ContextVar('configured', default=False)
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from structlog.types import EventDict, WrappedLogger
+
+__all__ = ['add_module_name', 'get_logger', 'reset_logging', 'set_log_file', 'setup_logging']
+
+# handlers installed by this module
+_console_handler: logging.Handler | None = None
+_file_handler: MultiFileHandler | None = None
+_configured = False
+
+
+def _level(value: int | str) -> int:
+    """Return a logging level as an int, whether given as one or as a name.
+
+    Raises:
+        ValueError: if the name is not a level.
+
+    """
+    if isinstance(value, int):
+        return value
+    # getLevelName() answers 'Level TRACE' for an unknown name rather than failing
+    levels = logging.getLevelNamesMapping()
+    name = value.upper()
+    if name not in levels:
+        msg = f'{value!r} is not a logging level. Expected one of {", ".join(levels)}, or an int'
+        raise ValueError(msg)
+    return levels[name]
+
+
+def _wants_colour(choice: str, stream: TextIO) -> bool:
+    """Decide whether to colour output, given the setting and where it is going."""
+    if choice == 'never':
+        return False
+    if choice == 'always':
+        return True
+    return hasattr(stream, 'isatty') and stream.isatty()
 
 
 def add_module_name(_logger: WrappedLogger, _method_name: str, event_dict: EventDict) -> EventDict:
-    """Add module name from logger name."""
+    """Record which logger an event came from."""
     record = event_dict.get('_record')
-    if record:
-        event_dict['module'] = record.name
+    name = record.name if record is not None else event_dict.get('logger')
+    if name:
+        event_dict['module'] = name
     return event_dict
 
 
-def setup_logging(
-    *,
-    console_level: str = 'INFO',
-    file_level: str = 'DEBUG',
-    log_dir: Path | str | None = None,
-    enable_colors: bool = True,
-    jupyter_mode: bool = False,  # noqa: ARG001
-) -> None:
-    """Set up unified logging system.
-
-    Arguments:
-        console_level: Minimum level for console output (DEBUG, INFO, WARNING, ERROR)
-        file_level: Minimum level for file output
-        log_dir: Directory for log files (None = no file logging)
-        enable_colors: Whether to use colors in console output
-        jupyter_mode: Whether running in Jupyter (affects tqdm behavior)
-
-    """
-    _console_handler = _console_handler_var.get()
-    _file_handler = _file_handler_var.get()
-    _configured = _configured_var.get()
-
-    if _configured:
-        return
-
-    # Setup stdlib logging
-    logging.basicConfig(
-        format='%(message)s',
-        level=logging.DEBUG,
-        stream=sys.stdout,
-    )
-
-    processors: list[structlog.types.Processor] = [
+def _processors() -> list[structlog.types.Processor]:
+    """Return the chain shared by console output, file output, and foreign records."""
+    return [
         structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
@@ -71,87 +73,125 @@ def setup_logging(
         structlog.processors.format_exc_info,
     ]
 
-    # Console renderer
-    console_renderer = ColoredConsoleRenderer() if enable_colors else structlog.dev.ConsoleRenderer(colors=False)
 
-    # Setup console handler
-    _console_handler = logging.StreamHandler(sys.stdout)
-    _console_handler.setLevel(getattr(logging, console_level.upper()))
-    _console_handler_var.set(_console_handler)
+def setup_logging(
+    *,
+    console_level: int | str | None = None,
+    file_level: int | str | None = None,
+    directory: Path | str | None = None,
+    colour: str | None = None,
+    stream: TextIO | None = None,
+) -> None:
+    """Configure logging, replacing any configuration this module made earlier.
 
-    # Setup file handler if requested
-    if log_dir:
-        log_path = Path(log_dir)
-        log_path.mkdir(parents=True, exist_ok=True)
-        _file_handler = MultiFileHandler(base_dir=log_path, level=file_level)
+    Arguments:
+        console_level: minimum level shown on the console.
+        file_level: minimum level written to file.
+        directory: where to write log files. None means console output only.
+        colour: 'auto' to colour only a terminal, or 'always' / 'never'.
+        stream: where console output goes, defaulting to stdout.
 
-    # Configure structlog
+    """
+    global _console_handler, _file_handler, _configured  # noqa: PLW0603
+
+    settings = resolve(
+        current_project().log,
+        console_level=console_level,
+        file_level=file_level,
+        directory=directory,
+        colour=colour,
+    )
+    console = _level(settings.console_level)
+    to_file = _level(settings.file_level)
+    output = stream if stream is not None else sys.stdout
+
+    reset_logging()
+
     structlog.configure(
-        processors=[*processors, structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
+        processors=[*_processors(), structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
 
-    # Setup formatters
-    console_formatter = structlog.stdlib.ProcessorFormatter(
-        processor=console_renderer,
-        foreign_pre_chain=processors,
+    colours = _wants_colour(settings.colour, output)
+    if colours and sys.platform == 'win32':  # pragma: no cover - platform specific
+        from colorama import just_fix_windows_console  # noqa: PLC0415
+
+        just_fix_windows_console()
+
+    _console_handler = logging.StreamHandler(output)
+    _console_handler.setLevel(console)
+    _console_handler.setFormatter(
+        structlog.stdlib.ProcessorFormatter(
+            processor=Renderer(colours=colours, clock_only=True),
+            foreign_pre_chain=_processors(),
+        ),
     )
 
-    if _file_handler:
-        file_formatter = structlog.stdlib.ProcessorFormatter(
-            processor=PlainFileRenderer(),
-            foreign_pre_chain=processors,
+    root = logging.getLogger()
+    root.addHandler(_console_handler)
+
+    if settings.directory is not None:
+        _file_handler = MultiFileHandler(settings.directory, level=to_file)
+        _file_handler.setFormatter(
+            structlog.stdlib.ProcessorFormatter(
+                processor=Renderer(),
+                foreign_pre_chain=_processors(),
+            ),
         )
-        _file_handler.setFormatter(file_formatter)
-        _file_handler_var.set(_file_handler)
+        root.addHandler(_file_handler)
 
-    _console_handler.setFormatter(console_formatter)
-
-    # Attach handlers to root logger
-    root_logger = logging.getLogger()
-    root_logger.handlers.clear()
-    root_logger.addHandler(_console_handler)
-    if _file_handler:
-        root_logger.addHandler(_file_handler)
-
+    root.setLevel(min(console, to_file) if settings.directory is not None else console)
     _configured = True
 
 
+def reset_logging() -> None:
+    """Remove the handlers this module installed."""
+    global _console_handler, _file_handler, _configured  # noqa: PLW0603
+
+    root = logging.getLogger()
+    for handler in (_console_handler, _file_handler):
+        if handler is not None:
+            root.removeHandler(handler)
+            handler.close()
+    _console_handler = _file_handler = None
+    _configured = False
+
+
 def get_logger(name: str | None = None, **context: Any) -> structlog.stdlib.BoundLogger:
-    """Get a logger instance with optional context.
+    """Return a logger.
 
     Arguments:
-        name: Logger name (typically __name__)
-        **context: Additional context fields (e.g., task="entity_resolution")
+        name: logger name, normally '__name__'.
+        **context: fields bound to every event from this logger, e.g. task='resolution'.
 
     Returns:
-        Configured logger instance
+        The logger.
 
     """
-    _configured = _configured_var.get()
-
     if not _configured:
         setup_logging()
 
     logger: structlog.stdlib.BoundLogger = structlog.get_logger(name)
-
-    if context:
-        logger = logger.bind(**context)
-
-    return logger
+    return logger.bind(**context) if context else logger
 
 
-def set_log_file(logger: structlog.stdlib.BoundLogger, filename: str) -> None:
-    """Set a specific log file for this logger's output.
+def set_log_file(name: str, filename: str) -> Path:
+    """Route one logger's records to their own file.
 
     Arguments:
-        logger: Logger instance
-        filename: Name of the log file (relative to log_dir)
+        name: the logger name, as passed to 'get_logger' (normally a module's '__name__').
+        filename: the file, relative to the configured log directory.
+
+    Returns:
+        The path records will be written to.
+
+    Raises:
+        RuntimeError: if file logging is not configured.
 
     """
-    _file_handler = _file_handler_var.get()
-    if _file_handler and isinstance(_file_handler, MultiFileHandler):
-        _file_handler.set_target_file(logger._context.get('_logger').name, filename)  # type: ignore [union-attr]  # noqa: SLF001
-        _file_handler_var.set(_file_handler)
+    if _file_handler is None:
+        msg = 'no log directory is configured. Pass directory= to setup_logging() or set it in pyproject.toml'
+        raise RuntimeError(msg)
+    return _file_handler.set_target_file(name, filename)
