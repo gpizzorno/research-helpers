@@ -13,6 +13,7 @@ Settings resolve in three layers, each overriding the last:
 from __future__ import annotations
 
 import os
+import tomllib
 import warnings
 from collections.abc import Mapping
 from dataclasses import dataclass, fields, replace
@@ -20,8 +21,6 @@ from functools import cache
 from pathlib import Path
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, TypeVar, get_type_hints
-
-import tomllib
 
 if TYPE_CHECKING:
     from _typeshed import DataclassInstance
@@ -75,6 +74,7 @@ class FigureSettings:
     text_width_in: float = 6.45
     column_width_in: float = 3.04
     palette: str = 'husl'
+    font: str = 'DejaVu Sans'
     dpi: int = 150
 
 
