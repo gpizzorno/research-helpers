@@ -1,0 +1,15 @@
+/* The reference pages are dense with signatures; a little more room makes them readable. */
+.wy-nav-content {
+    max-width: 60em;
+}
+
+/* Config keys and labels read better when they do not wrap mid-token. */
+code.literal {
+    white-space: nowrap;
+}
+
+/* Tables in the prose pages (the wiring/parameters comparison) need to wrap, not scroll. */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal;
+}
