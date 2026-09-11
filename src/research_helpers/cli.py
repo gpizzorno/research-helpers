@@ -8,6 +8,9 @@ import sys
 from research_helpers import arxiv as arxiv_module
 from research_helpers.project import Project, ProjectRootNotFoundError, current_project
 
+# 'python -OO' strips docstrings, leaving __doc__ as None
+DESCRIPTION = __doc__.splitlines()[0] if __doc__ else 'Command line entry point.'
+
 
 def doctor(args: argparse.Namespace) -> int:
     """Print every resolved setting, where it came from, and any path that is missing."""
@@ -47,7 +50,7 @@ def arxiv(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     """Dispatch to a subcommand."""
-    parser = argparse.ArgumentParser(prog='research-helpers', description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(prog='research-helpers', description=DESCRIPTION)
     subcommands = parser.add_subparsers(dest='command', required=True)
 
     check = subcommands.add_parser('doctor', help=doctor.__doc__)
