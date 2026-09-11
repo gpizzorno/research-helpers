@@ -14,15 +14,38 @@ look is chosen via a `profile`:
   figure is looked at on its own.
 
 `print`
-: Sized to the document, with width taken from `paper.text-width-in` or `paper.column-width-in`,
-  height 3.2 inches, 8pt fonts. A figure authored under this profile goes into the paper at 1:1
-  and its text comes out the same size as the surrounding body text.
+: Sized to the document, with width taken from `paper.text-width-in`, and height from
+  `figures.print-height-in`, 8pt fonts. A figure authored under this profile goes into the paper
+  at 1:1 and its text comes out the same size as the surrounding body text.
 
 ```python
 from research_helpers.figures import apply_style
 
 apply_style()                    # the project's profile, defaults to 'screen'
 apply_style(profile='print')     # paper geometry, paper font sizes
+```
+
+### Width and height
+
+The width value is dictated by the document, the `width` setting is used to indicate
+*which* of the document's two widths applies:
+
+```python
+apply_style(profile='print')                   # \textwidth, the default
+apply_style(profile='print', width='column')   # \columnwidth, for one column of a two-column paper
+```
+
+The height is unconstrained, so it is a setting:
+
+```toml
+[tool.research-helpers.figures]
+print-height-in = 3.2     # the default; -mm, -cm and -pt work too
+```
+
+Height can be overridden per call:
+
+```python
+apply_style(profile='print', print_height_in=4.5)
 ```
 
 ## Scoped styling
@@ -45,7 +68,7 @@ goes into `rcParams`, so `plt.subplots()` picks it up with no argument:
 
 ```python
 >>> apply_style(profile='print')
-FigureSettings(profile='print', palette='husl', font='DejaVu Sans', dpi=150)
+FigureSettings(profile='print', palette='husl', font='DejaVu Sans', dpi=150, print_height_in=3.2)
 >>> plt.rcParams['figure.figsize'], plt.rcParams['font.size']
 ([6.45, 3.2], 8.0)
 ```

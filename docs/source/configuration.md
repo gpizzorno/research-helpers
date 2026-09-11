@@ -81,16 +81,41 @@ Describes the document's geometry and the locations of its different components.
 | `figures-dir` | path | `tex/figures` | Location of generated `.png` figures. |
 | `bbl` | path | `tex/out_dir/paper.bbl` | The *biblatex* file. |
 | `build-dir` | path | `build` | Scratch space for generated artefacts. |
-| `text-width-in` | float | `6.45` | `\textwidth` in inches. |
-| `column-width-in` | float | `3.04` | `\columnwidth` in inches. |
+| `text-width-in` | float | `6.45` | `\textwidth`. |
+| `column-width-in` | float | `3.04` | `\columnwidth`. |
 
 :::{note}
 Both figures *and* tables are laid out against the document's width, so a figure or a table is
 authored at the size it will be printed rather than scaled afterwards.
 
 To find the real values, put `\showthe\textwidth` and `\showthe\columnwidth` in your document and
-read them off the log. They are in points, divide by 72.27 to get inches.
+read them off the log. They come out in points, which you can write down as they are (see
+[Units](#units) below).
 :::
+
+### Units
+
+Any length may be written in inches, millimetres, centimetres, or TeX points, by changing the key's
+suffix. These four all set the same field to the same value:
+
+```toml
+text-width-in = 6.4757
+text-width-mm = 164.48
+text-width-cm = 16.448
+text-width-pt = 468.0
+```
+
+| Suffix | Unit | In one inch |
+| --- | --- | --- |
+| `-in` | inch | 1 |
+| `-mm` | millimetre | 25.4 |
+| `-cm` | centimetre | 2.54 |
+| `-pt` | TeX point | 72.27 |
+
+`-pt` is the default unit LaTeX uses, i.e., the one `\showthe\textwidth` prints.
+
+Settings are stored in inches internally, because that is the unit `matplotlib` figure sizes use. 
+`research-helpers doctor` shows the converted value.
 
 ### `figures`
 
@@ -100,6 +125,7 @@ read them off the log. They are in points, divide by 72.27 to get inches.
 | `palette` | str | `husl` | Any *seaborn* palette name. |
 | `font` | str | `DejaVu Sans` | A *matplotlib* family name. |
 | `dpi` | int | `150` | Used for saving figures. On-screen display is separate and fixed. |
+| `print-height-in` | float | `3.2` | Height of a `print` profile figure. |
 
 ### `log`
 
@@ -160,6 +186,7 @@ pyproject  pyproject.toml
   figures.palette          husl                          [pyproject]
   figures.font             DejaVu Sans                   [default]
   figures.dpi              300                           [pyproject]
+  figures.print_height_in  3.2                           [default]
 
   log.directory            None                          [default]
   log.console_level        INFO                          [default]
