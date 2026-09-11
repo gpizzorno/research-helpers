@@ -1,0 +1,98 @@
+name: Publish
+
+# Publishing uses PyPI Trusted Publishing (OIDC)
+# A release published on GitHub goes to PyPI. Everything else is a manual run
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false  # never interrupt an upload part-way
+
+jobs:
+  build:
+    name: 'Build and verify'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: The tag must match the version being published
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          version=$(python -c "import tomllib, pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          tag="${GITHUB_REF_NAME#v}"
+          echo "pyproject: $version"
+          echo "tag:       $tag"
+          if [ "$version" != "$tag" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match version ${version} in pyproject.toml"
+            exit 1
+          fi
+
+      - name: Build
+        run: python -m build
+
+      - name: Check the metadata
+        run: twine check --strict dist/*
+
+      - name: Install the wheel into a clean environment and smoke-test it
+        # The core package must import with none of the extras present
+        run: |
+          python -m venv /tmp/smoke
+          /tmp/smoke/bin/pip install --quiet dist/*.whl
+          /tmp/smoke/bin/python - <<'PY'
+          import research_helpers
+          from importlib.resources import files
+          from research_helpers import archive, arxiv, build, cli, display, latex, project  # noqa: F401
+
+          print('version:', research_helpers.__version__)
+          template = files('research_helpers') / 'templates' / 'sweep.sbatch'
+          assert template.read_text().strip(), 'the sbatch template is missing from the wheel'
+          assert (files('research_helpers') / 'py.typed').is_file(), 'py.typed is missing from the wheel'
+          print('core imports clean, package data present')
+          PY
+          /tmp/smoke/bin/research-helpers --help > /dev/null
+          echo "console script runs"
+
+      - name: Upload the distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+          retention-days: 14
+  
+  publish-pypi:
+    name: 'Publish to PyPI'
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch')
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/research-helpers
+    permissions:
+      id-token: write
+    steps:
+      - name: Download the distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
