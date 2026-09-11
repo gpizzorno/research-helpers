@@ -1,11 +1,10 @@
 name: Publish
 
 # Publishing uses PyPI Trusted Publishing (OIDC)
-# A release published on GitHub goes to PyPI. Everything else is a manual run
-
 on:
   release:
     types: [published]
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   contents: read
@@ -76,10 +75,12 @@ jobs:
           name: distributions
           path: dist/
           retention-days: 14
-  
+
   publish-pypi:
     name: 'Publish to PyPI'
-    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch')
+    # both triggers publish, the condition is here so that adding another one later cannot
+    # start uploading by accident
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
     environment:
