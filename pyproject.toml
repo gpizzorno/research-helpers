@@ -195,6 +195,7 @@ root = ["src"]
 [tool.ty.src]
 exclude = [
   ".venv/",
+  "docs/",
 ]
 
 [tool.coverage.run]
