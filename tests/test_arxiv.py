@@ -43,12 +43,28 @@ def project(tmp_path, monkeypatch):
     _load.cache_clear()
 
 
+# Mtimes are set explicitly rather than by touching in order. Unlike macOS, Linux takes inode
+# timestamps from a coarse clock updated once per timer tick, so two writes a few hundred
+# microseconds apart get byte-identical mtimes and the comparison under test never fires
+MTIME = 1_700_000_000
+
+
+def _set_mtimes(root, *, bbl_offset):
+    """Place the .bbl 'bbl_offset' seconds either side of the manuscript."""
+    paper = root / 'tex' / 'paper.tex'
+    bbl = root / 'tex' / 'out_dir' / 'paper.bbl'
+    os.utime(paper, (MTIME, MTIME))
+    os.utime(bbl, (MTIME + bbl_offset, MTIME + bbl_offset))
+
+
 def _touch_bbl_after_paper(root):
     """Make the .bbl newer than the manuscript, as a real build would leave it."""
-    bbl = root / 'tex' / 'out_dir' / 'paper.bbl'
-    paper = root / 'tex' / 'paper.tex'
-    bbl.touch()
-    assert bbl.stat().st_mtime >= paper.stat().st_mtime
+    _set_mtimes(root, bbl_offset=10)
+
+
+def _leave_the_bbl_stale(root):
+    """Make the .bbl older than the manuscript, as editing citations would leave it."""
+    _set_mtimes(root, bbl_offset=-10)
 
 
 # --- the manifest -----------------------------------------------------------------------------
@@ -137,7 +153,7 @@ def test_the_expected_bbl_format_follows_the_project_setting(project):
 
 
 def test_a_bbl_older_than_the_manuscript_is_reported(project):
-    (project / 'tex' / 'paper.tex').touch()  # now newer than the .bbl
+    _leave_the_bbl_stale(project)
 
     assert any('older than paper.tex' in problem for problem in check(manifest()))
 
