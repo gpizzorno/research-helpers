@@ -60,6 +60,9 @@ CHOICES: Mapping[str, tuple[str, ...]] = MappingProxyType({'profile': PROFILES, 
 #
 # 'pt' is the TeX point, 1/72.27 in, which is what '\showthe\textwidth' prints, not the
 # PostScript big point of 1/72 in that '\includegraphics' works in
+# how many decimal places 'doctor' shows a float to
+DISPLAY_PLACES = 4
+
 INCH_SUFFIX = '_in'
 UNITS_IN_INCHES: Mapping[str, float] = MappingProxyType(
     {
@@ -210,6 +213,10 @@ class Project:
                 if isinstance(value, Path):
                     value = value.relative_to(self.root) if value.is_relative_to(self.root) else value
                     note = '' if (self.root / value).exists() else '   MISSING'
+                elif isinstance(value, float):
+                    # a length converted from another unit is exact to more digits than anyone
+                    # wants to read: 468pt is 6.475716064757161in
+                    value = f'{value:g}' if value == round(value, DISPLAY_PLACES) else f'{value:.{DISPLAY_PLACES}f}'
                 lines.append(f'  {dotted:<{width}}  {value!s:<28}  [{source}]{note}')
             lines.append('')
         return '\n'.join(lines).rstrip() + '\n'

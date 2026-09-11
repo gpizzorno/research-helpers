@@ -172,6 +172,18 @@ def test_an_unknown_settings_group_is_a_programming_error(project_dir):
 # --- lengths in other units -------------------------------------------------------------------
 
 
+def test_doctor_does_not_print_a_converted_length_to_full_precision(tmp_path):
+    (tmp_path / 'pyproject.toml').write_text(
+        '[tool.research-helpers.paper]\ntext-width-pt = 468.0\n',
+        encoding='utf-8',
+    )
+
+    printed = Project.from_pyproject(tmp_path).doctor()
+
+    assert '6.4757 ' in printed
+    assert '6.475716064757161' not in printed
+
+
 def _paper(tmp_path, body):
     (tmp_path / 'pyproject.toml').write_text(f'[tool.research-helpers.paper]\n{body}', encoding='utf-8')
     return tmp_path
