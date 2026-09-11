@@ -62,11 +62,12 @@ dev = [
 ]
 
 docs = [
-    "sphinx>=7.2.0",
-    "sphinx-rtd-theme>=2.0.0",
-    "sphinx-autodoc-typehints>=1.25.0",
-    "sphinxcontrib-mermaid>=1.0.0",
-    "myst-parser>=2.0.0",
+  "research-helpers[figures,latex,log,sweep]",
+  "sphinx>=7.2.0",
+  "sphinx-rtd-theme>=2.0.0",
+  "sphinx-autodoc-typehints>=1.25.0",
+  "sphinxcontrib-mermaid>=1.0.0",
+  "myst-parser>=2.0.0",
 ]
 
 [project.scripts]
