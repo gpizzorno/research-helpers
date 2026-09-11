@@ -54,6 +54,22 @@ COLOURS = ('auto', 'always', 'never')
 # settings whose value must be one of a fixed set, whatever section they appear in
 CHOICES: Mapping[str, tuple[str, ...]] = MappingProxyType({'profile': PROFILES, 'colour': COLOURS})
 
+# every length is stored internally in inches, because that is the unit matplotlib's figsize
+# takes. A length field is named '<name>_in', and its key may be written with any of these
+# suffixes instead: 'text-width-mm' sets the same field as 'text-width-in'.
+#
+# 'pt' is the TeX point, 1/72.27 in, which is what '\showthe\textwidth' prints, not the
+# PostScript big point of 1/72 in that '\includegraphics' works in
+INCH_SUFFIX = '_in'
+UNITS_IN_INCHES: Mapping[str, float] = MappingProxyType(
+    {
+        'in': 1.0,
+        'mm': 1.0 / 25.4,
+        'cm': 1.0 / 2.54,
+        'pt': 1.0 / 72.27,
+    },
+)
+
 
 class ConfigWarning(UserWarning):
     """A setting was not understood. The value is ignored and the default applies."""
@@ -84,6 +100,9 @@ class FigureSettings:
     palette: str = 'husl'
     font: str = 'DejaVu Sans'
     dpi: int = 150
+    # the print profile takes its width from the document ('paper.text_width_in' or
+    # 'column_width_in'), but nothing in the document dictates a height
+    print_height_in: float = 3.2
 
 
 @dataclass(frozen=True)
@@ -302,6 +321,21 @@ def _load(root: Path) -> Project:
     )
 
 
+def _length(name: str, known: set[str]) -> tuple[str, float]:
+    """Resolve a possibly unit-suffixed key to its field name and the factor that makes it inches.
+
+    'text_width_mm' resolves to ('text_width_in', 1/25.4). A name that is already a field, or is
+    not a length at all, comes back unchanged with a factor of 1.
+    """
+    if name in known:
+        return name, 1.0
+    stem, _, suffix = name.rpartition('_')
+    scale = UNITS_IN_INCHES.get(suffix)
+    if scale is not None and (canonical := stem + INCH_SUFFIX) in known:
+        return canonical, scale
+    return name, 1.0
+
+
 def _section(
     settings_cls: type[Settings],
     raw: dict[str, Any],
@@ -315,16 +349,25 @@ def _section(
     values: dict[str, Any] = {}
     sources = {f'{section}.{name}': 'default' for name in known}
 
+    written_as: dict[str, str] = {}  # field -> the key that set it, for the duplicate check
     for key, value in raw.items():
-        name = key.replace('-', '_')
+        name, scale = _length(key.replace('-', '_'), known)
         if name not in known:
             _warn(f'unknown key "{key}" in [tool.{TOOL_TABLE}.{section}], ignored', path)
+            continue
+        if name in written_as:
+            # the same length written twice in different units
+            _warn(
+                f'{section}.{name} is set twice, by "{written_as[name]}" and "{key}". Using "{written_as[name]}"',
+                path,
+            )
             continue
         converted = _coerce(value, hints[name], f'{section}.{key}', path)
         if converted is None:
             continue
-        values[name] = converted
+        values[name] = converted * scale if scale != 1.0 else converted
         sources[f'{section}.{name}'] = 'pyproject'
+        written_as[name] = key
 
     for name, allowed in CHOICES.items():
         if name in values and values[name] not in allowed:

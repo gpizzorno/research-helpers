@@ -38,8 +38,10 @@ __all__ = ['apply_style', 'current_settings', 'fit_x', 'render', 'save', 'style'
 SCREEN_FIGSIZE = (12.0, 6.0)
 SCREEN_FONT_SIZE = 11
 
+# which document width the print profile uses to lay out the figure
+WIDTHS = ('text', 'column')
+
 # print profile
-PRINT_HEIGHT_IN = 3.2
 PRINT_FONT_SIZE = 8
 PRINT_LINE_WIDTH = 1.2
 PRINT_MARKER_SIZE = 3.0
@@ -90,6 +92,8 @@ def apply_style(  # noqa: PLR0913
     dpi: int | None = None,
     text_width_in: float | None = None,
     column_width_in: float | None = None,
+    width: str = 'text',
+    print_height_in: float | None = None,
     figsize: tuple[float, float] | None = None,
     font_size: float | None = None,
     style_sheet: str = DEFAULT_STYLE,
@@ -105,8 +109,10 @@ def apply_style(  # noqa: PLR0913
         palette: seaborn palette name, e.g. 'husl', 'colorblind', 'deep'.
         font: sans-serif family name.
         dpi: resolution figures are saved at.
-        text_width_in: the document's '\textwidth', i.e. the print profile's figure width.
-        column_width_in: the document's '\columnwidth', for figures set in one column.
+        text_width_in: the document's '\textwidth'.
+        column_width_in: the document's '\columnwidth'.
+        width: which of the two the print profile uses to lay the figure out.
+        print_height_in: the print profile's figure height. Defaults to the project's setting.
         figsize: explicit figure size in inches, overriding the profile's.
         font_size: explicit base font size in points, overriding the profile's.
         style_sheet: matplotlib style sheet supplying the base look.
@@ -116,19 +122,30 @@ def apply_style(  # noqa: PLR0913
         The settings that were applied.
 
     Raises:
-        ValueError: if 'profile' is not one of 'PROFILES'.
+        ValueError: if 'profile' is not one of 'PROFILES', or 'width' is not one of 'WIDTHS'.
 
     """
     project = current_project()
-    settings = resolve(project.figures, profile=profile, palette=palette, font=font, dpi=dpi)
+    settings = resolve(
+        project.figures,
+        profile=profile,
+        palette=palette,
+        font=font,
+        dpi=dpi,
+        print_height_in=print_height_in,
+    )
     geometry = resolve(project.paper, text_width_in=text_width_in, column_width_in=column_width_in)
     if settings.profile not in PROFILES:
         msg = f'profile must be one of {PROFILES}, not {settings.profile!r}'
         raise ValueError(msg)
+    if width not in WIDTHS:
+        msg = f'width must be one of {WIDTHS}, not {width!r}'
+        raise ValueError(msg)
 
     printing = settings.profile == 'print'
     if figsize is None:
-        figsize = (geometry.text_width_in, PRINT_HEIGHT_IN) if printing else SCREEN_FIGSIZE
+        across = geometry.column_width_in if width == 'column' else geometry.text_width_in
+        figsize = (across, settings.print_height_in) if printing else SCREEN_FIGSIZE
     if font_size is None:
         font_size = PRINT_FONT_SIZE if printing else SCREEN_FONT_SIZE
 
@@ -145,6 +162,15 @@ def apply_style(  # noqa: PLR0913
     plt.rcParams['savefig.dpi'] = settings.dpi
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['font.sans-serif'] = [settings.font]
+    _apply_house_style()
+    if printing:
+        _apply_print_overrides()
+
+    return settings
+
+
+def _apply_house_style() -> None:
+    """Set the rcParams that are the same under every profile."""
     plt.rcParams['xtick.direction'] = DEFAULT_TICK_DIRECTION
     plt.rcParams['ytick.direction'] = DEFAULT_TICK_DIRECTION
     plt.rcParams['axes.titlesize'] = DEFAULT_TITLE_SIZE
@@ -171,11 +197,6 @@ def apply_style(  # noqa: PLR0913
     plt.rcParams['figure.constrained_layout.use'] = False
     plt.rcParams['figure.constrained_layout.w_pad'] = DEFAULT_CL_PAD
     plt.rcParams['figure.constrained_layout.wspace'] = DEFAULT_CL_SPACE
-
-    if printing:
-        _apply_print_overrides()
-
-    return settings
 
 
 def _apply_print_overrides() -> None:
