@@ -47,7 +47,7 @@ A project's wiring—*i.e.*, where the paper lives, how wide it is, where runs a
 main = "tex/paper.tex"
 tables-dir = "tex/tables"
 figures-dir = "tex/figures"
-text-width-pt = 468.0 # straight from \showthe\textwidth
+text-width-pt = 468.0 # as reported by \showthe\textwidth
 
 [tool.research-helpers.figures]
 profile = "print"
