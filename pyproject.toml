@@ -205,6 +205,7 @@ omit = [
 [tool.coverage.report]
 exclude_also = [
   "from __future__ import annotations",
+  "if __name__ == .__main__.:",
   "if T.TYPE_CHECKING:",
   "if TYPE_CHECKING:",
 ]
