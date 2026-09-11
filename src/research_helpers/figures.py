@@ -213,7 +213,7 @@ def save(
     pad_inches: float = 0.02,
     **kwargs: Any,
 ) -> Path:
-    r"""Write a figure to 'path', creating the parent directory, and return the path.
+    """Write a figure to 'path', creating the parent directory, and return the path.
 
     Arguments:
         figure: the figure to write.

@@ -116,7 +116,7 @@ def table(  # noqa: PLR0913
 
 
 def header(text: str, expand: str | None = None, size: str = DEFAULT_HEADER_SIZE) -> str:
-    r"""Format a header cell.
+    """Format a header cell.
 
     Arguments:
         text: the heading.
