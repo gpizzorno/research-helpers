@@ -5,11 +5,15 @@ from __future__ import annotations
 import argparse
 import re
 import shutil
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple, TypeVar
 
-from research_helpers.project import current_project
+from research_helpers.project import TOOL_TABLE, current_project
+
+# The decorator hands the emitter back untouched, so it must hand back the *same* type
+EmitterT = TypeVar('EmitterT', bound='Callable[[], str | bytes]')
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -161,7 +165,7 @@ class Registry:
         *,
         description: str = '',
         **metadata: Any,
-    ) -> Callable[[Callable[[], str | bytes]], Callable[[], str | bytes]]:
+    ) -> Callable[[EmitterT], EmitterT]:
         r"""Register the decorated function as the emitter for 'label'.
 
         Arguments:
@@ -185,7 +189,7 @@ class Registry:
             msg = f'{label!r} is already registered, by {existing}'
             raise ValueError(msg)
 
-        def decorator(emitter: Callable[[], str | bytes]) -> Callable[[], str | bytes]:
+        def decorator(emitter: EmitterT) -> EmitterT:
             self._artefacts[label] = Artefact(
                 label=label,
                 emitter=emitter,
