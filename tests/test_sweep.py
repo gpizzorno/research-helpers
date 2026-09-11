@@ -275,7 +275,7 @@ def test_leading_columns_come_first(sweep, planned):
 
 
 def test_collect_before_the_array_has_run_says_so(planned):
-    with pytest.raises(FileNotFoundError, match='has the array run yet'):
+    with pytest.raises(FileNotFoundError, match=r'no parts directory at .*Has the array run yet'):
         read_parts(planned)
 
 
