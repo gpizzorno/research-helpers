@@ -169,6 +169,81 @@ def test_an_unknown_settings_group_is_a_programming_error(project_dir):
         Project.from_pyproject(project_dir, tables=PaperSettings())
 
 
+# --- lengths in other units -------------------------------------------------------------------
+
+
+def _paper(tmp_path, body):
+    (tmp_path / 'pyproject.toml').write_text(f'[tool.research-helpers.paper]\n{body}', encoding='utf-8')
+    return tmp_path
+
+
+def test_a_length_can_be_written_in_millimetres(tmp_path):
+    project = Project.from_pyproject(_paper(tmp_path, 'text-width-mm = 164.0\n'))
+
+    assert project.paper.text_width_in == pytest.approx(164.0 / 25.4)
+
+
+def test_a_length_can_be_written_in_centimetres(tmp_path):
+    project = Project.from_pyproject(_paper(tmp_path, 'text-width-cm = 16.4\n'))
+
+    assert project.paper.text_width_in == pytest.approx(16.4 / 2.54)
+
+
+def test_a_length_can_be_written_in_tex_points(tmp_path):
+    # 468.0 is what '\showthe\textwidth' prints, so the common case needs no arithmetic by hand
+    project = Project.from_pyproject(_paper(tmp_path, 'text-width-pt = 468.0\n'))
+
+    assert project.paper.text_width_in == pytest.approx(468.0 / 72.27)
+
+
+def test_a_tex_point_is_not_a_postscript_point(tmp_path):
+    r"""TeX's pt is 1/72.27in; the big point '\includegraphics' uses is 1/72in. They differ by 0.37%."""
+    project = Project.from_pyproject(_paper(tmp_path, 'text-width-pt = 468.0\n'))
+
+    assert project.paper.text_width_in != pytest.approx(468.0 / 72.0)
+
+
+def test_units_apply_to_every_length_whatever_the_section(tmp_path):
+    (tmp_path / 'pyproject.toml').write_text(
+        '[tool.research-helpers.paper]\ncolumn-width-mm = 77.0\n\n[tool.research-helpers.figures]\nprint-height-cm = 6.0\n',
+        encoding='utf-8',
+    )
+
+    project = Project.from_pyproject(tmp_path)
+
+    assert project.paper.column_width_in == pytest.approx(77.0 / 25.4)
+    assert project.figures.print_height_in == pytest.approx(6.0 / 2.54)
+
+
+def test_inches_remain_the_canonical_spelling(tmp_path):
+    project = Project.from_pyproject(_paper(tmp_path, 'text-width-in = 6.45\n'))
+
+    assert project.paper.text_width_in == 6.45
+
+
+def test_a_unit_suffix_on_something_that_is_not_a_length_is_still_unknown(tmp_path):
+    # 'main' is a path, so 'main-mm' must not be quietly accepted as a unit spelling of it
+    with pytest.warns(ConfigWarning, match='unknown key "main-mm"'):
+        project = Project.from_pyproject(_paper(tmp_path, 'main-mm = 3.0\n'))
+
+    assert project.paper.main == tmp_path / PaperSettings.main
+
+
+def test_an_unrecognised_unit_is_an_unknown_key(tmp_path):
+    with pytest.warns(ConfigWarning, match='unknown key "text-width-furlong"'):
+        project = Project.from_pyproject(_paper(tmp_path, 'text-width-furlong = 0.00008\n'))
+
+    assert project.paper.text_width_in == PaperSettings.text_width_in
+
+
+def test_the_same_length_in_two_units_warns_and_takes_the_first(tmp_path):
+    # order in the file decides, so the result cannot depend on which spelling the reader prefers
+    with pytest.warns(ConfigWarning, match='set twice.*Using "text-width-mm"'):
+        project = Project.from_pyproject(_paper(tmp_path, 'text-width-mm = 164.0\ntext-width-in = 6.45\n'))
+
+    assert project.paper.text_width_in == pytest.approx(164.0 / 25.4)
+
+
 # --- bad input warns rather than failing the build ---------------------------------------------
 
 

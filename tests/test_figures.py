@@ -10,7 +10,6 @@ mpl.use('Agg')  # no display in the test environment
 
 from research_helpers.figures import (
     PRINT_FONT_SIZE,
-    PRINT_HEIGHT_IN,
     SCREEN_FIGSIZE,
     SCREEN_FONT_SIZE,
     apply_style,
@@ -24,12 +23,14 @@ from research_helpers.project import FigureSettings, _load
 SETTINGS = """
 [tool.research-helpers.paper]
 text-width-in = 5.5
+column-width-in = 2.6
 
 [tool.research-helpers.figures]
 profile = "print"
 palette = "colorblind"
 font = "Helvetica"
 dpi = 300
+print-height-in = 2.4
 """
 
 
@@ -109,8 +110,55 @@ def test_the_print_profile_takes_its_width_from_the_document():
     applied = apply_style()
 
     assert applied.profile == 'print'
-    assert tuple(plt.rcParams['figure.figsize']) == (5.5, PRINT_HEIGHT_IN)
+    assert tuple(plt.rcParams['figure.figsize']) == (5.5, 2.4)
     assert plt.rcParams['font.size'] == PRINT_FONT_SIZE
+
+
+@pytest.mark.usefixtures('configured')
+def test_the_print_height_comes_from_the_project():
+    # the document dictates the width but has no opinion on height, so it is a setting
+    assert apply_style().print_height_in == 2.4
+    assert plt.rcParams['figure.figsize'][1] == 2.4
+
+
+@pytest.mark.usefixtures('configured')
+def test_the_print_height_is_overridable_per_call():
+    apply_style(print_height_in=1.5)
+
+    assert tuple(plt.rcParams['figure.figsize']) == (5.5, 1.5)
+
+
+def test_the_print_height_falls_back_to_the_package_default():
+    apply_style(profile='print')
+
+    assert plt.rcParams['figure.figsize'][1] == FigureSettings().print_height_in
+
+
+@pytest.mark.usefixtures('configured')
+def test_a_column_figure_is_laid_out_against_columnwidth():
+    # a figure set in one column of a two-column document is \columnwidth across, not \textwidth
+    apply_style(width='column')
+
+    assert tuple(plt.rcParams['figure.figsize']) == (2.6, 2.4)
+
+
+@pytest.mark.usefixtures('configured')
+def test_the_text_width_is_what_a_figure_gets_by_default():
+    apply_style()
+
+    assert plt.rcParams['figure.figsize'][0] == 5.5
+
+
+def test_an_unknown_width_is_rejected():
+    with pytest.raises(ValueError, match='width must be one of'):
+        apply_style(width='page')
+
+
+@pytest.mark.usefixtures('configured')
+def test_column_width_is_overridable_per_call():
+    apply_style(width='column', column_width_in=1.9)
+
+    assert plt.rcParams['figure.figsize'][0] == 1.9
 
 
 def test_the_print_profile_shrinks_what_font_size_does_not_reach():
