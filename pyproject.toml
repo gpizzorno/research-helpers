@@ -1,19 +1,25 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-helpers"
-version = "0.1.0"
+version = "1.0.0"
 description = "Utilities for code-intensive research projects and the papers they produce"
 readme = "README.md"
-license = { file = "LICENSE" }
-authors = [{ name = "Gabriel H. Pizzorno" }]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Gabe Pizzorno" }]
 keywords = [
   "research", "latex", "arxiv", "zenodo", "matplotlib",
   "reproducibility", "slurm", "parameter-sweep",
 ]
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing :: Markup :: LaTeX",
+    "Typing :: Typed",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
@@ -43,7 +49,7 @@ log = [
 # so that `pip install research-helpers[latex]` works and the capability is discoverable.
 latex = []
 
-# The sweep engine's core needs nothing: planning, running, and checking status are stdlib only.
+# The sweep engine's core has no dependencies: planning, running, and checking status are stdlib only.
 # pandas is needed to build the results table, and pyarrow to write it as parquet.
 sweep = [
   "pandas",
@@ -76,10 +82,14 @@ docs = [
 research-helpers = "research_helpers.cli:main"
 
 [project.urls]
+Homepage = "https://github.com/gpizzorno/research-helpers"
+Documentation = "https://gpizzorno.github.io/research-helpers/"
 Repository = "https://github.com/gpizzorno/research-helpers"
+Issues = "https://github.com/gpizzorno/research-helpers/issues"
+Changelog = "https://github.com/gpizzorno/research-helpers/blob/main/CHANGELOG.md"
 
 [tool.setuptools.package-data]
-research_helpers = ["templates/*"]
+research_helpers = ["py.typed", "templates/*"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
