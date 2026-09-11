@@ -19,7 +19,7 @@ and [Zenodo](https://zenodo.org), structured logging, and a parameter-sweep engi
 - **LaTeX Assembly**: Compose tables for LaTeX and also display them in Jupyter
 - **Shared Figure Styling**: Consistent look across LaTeX and Jupyter
 - **Submission Packaging**: Automatic preparation and pre-checking for arXiv and Zenodo
-- **Parameter Sweeps**: Plan a grid once, run it as a scheduler job array, resume if necessary, and collect the results
+- **Parameter Sweeps**: Plan a grid, run it as a scheduler job array, resume if necessary, and collect the results
 - **Structured Logging**: Console and file output at separate levels, with progress bars and colour output
 
 ## Installation
