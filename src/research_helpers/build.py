@@ -289,6 +289,14 @@ class Registry:
         """
         manuscript = Path(paper) if paper is not None else current_project().paper.main
         target = self.install_dir(destination)
+        if not manuscript.exists():
+            # a repository can legitimately generate artefacts without carrying the manuscript
+            msg = (
+                f'no manuscript at {manuscript}, so there is nothing to check against. '
+                f'Set paper.main under [tool.{TOOL_TABLE}.paper], or build without --check '
+                f'in a repository that carries no paper.'
+            )
+            raise FileNotFoundError(msg)
         text = manuscript.read_text(encoding='utf-8')
         referenced = self.kind.referenced(text)
 
@@ -359,7 +367,11 @@ class Registry:
             return 0
 
         if args.check:
-            found = self.drift()
+            try:
+                found = self.drift()
+            except FileNotFoundError as error:
+                print(error, file=sys.stderr)
+                return 1
             print(self.report(found), end='')
             return 1 if found else 0
 

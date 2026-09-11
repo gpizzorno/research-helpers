@@ -359,3 +359,29 @@ def test_output_paths_are_relative_to_the_project(tables, paper, tmp_path, monke
     tables.main([])
 
     assert 'wrote build/tables/scores.tex' in capsys.readouterr().out
+
+
+def test_check_without_a_manuscript_explains_rather_than_tracing_back(tmp_path, monkeypatch):
+    """A public companion repository generates artefacts but carries no paper."""
+    (tmp_path / 'pyproject.toml').write_text('[tool.research-helpers.paper]\n', encoding='utf-8')
+    monkeypatch.chdir(tmp_path)
+    _load.cache_clear()
+    registry = Registry(TABLES)
+
+    with pytest.raises(FileNotFoundError, match='nothing to check against'):
+        registry.drift()
+
+
+def test_the_command_line_reports_a_missing_manuscript_without_a_traceback(tmp_path, monkeypatch, capsys):
+    (tmp_path / 'pyproject.toml').write_text('[tool.research-helpers.paper]\n', encoding='utf-8')
+    monkeypatch.chdir(tmp_path)
+    _load.cache_clear()
+    registry = Registry(TABLES)
+
+    status = registry.main(['--check'])
+
+    printed = capsys.readouterr()
+    assert status == 1
+    assert printed.out == ''
+    assert 'no manuscript at' in printed.err
+    assert 'paper.main' in printed.err, 'the message should name the setting to fix'
