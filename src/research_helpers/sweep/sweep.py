@@ -15,9 +15,10 @@ from research_helpers.project import current_project, resolve
 from research_helpers.sweep.collect import collect_results, run_status
 from research_helpers.sweep.grid import Manifest, expand_grid
 from research_helpers.sweep.runner import run_slice, task_index_from_env
+from research_helpers.sweep.stats import confidence_interval
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
 __all__ = ['Sweep', 'estimate_runtime', 'read_config']
 
@@ -156,6 +157,8 @@ class Sweep:
         notes: str = '',
         n_tasks: int | None = None,
         max_tasks: int = LARGE_ARRAY,
+        tuple_params: Sequence[str] = (),
+        artefact_key: str | None = None,
     ) -> Manifest:
         """Expand a grid and write the manifest that every task will read.
 
@@ -167,12 +170,14 @@ class Sweep:
             notes: free text recorded with the sweep.
             n_tasks: array width. Defaults to the smaller of 'max_tasks' and the grid size.
             max_tasks: the cap applied when 'n_tasks' is not given.
+            tuple_params: parameters whose values are tuples rather than lists.
+            artefact_key: the key under which the evaluation returns output too bulky for a results row.
 
         Returns:
             The manifest, already written.
 
         """
-        combinations = expand_grid(grid, constants)
+        combinations = expand_grid(grid, constants, tuple_params=tuple_params)
         tasks = n_tasks or min(max_tasks, len(combinations))
         tasks = max(1, min(tasks, len(combinations)))
 
@@ -182,6 +187,9 @@ class Sweep:
             n_tasks=tasks,
             metadata=metadata or {},
             notes=notes,
+            constants=dict(constants or {}),
+            tuple_params=list(tuple_params),
+            artefact_key=artefact_key,
         )
         manifest.save(run_dir)
         return manifest
@@ -221,6 +229,8 @@ class Sweep:
             notes=config.get('notes', ''),
             n_tasks=args.tasks,
             max_tasks=config.get('max_tasks', LARGE_ARRAY),
+            tuple_params=config.get('tuple_params', ()),
+            artefact_key=config.get('artefact_key'),
         )
         per_task = math.ceil(manifest.n_combinations / manifest.n_tasks)
         print(
@@ -246,12 +256,13 @@ class Sweep:
             n_tasks=args.tasks or manifest.n_tasks,
             context=context,
             resume=not args.no_resume,
+            artefact_key=args.artefact_key,
         )
         print(f'wrote {part}')
         return 0
 
     def _collect(self, args: argparse.Namespace, run_dir: Path) -> int:
-        frame = collect_results(run_dir, leading=args.leading or ())
+        frame = collect_results(run_dir, leading=args.leading or None)
         if frame.empty:
             print('no results found.')
             return 1
@@ -264,6 +275,16 @@ class Sweep:
         width = max(len(key) for key in status)
         for key, value in status.items():
             print(f'  {key:<{width}}  {value}')
+
+        unfinished = status.get('unfinished_tasks')
+        if unfinished:
+            print('\nResubmit the unfinished slices. Resuming skips what is already recorded:')
+            print(f'  sbatch --array={unfinished} <your sbatch script> {run_dir}')
+            print(
+                f'\nThe range comes from the MANIFEST (n_tasks={status["manifest_n_tasks"]}), not from the\n'
+                "config. If the config's task cap changed after this run was planned the two disagree,\n"
+                'and the plan must be re-run to adopt the new value.',
+            )
         return 0
 
     def _estimate(self, args: argparse.Namespace, run_dir: Path) -> int:
@@ -280,11 +301,14 @@ class Sweep:
             print('nothing to time.')
             return 1
 
-        mean = sum(timings) / len(timings)
+        interval = confidence_interval(timings)
+        mean = interval.mean
         print(
             f'\nmean {mean:.1f}s/combination over {len(timings)} random samples '
             f'(min {timings[0]:.1f}, median {timings[len(timings) // 2]:.1f}, max {timings[-1]:.1f})',
         )
+        if not math.isnan(interval.half_width):
+            print(f'  95% confidence interval on the mean: {interval.low:.1f}s to {interval.high:.1f}s')
         if timings[-1] > WIDE_SPREAD * timings[0]:
             print('note: wide spread across the grid, treat the mean as approximate and raise --samples.')
 
@@ -337,6 +361,7 @@ class Sweep:
         run.add_argument('--task', type=int, default=None, help='1-based index (default: from the scheduler)')
         run.add_argument('--tasks', type=int, default=None, help='override the planned array width')
         run.add_argument('--no-resume', action='store_true', help='recompute combinations already recorded')
+        run.add_argument('--artefact-key', default=None, help="override the manifest's artefact key")
 
         collect = commands.add_parser('collect', help='merge part files into results.csv')
         collect.add_argument('--run-dir', required=True)
