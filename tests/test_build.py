@@ -182,7 +182,7 @@ def test_stale_when_nothing_is_installed_at_all(tables, paper, tmp_path):
     assert found.stale == ['tab:scores']
 
 
-def test_missing_when_the_paper_never_pulls_the_artifact_in(paper, tmp_path):
+def test_missing_when_the_paper_never_pulls_the_artefact_in(paper, tmp_path):
     registry = Registry(TABLES)
 
     @registry.register('tab:unused')
