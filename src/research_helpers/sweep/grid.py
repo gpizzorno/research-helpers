@@ -7,9 +7,12 @@ import json
 from dataclasses import asdict, dataclass, field
 from itertools import product
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-__all__ = ['MANIFEST_NAME', 'Manifest', 'combination_id', 'expand_grid', 'slice_bounds']
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+__all__ = ['MANIFEST_NAME', 'Manifest', 'combination_id', 'expand_grid', 'restore_tuples', 'slice_bounds']
 
 MANIFEST_NAME = 'manifest.json'
 
@@ -39,13 +42,41 @@ def combination_id(params: dict[str, Any]) -> str:
     return hashlib.sha1(_canonical(params).encode(), usedforsecurity=False).hexdigest()[:ID_LENGTH]
 
 
-def expand_grid(grid: dict[str, list[Any]], constants: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def restore_tuples(params: dict[str, Any], tuple_params: Iterable[str]) -> dict[str, Any]:
+    """Convert the named list-valued parameters back into tuples, in place.
+
+    JSON has no tuple, so a parameter whose value must be a tuple arrives back from the
+    manifest as a list. Identity is unaffected, so this is safe to apply at any point:
+    'json.dumps' renders a tuple and a list to the same array, so a combination hashes
+    the same either way.
+
+    Arguments:
+        params: one combination, modified in place.
+        tuple_params: the parameter names whose values are tuples.
+
+    Returns:
+        The same dict, for chaining.
+
+    """
+    for name in tuple_params:
+        if isinstance(params.get(name), list):
+            params[name] = tuple(params[name])
+    return params
+
+
+def expand_grid(
+    grid: dict[str, list[Any]],
+    constants: dict[str, Any] | None = None,
+    *,
+    tuple_params: Iterable[str] = (),
+) -> list[dict[str, Any]]:
     """Expand a parameter grid into the full Cartesian product of combinations.
 
     Arguments:
         grid: parameter name to the list of values to sweep.
         constants: fixed values added to every combination before it is hashed, e.g. the label of
             the dataset being swept. Part of the identity, so two datasets do not collide.
+        tuple_params: parameter names whose values are tuples rather than lists.
 
     Returns:
         One dict per combination, each carrying the constants and a 'combination_id'. Ordering is
@@ -64,6 +95,7 @@ def expand_grid(grid: dict[str, list[Any]], constants: dict[str, Any] | None = N
     for values in product(*(grid[name] for name in names)):
         params: dict[str, Any] = dict(zip(names, values, strict=True))
         params.update(constants or {})
+        restore_tuples(params, tuple_params)
         params['combination_id'] = combination_id(params)
         combinations.append(params)
     return combinations
