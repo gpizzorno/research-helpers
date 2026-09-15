@@ -189,9 +189,7 @@ def test_the_checksum_file_is_verified_by_shasum(deposit):
     import subprocess
 
     if not shutil.which('shasum'):
-        # `ty` resolves pytest's @_with_exception-decorated `skip` as taking no arguments, so
-        # it rejects the reason either positionally or by keyword. The call is correct.
-        pytest.skip('shasum is not available')  # ty: ignore[too-many-positional-arguments]
+        pytest.skip('shasum is not available')
 
     write_checksums([deposit / 'README.md', deposit / 'models' / 'a.pt'], deposit / 'SHA256SUMS')
     result = subprocess.run(
