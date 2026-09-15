@@ -22,6 +22,8 @@ if TYPE_CHECKING:
 __all__ = ['Sweep', 'estimate_runtime', 'read_config']
 
 DEFAULT_SAMPLES = 12
+# config extensions read as YAML rather than TOML
+YAML_SUFFIXES = ('.yaml', '.yml')
 # array widths the estimate reports per-task wall time for
 REPORTED_WIDTHS = (100, 500, 1000)
 # schedulers commonly discourage arrays larger than this
@@ -32,21 +34,34 @@ WIDE_SPREAD = 3
 
 
 def read_config(path: Path | str) -> dict[str, Any]:
-    """Read a sweep config from TOML or JSON.
+    """Read a sweep config from TOML, JSON, or YAML.
 
-    Both are standard library, so planning a sweep needs nothing installed. A project preferring
-    another format can parse it itself and call 'Sweep.plan' directly.
+    TOML and JSON are standard library, YAML needs 'pyyaml'.
 
     Arguments:
-        path: the config file. '.json' is read as JSON, anything else as TOML.
+        path: the config file, read by extension.
 
     Returns:
-        The parsed config: 'grid', and optionally 'constants', 'metadata', 'notes', 'max_tasks'.
+        The parsed config: 'grid', and optionally 'constants', 'metadata', 'notes', 'max_tasks',
+        'tuple_params', and 'artefact_key'.
+
+    Raises:
+        ImportError: for a YAML config when 'pyyaml' is not installed.
 
     """
     source = Path(path)
     text = source.read_text(encoding='utf-8')
-    return json.loads(text) if source.suffix == '.json' else tomllib.loads(text)
+
+    if source.suffix == '.json':
+        return json.loads(text)
+    if source.suffix in YAML_SUFFIXES:
+        try:
+            import yaml  # noqa: PLC0415
+        except ImportError as error:
+            msg = f'reading {source.name} needs pyyaml: pip install pyyaml, or convert the config to TOML'
+            raise ImportError(msg) from error
+        return yaml.safe_load(text) or {}
+    return tomllib.loads(text)
 
 
 def estimate_runtime(
