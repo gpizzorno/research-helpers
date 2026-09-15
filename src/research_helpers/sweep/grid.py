@@ -104,6 +104,9 @@ class Manifest:
     n_tasks: int = 1
     metadata: dict[str, Any] = field(default_factory=dict)  # e.g. a dataset name, a seed count, options
     notes: str = ''
+    constants: dict[str, Any] = field(default_factory=dict)  # the fixed values folded into every combination
+    tuple_params: list[str] = field(default_factory=list)  # parameters whose values are tuples, not lists
+    artefact_key: str | None = None
 
     @property
     def n_combinations(self) -> int:
@@ -130,4 +133,7 @@ class Manifest:
         if not path.exists():
             msg = f'no manifest at {path}. Plan the sweep first'
             raise FileNotFoundError(msg)
-        return cls(**json.loads(path.read_text(encoding='utf-8')))
+        manifest = cls(**json.loads(path.read_text(encoding='utf-8')))
+        for combination in manifest.combinations:
+            restore_tuples(combination, manifest.tuple_params)
+        return manifest
