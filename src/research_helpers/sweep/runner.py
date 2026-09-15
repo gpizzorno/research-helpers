@@ -13,24 +13,42 @@ from research_helpers.sweep.grid import Manifest, slice_bounds
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-__all__ = ['PARTS_DIR', 'completed_ids', 'run_slice', 'task_index_from_env']
+__all__ = [
+    'ARTEFACTS_DIR',
+    'PARTS_DIR',
+    'artefact_path',
+    'completed_ids',
+    'jsonable',
+    'read_artefact',
+    'run_slice',
+    'task_index_from_env',
+]
 
 PARTS_DIR = 'parts'
+ARTEFACTS_DIR = 'artefacts'
 
 # the environment variables a scheduler uses to tell a task which one it is, in the order tried
 TASK_INDEX_VARS = ('SLURM_ARRAY_TASK_ID', 'SGE_TASK_ID', 'PBS_ARRAYID', 'LSB_JOBINDEX')
 
 
-def _jsonable(value: Any) -> Any:
-    """Convert values a result may carry into JSON-serialisable equivalents."""
-    if hasattr(value, 'item') and hasattr(value, 'dtype'):  # a numpy scalar, without importing numpy
+def jsonable(value: Any) -> Any:
+    """Convert result values into JSON-serialisable equivalents.
+
+    Arguments:
+        value: any result value, including nested containers.
+
+    Returns:
+        The same value with numpy scalars unwrapped and tuples and sets rendered as lists.
+
+    """
+    if hasattr(value, 'item') and hasattr(value, 'dtype'):  # a numpy scalar
         return value.item()
     if isinstance(value, tuple | set):
-        return [_jsonable(item) for item in value]
+        return [jsonable(item) for item in value]
     if isinstance(value, dict):
-        return {str(key): _jsonable(item) for key, item in value.items()}
+        return {str(key): jsonable(item) for key, item in value.items()}
     if isinstance(value, list):
-        return [_jsonable(item) for item in value]
+        return [jsonable(item) for item in value]
     return value
 
 
@@ -82,6 +100,41 @@ def completed_ids(run_dir: Path | str) -> set[str]:
     return done
 
 
+def artefact_path(run_dir: Path | str, combination_id: str) -> Path:
+    """Return the location where a combination's artefact is written.
+
+    Arguments:
+        run_dir: the run directory.
+        combination_id: the combination's id.
+
+    Returns:
+        The path, whether or not anything was written there.
+
+    """
+    return Path(run_dir) / ARTEFACTS_DIR / f'{combination_id}.json'
+
+
+def read_artefact(run_dir: Path | str, combination_id: str) -> Any:
+    """Read back what a combination put aside.
+
+    Arguments:
+        run_dir: the run directory.
+        combination_id: the combination's id.
+
+    Returns:
+        Whatever the evaluation returned under the manifest's 'artefact_key'.
+
+    Raises:
+        FileNotFoundError: if this combination recorded no artefact.
+
+    """
+    path = artefact_path(run_dir, combination_id)
+    if not path.exists():
+        msg = f'no artefact at {path}. Was the sweep planned with an artefact key?'
+        raise FileNotFoundError(msg)
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
 def run_slice(  # noqa: PLR0913
     run_dir: Path | str,
     evaluate: Callable[[dict[str, Any], Any], dict[str, Any]],
@@ -91,6 +144,7 @@ def run_slice(  # noqa: PLR0913
     context: Any = None,
     resume: bool = True,
     quiet: bool = False,
+    artefact_key: str | None = None,
 ) -> Path:
     """Run this task's slice of the sweep, appending each result to its own part file.
 
@@ -99,11 +153,11 @@ def run_slice(  # noqa: PLR0913
         evaluate: called as 'evaluate(params, context)' for each combination, returning the
             measurements to record. The parameters are recorded alongside them automatically.
         task_index: 1-based array task index.
-        n_tasks: total array tasks. Defaults to the manifest's value, which is what it should be;
-            pass one only to deliberately re-partition the grid.
+        n_tasks: total array tasks. Defaults to the manifest's value.
         context: whatever the evaluation needs, built once for the task.
         resume: skip combinations already recorded in this run.
         quiet: suppress per-combination progress.
+        artefact_key: the key under which the evaluation returns output too bulky for a results row.
 
     Returns:
         The part file written.
@@ -112,6 +166,7 @@ def run_slice(  # noqa: PLR0913
     directory = Path(run_dir)
     manifest = Manifest.load(directory)
     n_tasks = n_tasks or manifest.n_tasks
+    artefact_key = artefact_key or manifest.artefact_key
 
     start, end = slice_bounds(manifest.n_combinations, n_tasks, task_index)
     assigned = manifest.combinations[start:end]
@@ -119,6 +174,8 @@ def run_slice(  # noqa: PLR0913
     parts = directory / PARTS_DIR
     parts.mkdir(parents=True, exist_ok=True)
     part = parts / f'task-{task_index:05d}.jsonl'
+    if artefact_key:
+        (directory / ARTEFACTS_DIR).mkdir(parents=True, exist_ok=True)
 
     already = completed_ids(directory) if resume else set()
     todo = [combination for combination in assigned if combination['combination_id'] not in already]
@@ -135,10 +192,17 @@ def run_slice(  # noqa: PLR0913
             began = time.monotonic()
             measured = evaluate(params, context)
             result = {**params, **measured}
+
+            if artefact_key:
+                artefact = result.pop(artefact_key, None)
+                if artefact is not None:
+                    path = artefact_path(directory, params['combination_id'])
+                    path.write_text(json.dumps(jsonable(artefact)), encoding='utf-8')
+
             result['task_index'] = task_index
             result['runtime_seconds'] = round(time.monotonic() - began, 3)
 
-            handle.write(json.dumps(_jsonable(result)) + '\n')
+            handle.write(json.dumps(jsonable(result)) + '\n')
             handle.flush()  # a kill on a requeue partition then costs one combination
 
             if not quiet:
