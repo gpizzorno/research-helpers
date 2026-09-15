@@ -56,11 +56,30 @@ def read_parts(run_dir: Path | str) -> list[dict[str, Any]]:
     return records
 
 
+def leading_columns(run_dir: Path | str) -> list[str]:
+    """Return the configuration columns of a run, in the order they should be read.
+
+    The id first, then the constants, then the swept parameters. Everything else is a measurement.
+
+    Arguments:
+        run_dir: the run directory.
+
+    Returns:
+        The column names, or an empty list if the run has no manifest to describe it.
+
+    """
+    try:
+        manifest = Manifest.load(run_dir)
+    except (FileNotFoundError, TypeError, ValueError):
+        return []
+    return ['combination_id', *sorted(manifest.constants), *sorted(manifest.grid)]
+
+
 def collect_results(
     run_dir: Path | str,
     *,
     write: bool = True,
-    leading: Iterable[str] = (),
+    leading: Iterable[str] | None = None,
 ) -> pd.DataFrame:
     """Merge the part files into a table de-duplicating by combination id.
 
@@ -69,20 +88,23 @@ def collect_results(
 
     Arguments:
         run_dir: the run directory.
-        write: also write 'results.csv', and 'results.parquet' where pyarrow allows it.
-        leading: columns to move to the front, e.g. the swept parameters, so the table reads
-            configuration first and measurements second.
+        write: also write 'results.csv', and 'results.parquet' where an engine is installed.
+        leading: columns to move to the front, so the table reads configuration first and
+            measurements second. Defaults to the run's own parameters, taken from the manifest.
+            Pass an explicit sequence to override it, or an empty one to leave the order alone.
 
     Returns:
         One row per combination.
 
     """
-    import pandas as pd  # noqa: PLC0415 -- only this function needs pandas
+    import pandas as pd  # noqa: PLC0415
 
     directory = Path(run_dir)
     records = read_parts(directory)
     if not records:
         return pd.DataFrame()
+    if leading is None:
+        leading = leading_columns(directory)
 
     frame = pd.DataFrame(records)
     if 'combination_id' in frame:
@@ -91,8 +113,7 @@ def collect_results(
     front = [column for column in leading if column in frame.columns]
     frame = frame[front + [column for column in frame.columns if column not in front]]
 
-    # sort on scalar columns only: a parameter holding a list cannot be factorized, and the id
-    # carries no ordering meaning
+    # sort on scalar columns only
     sortable = [
         column
         for column in front
