@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-helpers"
-version = "1.0.0"
+version = "1.1.0"
 description = "Utilities for code-intensive research projects and the papers they produce"
 readme = "README.md"
 license = "MIT"
@@ -28,8 +28,8 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
 ]
-# The core package deliberately has no third-party dependencies: root discovery and settings
-# use tomllib (stdlib on 3.11+), and everything needing a library lives behind an extra below.
+# The core package deliberately has no third-party dependencies.
+# Everything needing a library lives behind an extra below.
 dependencies = []
 requires-python = ">=3.11"
 
@@ -49,8 +49,8 @@ log = [
 # so that `pip install research-helpers[latex]` works and the capability is discoverable.
 latex = []
 
-# The sweep engine's core has no dependencies: planning, running, and checking status are stdlib only.
-# pandas is needed to build the results table, and pyarrow to write it as parquet.
+# The sweep engine's core has no dependencies: planning, running, checking status, sizing the array
+# and computing confidence intervals are stdlib only.
 sweep = [
   "pandas",
   "pyarrow",
@@ -65,6 +65,7 @@ dev = [
   "pytest-mock",
   "pytest",
   "ruff",
+  "scipy",
   "ty",
   "types-requests",
 ]
