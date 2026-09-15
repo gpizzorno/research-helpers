@@ -64,8 +64,9 @@ dev = [
   "pytest-cov",
   "pytest-mock",
   "pytest",
+  "pyyaml",  # test-only
   "ruff",
-  "scipy",
+  "scipy",  # test-only
   "ty",
   "types-requests",
 ]
