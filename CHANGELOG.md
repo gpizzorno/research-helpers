@@ -4,6 +4,43 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] — 2026-09-15
+
+### Added
+
+- **`sweep`: resubmission guidance.** `status` on an unfinished run now names the array indices that
+  still hold work, collapsed into the syntax `--array` takes, alongside the width the run was planned
+  at. New: `missing_task_indices` and `array_spec`.
+- **`sweep`: artefacts.** An evaluation can return output too large for a results row under a key named 
+  by `artefact_key`, and it is written to `artefacts/<combination_id>.json` instead of into the row. 
+  The key is declared on the sweep so the manifest records that the run kept them. New: `read_artefact` 
+  and `artefact_path`.
+- **`sweep`: tuple parameters.** `tuple_params` declares parameters whose values are tuples rather
+  than lists, so the type survives the round trip through the manifest's JSON. New: `restore_tuples`.
+- **`sweep`: YAML configs.** `read_config` reads `.yaml` and `.yml` through `pyyaml` where it is
+  installed.
+- **`sweep`: default column order.** `collect_results` without `leading` now leads with the run's own
+  configuration, read from the manifest. Manifests record `constants` for this. Previously the caller 
+  had to name the columns or read an unordered table.
+- **`sweep`: confidence intervals.** `aggregate_runs` combines several runs of one grid into a table
+  carrying, per metric, a mean, a Student's *t* interval and a standard error.
+- **`sweep.stats`**: `confidence_interval` and `student_t_quantile`, with **no dependencies**. The
+  quantile is computed in the package—regularized incomplete beta by continued fraction, inverted by
+  bisection. Tested against `scipy.stats.t.ppf`: worst relative error 2e-11 across the confidence 
+  levels an interval reaches. `scipy` is in the `dev` extra as a test oracle and is not a runtime 
+  dependency.
+- **`job.sbatch`** template for single jobs (i.e. not grids).
+- **`diagnose-env.sbatch`** template: captures the batch environment before and after activation, to
+  tell an inherited `CONDA_PREFIX` apart from an environment that is genuinely incomplete.
+
+### Changed
+
+- **`sweep`: a missing Parquet engine is no longer a warning.** `collect_results` checks for one
+  rather than catching the failure.
+- **`sweep.sbatch`** now names both causes of a missing interpreter in its failure message, points at
+  `diagnose-env.sbatch`, mentions `status` for the resubmission range, and honours `SWEEP_TASKS` for
+  a deliberate re-partition.
+
 ## [1.0.0] — 2026-09-11
 
 First public release.
