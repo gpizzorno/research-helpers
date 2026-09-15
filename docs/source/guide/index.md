@@ -7,6 +7,7 @@ generated-table
 figures
 tables
 sweeps
+cluster
 submission
 logging
 ```

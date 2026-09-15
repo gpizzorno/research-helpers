@@ -11,13 +11,15 @@ and [Zenodo](https://zenodo.org), structured logging, and a parameter-sweep engi
 
 ## Install
 
-The core package has no third-party dependencies. Additional capabilities are installed as extras:
+The core package has no third-party dependencies. Specifically, **the code path that runs on a cluster only depends on the standard library**. 
+Planning a sweep, running an array task, checking its status, sizing the array and computing a confidence interval all work on a node
+with nothing but Python on it. Everything that needs a library is a capability, installed as an extra:
 
 ```sh
 pip install research-helpers[figures]   # matplotlib, seaborn
 pip install research-helpers[latex]     # LaTeX table assembly and rendering (stdlib only)
 pip install research-helpers[log]       # structlog, colorama, tqdm
-pip install research-helpers[sweep]     # pandas, pyarrow (planning and running need neither)
+pip install research-helpers[sweep]     # pandas, pyarrow (planning, running, and intervals need neither)
 ```
 
 Requires Python 3.11 or newer ({py:mod}`tomllib` is needed to read the project's wiring).
