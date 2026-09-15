@@ -20,17 +20,20 @@ and [Zenodo](https://zenodo.org), structured logging, and a parameter-sweep engi
 - **Shared Figure Styling**: Consistent look across LaTeX and Jupyter
 - **Submission Packaging**: Automatic preparation and pre-checking for arXiv and Zenodo
 - **Parameter Sweeps**: Plan a grid, run it as a scheduler job array, resume if necessary, and collect the results
+- **Aggregation**: Combine repeated runs into confidence intervals, with no dependencies on the cluster side
 - **Structured Logging**: Console and file output at separate levels, with progress bars and colour output
 
 ## Installation
 
-The core package has no third-party dependencies. Capabilities are installed as extras:
+The core package has no third-party dependencies. Specifically, **the code path that runs on a cluster only depends on the standard library**. 
+Planning a sweep, running an array task, checking its status, sizing the array and computing a confidence interval all work on a node
+with nothing but Python on it. Everything that needs a library is a capability, installed as an extra:
 
 ```sh
 pip install research-helpers[figures]   # matplotlib, seaborn
 pip install research-helpers[latex]     # LaTeX table assembly and rendering (stdlib only)
 pip install research-helpers[log]       # structlog, colorama, tqdm
-pip install research-helpers[sweep]     # pandas, pyarrow (planning and running need neither)
+pip install research-helpers[sweep]     # pandas, pyarrow (planning, running, and intervals need neither)
 ```
 
 Requires Python 3.11 or newer.
