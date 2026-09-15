@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>research_helpers.project &mdash; Research Helpers v1.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="research_helpers.build" href="build.html" />
+    <link rel="prev" title="Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/api/project.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="research-helpers-project">
+<h1><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code><a class="headerlink" href="#research-helpers-project" title="Link to this heading"></a></h1>
+<p>This module covers project discovery and wiring. Everything else in the package resolves its settings through here. See <a class="reference internal" href="../configuration.html"><span class="std std-doc">Configuration</span></a> for the TOML keys.</p>
+<dl class="py exception" id="module-research_helpers.project">
+<dt class="sig sig-object py" id="research_helpers.project.ConfigWarning">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">ConfigWarning</span></span><a class="reference internal" href="../_modules/research_helpers/project.html#ConfigWarning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.ConfigWarning" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#UserWarning" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserWarning</span></code></a></p>
+<p>A setting was not understood. The value is ignored and the default applies.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="research_helpers.project.ProjectRootNotFoundError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">ProjectRootNotFoundError</span></span><a class="reference internal" href="../_modules/research_helpers/project.html#ProjectRootNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.ProjectRootNotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></p>
+<p>No ancestor directory carried a project-root marker.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.PaperSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">PaperSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/paper.tex')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tables_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/tables')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figures_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/figures')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/out_dir/paper.bbl')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('build')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_width_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_width_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.04</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#PaperSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.PaperSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Where the manuscript and its generated inputs live, relative to the project root.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>main</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>tables_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>figures_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>bbl</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>build_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>text_width_in</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>column_width_in</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.FigureSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">FigureSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'screen'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'husl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DejaVu</span> <span class="pre">Sans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_height_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#FigureSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.FigureSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Figure styling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>font</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>dpi</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>print_height_in</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.LogSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">LogSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DEBUG'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#LogSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.LogSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Where logs go and how much of them. Every value stays overridable per call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>console_level</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>file_level</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>colour</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.SweepSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">SweepSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('runs')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contention_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#SweepSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.SweepSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Where parameter sweeps run, and what to assume about a shared node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>runs_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>contention_factor</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.ArxivSettings">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">ArxivSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xelatex'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texlive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbl_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'3.3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#ArxivSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.ArxivSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Facts about the submission target. These track the submission cycle, not the package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>texlive</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>bbl_format</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.project.Project">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">Project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PaperSettings(main=PosixPath('tex/paper.tex')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tables_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/tables')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figures_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/figures')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('tex/out_dir/paper.bbl')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('build')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_width_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_width_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.04)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FigureSettings(profile='screen'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'husl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DejaVu</span> <span class="pre">Sans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_height_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LogSettings(directory=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DEBUG'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">SweepSettings(runs_dir=PosixPath('runs')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contention_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arxiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ArxivSettings(engine='xelatex'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texlive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbl_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'3.3')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyproject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#Project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.Project" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A project’s wiring, with every path resolved to an absolute location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>)</p></li>
+<li><p><strong>paper</strong> (<a class="reference internal" href="#research_helpers.project.PaperSettings" title="research_helpers.project.PaperSettings"><em>PaperSettings</em></a>)</p></li>
+<li><p><strong>figures</strong> (<a class="reference internal" href="#research_helpers.project.FigureSettings" title="research_helpers.project.FigureSettings"><em>FigureSettings</em></a>)</p></li>
+<li><p><strong>log</strong> (<a class="reference internal" href="#research_helpers.project.LogSettings" title="research_helpers.project.LogSettings"><em>LogSettings</em></a>)</p></li>
+<li><p><strong>sweep</strong> (<a class="reference internal" href="#research_helpers.project.SweepSettings" title="research_helpers.project.SweepSettings"><em>SweepSettings</em></a>)</p></li>
+<li><p><strong>arxiv</strong> (<a class="reference internal" href="#research_helpers.project.ArxivSettings" title="research_helpers.project.ArxivSettings"><em>ArxivSettings</em></a>)</p></li>
+<li><p><strong>pyproject</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>sources</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.14)"><em>Mapping</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.project.Project.from_pyproject">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_pyproject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#Project.from_pyproject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.Project.from_pyproject" title="Link to this definition"></a></dt>
+<dd><p>Load wiring by walking up from ‘start’ for a project root.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – directory to search upward from. Defaults to the current working directory.</p></li>
+<li><p><strong>**overrides</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – settings objects (‘paper’, ‘figures’, ‘arxiv’) replacing what was loaded.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#research_helpers.project.Project" title="research_helpers.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The project, with every path made absolute against the root.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#research_helpers.project.ProjectRootNotFoundError" title="research_helpers.project.ProjectRootNotFoundError"><strong>ProjectRootNotFoundError</strong></a> – if no ancestor carries a marker from ‘ROOT_MARKERS’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.project.Project.doctor">
+<span class="sig-name descname"><span class="pre">doctor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#Project.doctor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.Project.doctor" title="Link to this definition"></a></dt>
+<dd><p>Return every resolved setting with the layer it came from, as well as any missing paths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="research_helpers.project.current_project">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">current_project</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#current_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.current_project" title="Link to this definition"></a></dt>
+<dd><p>Return the enclosing project, or one carrying pure defaults if there is no root above.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#research_helpers.project.Project" title="research_helpers.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="research_helpers.project.resolve">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.resolve" title="Link to this definition"></a></dt>
+<dd><p>Return ‘settings’ with each override applied, ignoring any that is None.</p>
+<p>None means ‘not specified at this layer’, so a caller may forward its own optional arguments
+straight through without first filtering them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">SettingsT</span></code>, bound= DataclassInstance)</span>) – the settings object to start from.</p></li>
+<li><p><strong>**overrides</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – any field of that object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">SettingsT</span></code>, bound= DataclassInstance)</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The settings, with the overrides applied.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – if an override does not name a field of ‘settings’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="research_helpers.project.find_project_root">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.project.</span></span><span class="sig-name descname"><span class="pre">find_project_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/project.html#find_project_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.project.find_project_root" title="Link to this definition"></a></dt>
+<dd><p>Return the first ancestor of ‘start’ carrying a project-root marker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – directory to search upward from (defaults to the current working directory).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The project root, absolute.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#research_helpers.project.ProjectRootNotFoundError" title="research_helpers.project.ProjectRootNotFoundError"><strong>ProjectRootNotFoundError</strong></a> – if no ancestor carries a marker.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="build.html" class="btn btn-neutral float-right" title="research_helpers.build" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

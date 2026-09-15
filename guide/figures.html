@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Figures &mdash; Research Helpers v1.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LaTeX tables" href="tables.html" />
+    <link rel="prev" title="Adding a generated table" href="generated-table.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+      <li class="breadcrumb-item active">Figures</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/guide/figures.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="figures">
+<h1>Figures<a class="headerlink" href="#figures" title="Link to this heading"></a></h1>
+<p>The module aims to solve two main problems: figures that look different from each other because
+each notebook set its own <code class="docutils literal notranslate"><span class="pre">rcParams</span></code>, and figures that look pasted into the paper because they were
+authored at screen size and scaled down.</p>
+<section id="profiles">
+<h2>Profiles<a class="headerlink" href="#profiles" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../api/figures.html#research_helpers.figures.apply_style" title="research_helpers.figures.apply_style"><code class="xref py py-func docutils literal notranslate"><span class="pre">apply_style()</span></code></a> applies a coherent look throughout. The specific
+look is chosen via a <code class="docutils literal notranslate"><span class="pre">profile</span></code>:</p>
+<dl class="simple myst">
+<dt><code class="docutils literal notranslate"><span class="pre">screen</span></code></dt><dd><p>Large (12×6 inches), default font sizes, 100 dpi on display. Intended for notebooks, where a
+figure is looked at on its own.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">print</span></code></dt><dd><p>Sized to the document, with width taken from <code class="docutils literal notranslate"><span class="pre">paper.text-width-in</span></code>, and height from
+<code class="docutils literal notranslate"><span class="pre">figures.print-height-in</span></code>, 8pt fonts. A figure authored under this profile goes into the paper
+at 1:1 and its text comes out the same size as the surrounding body text.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.figures</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_style</span>
+
+<span class="n">apply_style</span><span class="p">()</span>                    <span class="c1"># the project's profile, defaults to 'screen'</span>
+<span class="n">apply_style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">)</span>     <span class="c1"># paper geometry, paper font sizes</span>
+</pre></div>
+</div>
+<section id="width-and-height">
+<h3>Width and height<a class="headerlink" href="#width-and-height" title="Link to this heading"></a></h3>
+<p>The width value is dictated by the document, the <code class="docutils literal notranslate"><span class="pre">width</span></code> setting is used to indicate
+<em>which</em> of the document’s two widths applies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">apply_style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">)</span>                   <span class="c1"># \textwidth, the default</span>
+<span class="n">apply_style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">'column'</span><span class="p">)</span>   <span class="c1"># \columnwidth, for one column of a two-column paper</span>
+</pre></div>
+</div>
+<p>The height is unconstrained, so it is a setting:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[tool.research-helpers.figures]</span>
+<span class="n">print-height-in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.2</span><span class="w">     </span><span class="c1"># the default; -mm, -cm and -pt work too</span>
+</pre></div>
+</div>
+<p>Height can be overridden per call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">apply_style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">,</span> <span class="n">print_height_in</span><span class="o">=</span><span class="mf">4.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="scoped-styling">
+<h2>Scoped styling<a class="headerlink" href="#scoped-styling" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../api/figures.html#research_helpers.figures.style" title="research_helpers.figures.style"><code class="xref py py-func docutils literal notranslate"><span class="pre">style()</span></code></a> works as a context manager over
+<code class="docutils literal notranslate"><span class="pre">matplotlib.rc_context</span></code>. It can be used in cases where one figure needs to differ
+without the details leaking into the rest of the notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.figures</span><span class="w"> </span><span class="kn">import</span> <span class="n">style</span>
+
+<span class="k">with</span> <span class="n">style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">'colorblind'</span><span class="p">)</span> <span class="k">as</span> <span class="n">settings</span><span class="p">:</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>      <span class="c1"># the profile's size is already in rcParams</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>The object returned is the resolved <a class="reference internal" href="../api/project.html#research_helpers.project.FigureSettings" title="research_helpers.project.FigureSettings"><code class="xref py py-class docutils literal notranslate"><span class="pre">FigureSettings</span></code></a>, which
+carries <code class="docutils literal notranslate"><span class="pre">profile</span></code>, <code class="docutils literal notranslate"><span class="pre">palette</span></code>, <code class="docutils literal notranslate"><span class="pre">font</span></code> and <code class="docutils literal notranslate"><span class="pre">dpi</span></code>. The geometry is not on the profile—it
+goes into <code class="docutils literal notranslate"><span class="pre">rcParams</span></code>, so <code class="docutils literal notranslate"><span class="pre">plt.subplots()</span></code> picks it up with no argument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_style</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s1">'print'</span><span class="p">)</span>
+<span class="go">FigureSettings(profile='print', palette='husl', font='DejaVu Sans', dpi=150, print_height_in=3.2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.figsize'</span><span class="p">],</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.size'</span><span class="p">]</span>
+<span class="go">([6.45, 3.2], 8.0)</span>
+</pre></div>
+</div>
+</section>
+<section id="saving-versus-rendering">
+<h2>Saving versus rendering<a class="headerlink" href="#saving-versus-rendering" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../api/figures.html#research_helpers.figures.save" title="research_helpers.figures.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">save()</span></code></a> writes to a file. <a class="reference internal" href="../api/figures.html#research_helpers.figures.render" title="research_helpers.figures.render"><code class="xref py py-func docutils literal notranslate"><span class="pre">render()</span></code></a>
+returns the identical bytes without touching the disk:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">save</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s1">'build/figures/learning-curve.png'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>                   <span class="c1"># the same bytes, in memory</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">render</span></code> exists for the build pipeline: an emitter registered with
+<a class="reference internal" href="../api/build.html#research_helpers.build.Registry" title="research_helpers.build.Registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code></a> returns its artefact’s content, and drift detection
+compares that against the installed file byte for byte. A test asserts the two functions agree,
+so the comparison is meaningful.</p>
+<p>Both default to <code class="docutils literal notranslate"><span class="pre">tight=True</span></code>, which crops whitespace from the saved figure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">tight=True</span></code> means that the saved image will be <em>narrower</em>, so a figure authored
+at exactly <code class="docutils literal notranslate"><span class="pre">\textwidth</span></code> is not saved at exactly <code class="docutils literal notranslate"><span class="pre">\textwidth</span></code>. This is to prevent
+unnecessary white space, and <code class="docutils literal notranslate"><span class="pre">\includegraphics[width=\textwidth]</span></code>
+will scale it correctly. This behaviour might be undesirable in certain situations,
+for example if trying to match a figure’s width to a table’s, in which case passing
+<code class="docutils literal notranslate"><span class="pre">tight=False</span></code> will prevent the cropping altogether.</p>
+</div>
+</section>
+<section id="long-tick-labels">
+<h2>Long tick labels<a class="headerlink" href="#long-tick-labels" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../api/figures.html#research_helpers.figures.fit_x" title="research_helpers.figures.fit_x"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_x()</span></code></a> shrinks the x tick labels until they stop overlapping,
+rather than rotating them:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit_x</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is designed to help in situations where one wants to avoid rotating labels.</p>
+</section>
+<section id="checking-current-settings">
+<h2>Checking current settings<a class="headerlink" href="#checking-current-settings" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../api/figures.html#research_helpers.figures.current_settings" title="research_helpers.figures.current_settings"><code class="xref py py-func docutils literal notranslate"><span class="pre">current_settings()</span></code></a> resolves the project’s figure settings
+without applying anything (useful for troubleshooting):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">current_settings</span><span class="p">()</span><span class="o">.</span><span class="n">dpi</span>
+<span class="go">300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">current_settings</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">)</span><span class="o">.</span><span class="n">dpi</span>     <span class="c1"># an override, resolved the same way</span>
+<span class="go">72</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generated-table.html" class="btn btn-neutral float-left" title="Adding a generated table" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tables.html" class="btn btn-neutral float-right" title="LaTeX tables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

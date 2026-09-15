@@ -1,0 +1,656 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration &mdash; Research Helpers v1.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=b93aa178" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Guides" href="guide/index.html" />
+    <link rel="prev" title="Research Helpers Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guide/generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/configuration.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h1>
+<p>A project’s wiring goes in the <code class="docutils literal notranslate"><span class="pre">[tool.research-helpers]</span></code> section in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+No keys are required—defaults are provided out-of-the-box—so a new project can be started with
+minimal or no configuration.</p>
+<p>The keys are written in kebab-case and map to the snake_case attribute of the same name, so
+<code class="docutils literal notranslate"><span class="pre">tables-dir</span></code> in TOML is <code class="docutils literal notranslate"><span class="pre">paper.tables_dir</span></code> in Python. An unknown key raises a
+<a class="reference internal" href="api/project.html#research_helpers.project.ConfigWarning" title="research_helpers.project.ConfigWarning"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a> and is ignored, as does a key with the wrong
+value type or with a value outside the allowed set.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wiring lives in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> because that file is <em>also</em> the project-root marker.
+Finding the configuration and finding the root are therefore one operation, and every
+path in the configuration is resolved relative to the directory containing it.</p>
+</div>
+<section id="three-layers-of-resolution">
+<h2>Three layers of resolution<a class="headerlink" href="#three-layers-of-resolution" title="Link to this heading"></a></h2>
+<p>Each layer overrides the one before it:</p>
+<ol class="arabic simple">
+<li><p><strong>Package defaults:</strong> everything works with no configuration at all.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">[tool.research-helpers]</span></code>:</strong> a project’s wiring, read once per root and cached.</p></li>
+<li><p><strong>Explicit keyword arguments:</strong> always take precedence.</p></li>
+</ol>
+<p>A value of <code class="docutils literal notranslate"><span class="pre">None</span></code> in an override is read as <em>not specified at this layer</em>, so a function may forward its own
+optional arguments straight through to <a class="reference internal" href="api/project.html#research_helpers.project.resolve" title="research_helpers.project.resolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve()</span></code></a> without
+filtering them first:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_something</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="n">current_project</span><span class="p">()</span><span class="o">.</span><span class="n">figures</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>   <span class="c1"># dpi=None leaves the project's value</span>
+</pre></div>
+</div>
+<p>Every entry point is fully callable with plain arguments and no project file.</p>
+</section>
+<section id="complete-example">
+<h2>Complete example<a class="headerlink" href="#complete-example" title="Link to this heading"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[tool.research-helpers.paper]</span>
+<span class="n">main</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">"tex/paper.tex"</span>
+<span class="n">tables-dir</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">"tex/tables"</span>
+<span class="n">figures-dir</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"tex/figures"</span>
+<span class="n">bbl</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="s2">"tex/out_dir/paper.bbl"</span>
+<span class="n">build-dir</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"build"</span>
+<span class="n">text-width-in</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mf">6.45</span><span class="w">           </span><span class="c1"># \textwidth: letterpaper, 73pt margins</span>
+<span class="n">column-width-in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.04</span><span class="w">           </span><span class="c1"># \columnwidth</span>
+
+<span class="k">[tool.research-helpers.figures]</span>
+<span class="n">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"print"</span>
+<span class="n">palette</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"colorblind"</span>
+<span class="n">font</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"TeX Gyre Pagella"</span>
+<span class="n">dpi</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span>
+
+<span class="k">[tool.research-helpers.log]</span>
+<span class="n">directory</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"data/logs"</span><span class="w">      </span><span class="c1"># omit for console output only</span>
+<span class="n">console-level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"INFO"</span>
+<span class="n">file-level</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"DEBUG"</span>
+<span class="n">colour</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">"auto"</span>
+
+<span class="k">[tool.research-helpers.sweep]</span>
+<span class="n">runs-dir</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="s2">"runs"</span>
+<span class="n">contention-factor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.8</span><span class="w">          </span><span class="c1"># no default is provided, has to be measured</span>
+
+<span class="k">[tool.research-helpers.arxiv]</span>
+<span class="n">engine</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"xelatex"</span>
+<span class="n">texlive</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">2025</span>
+<span class="n">bbl-format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"3.3"</span>
+</pre></div>
+</div>
+</section>
+<section id="subsections">
+<h2>Subsections<a class="headerlink" href="#subsections" title="Link to this heading"></a></h2>
+<section id="paper">
+<h3><code class="docutils literal notranslate"><span class="pre">paper</span></code><a class="headerlink" href="#paper" title="Link to this heading"></a></h3>
+<p>Describes the document’s geometry and the locations of its different components. All paths are relative to the project root.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tex/paper.tex</span></code></p></td>
+<td><p>The manuscript.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tables-dir</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tex/tables</span></code></p></td>
+<td><p>Location of generated <code class="docutils literal notranslate"><span class="pre">.tex</span></code> tables.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">figures-dir</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tex/figures</span></code></p></td>
+<td><p>Location of generated <code class="docutils literal notranslate"><span class="pre">.png</span></code> figures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bbl</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tex/out_dir/paper.bbl</span></code></p></td>
+<td><p>The <em>biblatex</em> file.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">build-dir</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">build</span></code></p></td>
+<td><p>Scratch space for generated artefacts.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">text-width-in</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6.45</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\textwidth</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">column-width-in</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3.04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\columnwidth</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both figures <em>and</em> tables are laid out against the document’s width, so a figure or a table is
+authored at the size it will be printed rather than scaled afterwards.</p>
+<p>To find the real values, put <code class="docutils literal notranslate"><span class="pre">\showthe\textwidth</span></code> and <code class="docutils literal notranslate"><span class="pre">\showthe\columnwidth</span></code> in your document and
+read them off the log. They come out in points, which you can write down as they are (see
+<a class="reference internal" href="#units">Units</a> below).</p>
+</div>
+</section>
+<section id="units">
+<h3>Units<a class="headerlink" href="#units" title="Link to this heading"></a></h3>
+<p>Any length may be written in inches, millimetres, centimetres, or TeX points, by changing the key’s
+suffix. These four all set the same field to the same value:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">text-width-in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6.4757</span>
+<span class="n">text-width-mm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">164.48</span>
+<span class="n">text-width-cm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">16.448</span>
+<span class="n">text-width-pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">468.0</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Suffix</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>In one inch</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-in</span></code></p></td>
+<td><p>inch</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-mm</span></code></p></td>
+<td><p>millimetre</p></td>
+<td><p>25.4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-cm</span></code></p></td>
+<td><p>centimetre</p></td>
+<td><p>2.54</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-pt</span></code></p></td>
+<td><p>TeX point</p></td>
+<td><p>72.27</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">-pt</span></code> is the default unit LaTeX uses, i.e., the one <code class="docutils literal notranslate"><span class="pre">\showthe\textwidth</span></code> prints.</p>
+<p>Settings are stored in inches internally, because that is the unit <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> figure sizes use.
+<code class="docutils literal notranslate"><span class="pre">research-helpers</span> <span class="pre">doctor</span></code> shows the converted value.</p>
+</section>
+<section id="figures">
+<h3><code class="docutils literal notranslate"><span class="pre">figures</span></code><a class="headerlink" href="#figures" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">profile</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">screen</span></code> | <code class="docutils literal notranslate"><span class="pre">print</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">screen</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">screen</span></code> is large and legible in a notebook. <code class="docutils literal notranslate"><span class="pre">print</span></code> is sized for the paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">palette</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">husl</span></code></p></td>
+<td><p>Any <em>seaborn</em> palette name.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">font</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DejaVu</span> <span class="pre">Sans</span></code></p></td>
+<td><p>A <em>matplotlib</em> family name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dpi</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">150</span></code></p></td>
+<td><p>Used for saving figures. On-screen display is separate and fixed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">print-height-in</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3.2</span></code></p></td>
+<td><p>Height of a <code class="docutils literal notranslate"><span class="pre">print</span></code> profile figure.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="log">
+<h3><code class="docutils literal notranslate"><span class="pre">log</span></code><a class="headerlink" href="#log" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">directory</span></code></p></td>
+<td><p>path</p></td>
+<td><p><em>(unset)</em></p></td>
+<td><p>Location where log files should be written. Omit it for console output only.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">console-level</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INFO</span></code></p></td>
+<td><p>Any level name accepted by the standard library, including custom ones.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file-level</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></p></td>
+<td><p>Same as above. Usually more verbose than the console.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">colour</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">always</span></code> | <code class="docutils literal notranslate"><span class="pre">never</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> uses colours only when stderr is a terminal, so redirected output stays clean.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sweep">
+<h3><code class="docutils literal notranslate"><span class="pre">sweep</span></code><a class="headerlink" href="#sweep" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">runs-dir</span></code></p></td>
+<td><p>path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">runs</span></code></p></td>
+<td><p>Location where a sweep’s manifest, parts, and results are written.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">contention-factor</span></code></p></td>
+<td><p>float</p></td>
+<td><p><em>(unset)</em></p></td>
+<td><p>A value indicating how much slower a task runs when the node is full.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">contention-factor</span></code> is the ratio between a task’s runtime alone on a node and its runtime with every
+core busy, and it depends on the specifics of the setup (<em>i.e.</em> the code, the node, and the scheduler).
+No default is provided since a wrong one would lead to incorrect walltime estimates that either waste
+a queue slot or get the job killed before completion. Left unset, <a class="reference internal" href="api/sweep.html#research_helpers.sweep.estimate_runtime" title="research_helpers.sweep.estimate_runtime"><code class="xref py py-func docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a>
+reports its numbers as optimistic and lists instructions on how to measure the factor.</p>
+</div>
+</section>
+<section id="arxiv">
+<h3><code class="docutils literal notranslate"><span class="pre">arxiv</span></code><a class="headerlink" href="#arxiv" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">engine</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xelatex</span></code></p></td>
+<td><p>The engine you select on arXiv. Used to check for engine-specific hazards, e.g. microtype font expansion under XeTeX.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">texlive</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2025</span></code></p></td>
+<td><p>The TeX Live year selected on arXiv. Used in diagnostic messages.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bbl-format</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3.3</span></code></p></td>
+<td><p>The <em>biblatex</em> <code class="docutils literal notranslate"><span class="pre">.bbl</span></code> format version that TeX Live year reads.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="checking-settings-resolution">
+<h2>Checking settings resolution<a class="headerlink" href="#checking-settings-resolution" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">doctor</span></code> utility can be used to check settings resolution:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>research-helpers<span class="w"> </span>doctor
+</pre></div>
+</div>
+<p>It prints every setting, the value in force, where it came from, and flags any configured
+path that does not exist:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>root       /Users/john/my-project
+pyproject  pyproject.toml
+
+  paper.main               tex/paper.tex                 [pyproject]
+  paper.tables_dir         tex/tables                    [pyproject]
+  paper.figures_dir        tex/figures                   [pyproject]
+  paper.bbl                tex/out_dir/paper.bbl         [pyproject]
+  paper.build_dir          build                         [pyproject]
+  paper.text_width_in      6.48                          [pyproject]
+  paper.column_width_in    3.04                          [pyproject]
+
+  figures.profile          screen                        [pyproject]
+  figures.palette          husl                          [pyproject]
+  figures.font             DejaVu Sans                   [default]
+  figures.dpi              300                           [pyproject]
+  figures.print_height_in  3.2                           [default]
+
+  log.directory            None                          [default]
+  log.console_level        INFO                          [default]
+  log.file_level           DEBUG                         [default]
+  log.colour               auto                          [default]
+
+  sweep.runs_dir           runs                          [default]   MISSING
+  sweep.contention_factor  None                          [default]
+
+  arxiv.engine             xelatex                       [pyproject]
+  arxiv.texlive            2025                          [pyproject]
+  arxiv.bbl_format         3.3                           [pyproject]
+</pre></div>
+</div>
+<p>Checking <code class="docutils literal notranslate"><span class="pre">[default]</span></code> versus <code class="docutils literal notranslate"><span class="pre">[pyproject]</span></code> is useful when trying to troubleshoot keys,
+for example when a setting appears to have no effect—usually a typo in the key name, which also
+produces a warning you can see with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-W</span> <span class="pre">always::UserWarning</span> <span class="pre">-c</span> <span class="pre">'import</span> <span class="pre">...'</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MISSING</span></code> indicates a path that is configured but does not exist. In the example above, <code class="docutils literal notranslate"><span class="pre">runs</span></code> is
+simply a directory that sweeps have not created yet. The same value on <code class="docutils literal notranslate"><span class="pre">paper.main</span></code> would mean that
+the manuscript path is wrong.</p>
+</section>
+<section id="overriding-the-root">
+<h2>Overriding the root<a class="headerlink" href="#overriding-the-root" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="api/project.html#research_helpers.project.find_project_root" title="research_helpers.project.find_project_root"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_project_root()</span></code></a> searches upward for <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.git</span></code>. Set <code class="docutils literal notranslate"><span class="pre">RESEARCH_HELPERS_ROOT</span></code> to skip the search—necessary in a scheduler job whose
+working directory is outside the tree:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">RESEARCH_HELPERS_ROOT</span><span class="o">=</span>/scratch/<span class="nv">$USER</span>/my-project
+</pre></div>
+</div>
+<p>If no root is found, <a class="reference internal" href="api/project.html#research_helpers.project.current_project" title="research_helpers.project.current_project"><code class="xref py py-func docutils literal notranslate"><span class="pre">current_project()</span></code></a> returns a project
+carrying pure defaults rather than raising an exception so, for example, a Jupyter notebook
+in a scratch directory still works.</p>
+</section>
+<section id="reading-settings">
+<h2>Reading settings<a class="headerlink" href="#reading-settings" title="Link to this heading"></a></h2>
+<p>Settings can be easily read by any code in the project:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_project</span>
+
+<span class="n">paper</span> <span class="o">=</span> <span class="n">current_project</span><span class="p">()</span><span class="o">.</span><span class="n">paper</span>
+<span class="n">width</span> <span class="o">=</span> <span class="n">paper</span><span class="o">.</span><span class="n">text_width_in</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="api/project.html#research_helpers.project.current_project" title="research_helpers.project.current_project"><code class="xref py py-func docutils literal notranslate"><span class="pre">current_project()</span></code></a> caches per root, so calling it in a loop is
+free.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Research Helpers Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide/index.html" class="btn btn-neutral float-right" title="Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

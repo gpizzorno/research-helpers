@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameter sweeps &mdash; Research Helpers v1.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cluster jobs" href="cluster.html" />
+    <link rel="prev" title="LaTeX tables" href="tables.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+      <li class="breadcrumb-item active">Parameter sweeps</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/guide/sweeps.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parameter-sweeps">
+<h1>Parameter sweeps<a class="headerlink" href="#parameter-sweeps" title="Link to this heading"></a></h1>
+<p><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep" title="research_helpers.sweep"><code class="xref py py-mod docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a> runs a parameter grid as a scheduler job array. The grid is
+planned once, the array is submitted, each task works on its own slice, and the results are then
+collected together.</p>
+<p>It fits the shape <em>one parameter grid, one expensive function, independent tasks</em>, meaning that it
+is not suitable for tasks that depend on each other, or situations where the grid is generated
+dynamically.</p>
+<p>Planning, running, and checking status need only the standard library. The <code class="docutils literal notranslate"><span class="pre">sweep</span></code> extra
+(which depends on <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">pyarrow</span></code>) is needed for <code class="docutils literal notranslate"><span class="pre">collect</span></code>, which means a status check
+from a login node does not require any installs.</p>
+<section id="define-the-sweep">
+<h2>Define the sweep<a class="headerlink" href="#define-the-sweep" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""A sweep over a toy objective."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.sweep</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sweep</span>
+
+<span class="n">sweep</span> <span class="o">=</span> <span class="n">Sweep</span><span class="p">()</span>
+
+
+<span class="nd">@sweep</span><span class="o">.</span><span class="n">context</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prepare</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">run_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Load anything every combination in this task needs, once per task."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'dataset'</span><span class="p">:</span> <span class="n">manifest</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'dataset'</span><span class="p">,</span> <span class="s1">'demo'</span><span class="p">)}</span>
+
+
+<span class="nd">@sweep</span><span class="o">.</span><span class="n">evaluate</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Score one parameter combination."""</span>
+    <span class="n">objective</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">'alpha'</span><span class="p">]</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">'beta'</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">'dataset'</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'objective'</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s1">'seeds'</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">sweep</span><span class="o">.</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&#64;sweep.evaluate</span></code> is the expensive function: one combination in, a <code class="docutils literal notranslate"><span class="pre">dict</span></code> of measurements out.
+<code class="docutils literal notranslate"><span class="pre">&#64;sweep.context</span></code> is optional and runs once per <em>task</em> (not once per combination).</p>
+</section>
+<section id="configure-the-grid">
+<h2>Configure the grid<a class="headerlink" href="#configure-the-grid" title="Link to this heading"></a></h2>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"toy objective, alpha x beta"</span>
+
+<span class="k">[metadata]</span>
+<span class="n">dataset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"demo"</span>
+
+<span class="k">[grid]</span>
+<span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">beta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]</span>
+
+<span class="k">[constants]</span>
+<span class="n">tolerance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-6</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">grid</span></code> is swept over, while <code class="docutils literal notranslate"><span class="pre">constants</span></code> are passed to every combination unchanged. TOML, JSON, and
+YAML are all accepted.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">constants</span></code> are part of a combination’s identity. Two sweeps over the same grid
+with different constants produce different <code class="docutils literal notranslate"><span class="pre">combination_id</span></code>s and cannot collide in a shared
+results table.</p>
+</div>
+<p>Two further keys change how a run is recorded rather than what it sweeps:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">tuple_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"window"</span><span class="p">]</span>
+<span class="n">artefact_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"cover"</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tuple_params</span></code> names parameters whose values are tuples rather than lists. JSON has no tuple, so
+without this an evaluation receives a <code class="docutils literal notranslate"><span class="pre">list</span></code> where the planning process passed a <code class="docutils literal notranslate"><span class="pre">tuple</span></code>.
+Declaring a parameter does not change any <code class="docutils literal notranslate"><span class="pre">combination_id</span></code>, so it can be added to a sweep
+that is already part-way through.</p>
+<p><code class="docutils literal notranslate"><span class="pre">artefact_key</span></code> is described under <a class="reference internal" href="#artefacts">artefacts</a>.</p>
+</section>
+<section id="plan">
+<h2>Plan<a class="headerlink" href="#plan" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>plan<span class="w"> </span>--config<span class="w"> </span>config.toml<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo<span class="w"> </span>--tasks<span class="w"> </span><span class="m">4</span>
+<span class="go">planned 12 combinations over 4 array tasks (~3 per task)</span>
+<span class="go">manifest: runs/demo/manifest.json</span>
+
+<span class="go">submit with:</span>
+<span class="go">  sbatch --array=1-4 &lt;your sbatch script&gt; runs/demo</span>
+</pre></div>
+</div>
+<p>The manifest is the record of what the run <em>is</em>. It holds the grid, every expanded combination
+with its <code class="docutils literal notranslate"><span class="pre">id</span></code>, the array width, the metadata, and the notes. It is written once and tasks read it,
+nothing recomputes the partition.</p>
+<p>That means that if tasks 17 and 42 are killed, and then resubmitted with <code class="docutils literal notranslate"><span class="pre">--array=17,42</span></code>, they
+reproduce exactly the slices they had originally, because the width comes from the manifest rather
+than from the size of the array.</p>
+</section>
+<section id="run">
+<h2>Run<a class="headerlink" href="#run" title="Link to this heading"></a></h2>
+<p>Each task writes its own part file, so no two tasks write to the same file, and no locking is
+needed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>run<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo<span class="w"> </span>--task<span class="w"> </span><span class="m">1</span>
+<span class="go">[task 1/4] combinations 0..2 (3 assigned, 0 already done, 3 to run)</span>
+<span class="go">[task 1] 1/3 7789d6bcd687 in 0.0s</span>
+<span class="go">[task 1] 2/3 3e8101ffc006 in 0.0s</span>
+<span class="go">[task 1] 3/3 fcbd23e1d4ff in 0.0s</span>
+<span class="go">wrote runs/demo/parts/task-00001.jsonl</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--task</span></code> is for running manually. Under a scheduler it is read from the environment—<code class="docutils literal notranslate"><span class="pre">SLURM_ARRAY_TASK_ID</span></code>,
+and the SGE, PBS, and LSF equivalents.</p>
+<p>If a task that has already finished is resubmitted, it does nothing:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>run<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo<span class="w"> </span>--task<span class="w"> </span><span class="m">1</span>
+<span class="go">[task 1/4] combinations 0..2 (3 assigned, 3 already done, 0 to run)</span>
+</pre></div>
+</div>
+<p>The ability to resume is per <em>combination</em>, not per task, so a task killed by the walltime keeps
+everything it had finished. Part files are <a class="reference external" href="https://jsonlines.org">JSON Lines</a> written one at a
+time and flushed. A truncated final line from a task killed mid-write is skipped on read rather
+than corrupting the output file.</p>
+<p>Results are converted to JSON-compatible formats before they are written. Numpy scalars are unwrapped,
+and tuples and sets are recorded as lists, through nested containers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@sweep</span><span class="o">.</span><span class="n">evaluate</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'f1'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">0.83</span><span class="p">),</span> <span class="s1">'window'</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">)}</span>   <span class="c1"># recorded as 0.83 and [4, 12]</span>
+</pre></div>
+</div>
+<p>The conversion function is available as <code class="docutils literal notranslate"><span class="pre">jsonable</span></code> for writing files alongside the parts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.sweep</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonable</span>
+</pre></div>
+</div>
+</section>
+<section id="status">
+<h2>Status<a class="headerlink" href="#status" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>status<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo
+<span class="go">  planned                12</span>
+<span class="go">  completed              3</span>
+<span class="go">  remaining              9</span>
+<span class="go">  percent                25.0</span>
+<span class="go">  mean_runtime_seconds   0.01</span>
+<span class="go">  total_compute_seconds  0.0</span>
+<span class="go">  manifest_n_tasks       4</span>
+<span class="go">  unfinished_tasks       2-4</span>
+
+<span class="go">Resubmit the unfinished slices; resuming skips what is already recorded:</span>
+<span class="go">  sbatch --array=2-4 &lt;your sbatch script&gt; runs/demo</span>
+
+<span class="go">The range comes from the MANIFEST (n_tasks=4), not from the</span>
+<span class="go">config. If the config's task cap changed after this run was planned the two disagree,</span>
+<span class="go">and the plan must be re-run to adopt the new value.</span>
+</pre></div>
+</div>
+<p>Standard library only (runs on a login node without anything installed).</p>
+<p>An unfinished run names the array indices still holding work, collapsed into the syntax <code class="docutils literal notranslate"><span class="pre">--array</span></code>
+takes. A task counts as unfinished if <em>any</em> combination in its slice is missing, so a task
+killed by the walltime part-way through comes back and resumes where it stopped.</p>
+<p>The width matters as much as the range. Slices come from the manifest, not from the width of the
+array submitted, so an array narrower than the manifest plans leaves the tail simply unrun: nothing
+fails anywhere, and the sweep stops short. That is what happens when a config’s <code class="docutils literal notranslate"><span class="pre">max_tasks</span></code> changes
+<em>after</em> a run directory was planned, which is why <code class="docutils literal notranslate"><span class="pre">status</span></code> prints the width the run actually holds.</p>
+</section>
+<section id="collect">
+<h2>Collect<a class="headerlink" href="#collect" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>collect<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo<span class="w"> </span>--leading<span class="w"> </span>combination_id<span class="w"> </span>alpha<span class="w"> </span>beta<span class="w"> </span>objective
+<span class="go">collected 12 combinations -&gt; runs/demo/results.csv</span>
+<span class="go">combination_id  alpha  beta  objective  tolerance  seeds  task_index  runtime_seconds</span>
+<span class="go">  7789d6bcd687    0.1     1        4.1   0.000001      5           1            0.011</span>
+<span class="go">  3e8101ffc006    0.1     2        4.2   0.000001      5           1            0.013</span>
+<span class="go">  fcbd23e1d4ff    0.1     4        4.4   0.000001      5           1            0.011</span>
+<span class="go">  c15e73c315a4    0.1     8        4.8   0.000001      5           2            0.011</span>
+</pre></div>
+</div>
+<p>Duplicate <code class="docutils literal notranslate"><span class="pre">id</span></code>s—e.g., from a task that ran twice—are deduplicated. <code class="docutils literal notranslate"><span class="pre">--leading</span></code> names columns
+to put first and a name that is not a column is ignored. Without it the table leads with the run’s
+own configuration, taken from the manifest: the <code class="docutils literal notranslate"><span class="pre">id</span></code>, then the constants, then the swept
+parameters, followed by the measurements.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameters are recorded by the engine. Note <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, and <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> in the table above even
+though <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> returns only <code class="docutils literal notranslate"><span class="pre">objective</span></code> and <code class="docutils literal notranslate"><span class="pre">seeds</span></code>. The runner merges the combination’s parameters
+into the record, so a table of results can be read on its own without joining it back to the manifest
+by <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</div>
+</section>
+<section id="artefacts">
+<h2>Artefacts<a class="headerlink" href="#artefacts" title="Link to this heading"></a></h2>
+<p>Some evaluations produce objects too large for a results row—<em>e.g.</em>, a community cover, a fitted model, or a
+per-item prediction dump. Returning this from <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> puts it in the row, where it makes the table
+unreadable and the CSV huge.</p>
+<p>If the name of the key it comes back under is provided, the engine moves it out of the row:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">artefact_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"cover"</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@sweep</span><span class="o">.</span><span class="n">evaluate</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+    <span class="n">cover</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'n_communities'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cover</span><span class="p">),</span> <span class="s1">'modularity'</span><span class="p">:</span> <span class="n">score</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">cover</span><span class="p">),</span> <span class="s1">'cover'</span><span class="p">:</span> <span class="n">cover</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The row keeps <code class="docutils literal notranslate"><span class="pre">n_communities</span></code> and <code class="docutils literal notranslate"><span class="pre">modularity</span></code>, the cover is written to
+<code class="docutils literal notranslate"><span class="pre">runs/demo/artefacts/&lt;combination_id&gt;.json</span></code> and read back with <code class="docutils literal notranslate"><span class="pre">read_artefact</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.sweep</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_artefact</span>
+
+<span class="n">cover</span> <span class="o">=</span> <span class="n">read_artefact</span><span class="p">(</span><span class="s1">'runs/demo'</span><span class="p">,</span> <span class="s1">'7789d6bcd687'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The key is declared on the sweep config rather than passed at run time, so the manifest records that
+the run kept them (otherwise a run with no artefacts is indistinguishable from one whose
+artefacts were never written). <code class="docutils literal notranslate"><span class="pre">--artefact-key</span></code> overrides it for a single task.</p>
+</section>
+<section id="aggregating-several-runs">
+<h2>Aggregating several runs<a class="headerlink" href="#aggregating-several-runs" title="Link to this heading"></a></h2>
+<p>A benchmark is usually one draw from a family—a subsample of a graph, a synthetic instance, a
+split—and the draws differ from each other more than the parameters do. To run the same grid over
+several independent draws and aggregate use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.sweep</span><span class="w"> </span><span class="kn">import</span> <span class="n">aggregate_runs</span>
+
+<span class="n">frame</span> <span class="o">=</span> <span class="n">aggregate_runs</span><span class="p">([</span><span class="s1">'runs/sub01'</span><span class="p">,</span> <span class="s1">'runs/sub02'</span><span class="p">,</span> <span class="s1">'runs/sub03'</span><span class="p">,</span> <span class="s1">'runs/sub04'</span><span class="p">,</span> <span class="s1">'runs/sub05'</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   alpha  beta  n_runs  objective_mean  objective_ci  objective_sem
+     0.1     1       5           4.118         0.214          0.077
+     0.1     2       5           4.232         0.187          0.067
+</pre></div>
+</div>
+<p>Each metric gets a mean, the half-width of a 95% interval, and the standard error. The interval uses
+Student’s <em>t</em> rather than the normal approximation (aggregation is over a handful of runs
+and at that size the normal understates it). A single run reports <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<p>Metrics default to every numeric column that is not a grouping column or engine book-keeping. A
+metric missing from one run of several—a measurement added part-way through a series—aggregates over
+the runs that have it rather than voiding the row.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">aggregate_runs</span></code>, which needs the <code class="docutils literal notranslate"><span class="pre">sweep</span></code> extra for pandas, the statistic behind it does not:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.sweep</span><span class="w"> </span><span class="kn">import</span> <span class="n">confidence_interval</span>
+
+<span class="n">mean</span><span class="p">,</span> <span class="n">half_width</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">confidence_interval</span><span class="p">([</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.79</span><span class="p">,</span> <span class="mf">0.88</span><span class="p">,</span> <span class="mf">0.81</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">confidence_interval</span></code> only requires the standard library, so it works in the same places <code class="docutils literal notranslate"><span class="pre">plan</span></code>,
+<code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">status</span></code> do. The Student’s <em>t</em> quantile it needs is computed in the package rather,
+see <a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.stats" title="research_helpers.sweep.stats"><code class="xref py py-mod docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a> for details on its accuracy and limits.</p>
+</section>
+<section id="sizing-the-array">
+<h2>Sizing the array<a class="headerlink" href="#sizing-the-array" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>estimate<span class="w"> </span>--run-dir<span class="w"> </span>runs/demo<span class="w"> </span>--samples<span class="w"> </span><span class="m">4</span>
+<span class="go">mean 12.4s/combination over 4 random samples (min 9.8, median 12.1, max 15.6)</span>
+<span class="go">  95% confidence interval on the mean: 8.7s to 16.1s</span>
+<span class="go">estimated serial total: 0.0 compute-hours, measured alone on a node</span>
+
+<span class="go">No contention factor is set, so these numbers are optimistic: a real array puts</span>
+<span class="go">many tasks on one node, competing for memory bandwidth, and each combination takes</span>
+<span class="go">longer than it does alone. Measure yours by timing the same combinations both ways,</span>
+<span class="go">then set contention-factor under [tool.research-helpers.sweep].</span>
+
+<span class="go">per-task wall time:</span>
+<span class="go">   100 tasks -&gt; ~1 combinations/task -&gt; 0.00 h</span>
+<span class="go">   500 tasks -&gt; ~1 combinations/task -&gt; 0.00 h</span>
+<span class="go">  1000 tasks -&gt; ~1 combinations/task -&gt; 0.00 h</span>
+</pre></div>
+</div>
+<p>Samples are drawn at random, not strided. A strided sample through a grid whose first axis is
+the expensive one gives a mean that is systematically wrong, and the error does not shrink
+with more samples.</p>
+<p>The interval shows how well this sample pins the mean, and narrows as <code class="docutils literal notranslate"><span class="pre">--samples</span></code> rises.
+The spread shows how much the grid varies around that mean. A wide spread means
+that no single number describes the grid, regardless of how many samples are taken.</p>
+<p>With a factor configured, the projection is included:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>projected in-array: ~0.0s/combination at 1.8x contention, ~0.0 compute-hours total
+</pre></div>
+</div>
+</section>
+<section id="submitting">
+<h2>Submitting<a class="headerlink" href="#submitting" title="Link to this heading"></a></h2>
+<p>Templates for <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> ship with the package, along with the environment diagnostic for when a job
+fails before it reaches the code. See <a class="reference internal" href="cluster.html"><span class="std std-doc">cluster jobs</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tables.html" class="btn btn-neutral float-left" title="LaTeX tables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cluster.html" class="btn btn-neutral float-right" title="Cluster jobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
