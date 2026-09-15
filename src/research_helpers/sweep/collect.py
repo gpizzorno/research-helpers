@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from research_helpers.sweep.grid import Manifest
+from research_helpers.sweep.grid import Manifest, slice_bounds
 from research_helpers.sweep.runner import PARTS_DIR
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
     import pandas as pd
 
-__all__ = ['collect_results', 'read_parts', 'run_status']
+__all__ = ['array_spec', 'collect_results', 'missing_task_indices', 'read_parts', 'run_status']
 
 RESULTS_STEM = 'results'
 
@@ -160,14 +161,67 @@ def _write_parquet(frame: pd.DataFrame, run_dir: Path) -> bool:
     return True
 
 
-def run_status(run_dir: Path | str) -> dict[str, float]:
+def missing_task_indices(run_dir: Path | str) -> list[int]:
+    """Return the 1-based array indices whose slices still hold unfinished combinations.
+
+    Slices come from the manifest, not from the width of the array that was submitted, so an
+    array narrower than the manifest plans leaves the tail simply unrun—nothing fails anywhere,
+    the sweep stops short.
+
+    Arguments:
+        run_dir: the run directory.
+
+    Returns:
+        Sorted task indices with at least one combination still to run.
+
+    """
+    directory = Path(run_dir)
+    manifest = Manifest.load(directory)
+    records = read_parts(directory) if (directory / PARTS_DIR).exists() else []
+    done = {record.get('combination_id') for record in records} - {None}
+
+    missing = []
+    for task_index in range(1, manifest.n_tasks + 1):
+        start, end = slice_bounds(manifest.n_combinations, manifest.n_tasks, task_index)
+        if any(combination['combination_id'] not in done for combination in manifest.combinations[start:end]):
+            missing.append(task_index)
+    return missing
+
+
+def array_spec(indices: Iterable[int]) -> str:
+    """Render task indices the way '--array' takes them, collapsing runs into ranges.
+
+    Arguments:
+        indices: task indices, ascending.
+
+    Returns:
+        For example '9-12,17'. Empty if there are no indices.
+
+    """
+    ordered = sorted(indices)
+    if not ordered:
+        return ''
+
+    runs, start, previous = [], ordered[0], ordered[0]
+    for index in ordered[1:]:
+        if index == previous + 1:
+            previous = index
+            continue
+        runs.append((start, previous))
+        start = previous = index
+    runs.append((start, previous))
+    return ','.join(str(low) if low == high else f'{low}-{high}' for low, high in runs)
+
+
+def run_status(run_dir: Path | str) -> dict[str, float | int | str]:
     """Report how much of a planned sweep has finished.
 
     Arguments:
         run_dir: the run directory.
 
     Returns:
-        Counts, percentage complete, and the runtime seen so far.
+        Counts, percentage complete, and the runtime seen so far. An unfinished run also carries
+        the array width it was planned at and the indices to resubmit.
 
     """
     directory = Path(run_dir)
@@ -178,7 +232,7 @@ def run_status(run_dir: Path | str) -> dict[str, float]:
     runtimes = [record['runtime_seconds'] for record in records if 'runtime_seconds' in record]
     planned = manifest.n_combinations
 
-    return {
+    status: dict[str, float | int | str] = {
         'planned': planned,
         'completed': done,
         'remaining': planned - done,
@@ -186,3 +240,7 @@ def run_status(run_dir: Path | str) -> dict[str, float]:
         'mean_runtime_seconds': round(sum(runtimes) / len(runtimes), 2) if runtimes else 0.0,
         'total_compute_seconds': round(sum(runtimes), 1),
     }
+    if status['remaining']:
+        status['manifest_n_tasks'] = manifest.n_tasks
+        status['unfinished_tasks'] = array_spec(missing_task_indices(directory))
+    return status
