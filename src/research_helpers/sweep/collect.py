@@ -18,6 +18,9 @@ __all__ = ['collect_results', 'read_parts', 'run_status']
 
 RESULTS_STEM = 'results'
 
+# engines pandas can use to write Parquet
+PARQUET_ENGINES = ('pyarrow', 'fastparquet')
+
 
 def read_parts(run_dir: Path | str) -> list[dict[str, Any]]:
     """Read every result recorded by this run's tasks.
@@ -100,19 +103,40 @@ def collect_results(
     frame = frame.reset_index(drop=True)
 
     if write:
+        # the CSV is the deliverable and is written first
         frame.to_csv(directory / f'{RESULTS_STEM}.csv', index=False)
-        # a column of lists has no Parquet representation
-        # record it as text rather than fail
-        parquet = frame.copy()
-        for column in parquet.columns:
-            if parquet[column].map(lambda value: isinstance(value, list)).any():
-                parquet[column] = parquet[column].astype(str)
-        try:
-            parquet.to_parquet(directory / f'{RESULTS_STEM}.parquet', index=False)
-        except (ImportError, ValueError) as error:
-            print(f'warning: could not write parquet ({error}), the CSV was still written')
+        _write_parquet(frame, directory)
 
     return frame
+
+
+def _write_parquet(frame: pd.DataFrame, run_dir: Path) -> bool:
+    """Write 'results.parquet' beside the CSV when an engine is installed.
+
+    Parquet is just a convenience, so a missing engine is not a warning.
+
+    Arguments:
+        frame: the collected results.
+        run_dir: the run directory.
+
+    Returns:
+        True if the file was written.
+
+    """
+    if not any(importlib.util.find_spec(engine) for engine in PARQUET_ENGINES):
+        return False
+
+    # a column of lists has no Parquet representation; record it as text rather than fail
+    parquet = frame.copy()
+    for column in parquet.columns:
+        if parquet[column].map(lambda value: isinstance(value, list)).any():
+            parquet[column] = parquet[column].astype(str)
+    try:
+        parquet.to_parquet(run_dir / f'{RESULTS_STEM}.parquet', index=False)
+    except (ImportError, ValueError) as error:  # an engine is installed but cannot take this frame
+        print(f'note: parquet skipped ({error}), the CSV was still written')
+        return False
+    return True
 
 
 def run_status(run_dir: Path | str) -> dict[str, float]:
