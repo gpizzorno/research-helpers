@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import math
 import random
+import sys
 import time
 import tomllib
 from pathlib import Path
@@ -14,6 +16,18 @@ from typing import TYPE_CHECKING, Any
 from research_helpers.project import current_project, resolve
 from research_helpers.sweep.collect import collect_results, run_status
 from research_helpers.sweep.grid import Manifest, expand_grid
+from research_helpers.sweep.queue import (
+    QUARANTINE_SUFFIX,
+    Unit,
+    build_units,
+    expand_run_dirs,
+    quarantine,
+    read_plan_list,
+    read_units,
+    select_run_dirs,
+    shuffled,
+    write_queues,
+)
 from research_helpers.sweep.runner import run_slice, task_index_from_env
 from research_helpers.sweep.stats import confidence_interval
 
@@ -27,8 +41,8 @@ DEFAULT_SAMPLES = 12
 YAML_SUFFIXES = ('.yaml', '.yml')
 # array widths the estimate reports per-task wall time for
 REPORTED_WIDTHS = (100, 500, 1000)
-# schedulers commonly discourage arrays larger than this
-LARGE_ARRAY = 1000
+# how often a collect over many sweeps reports progress
+COLLECT_PROGRESS = 250
 SECONDS_PER_HOUR = 3600
 # a spread this wide means the mean is a poor guide to any individual combination
 WIDE_SPREAD = 3
@@ -156,7 +170,7 @@ class Sweep:
         metadata: dict[str, Any] | None = None,
         notes: str = '',
         n_tasks: int | None = None,
-        max_tasks: int = LARGE_ARRAY,
+        max_tasks: int | None = None,
         tuple_params: Sequence[str] = (),
         artefact_key: str | None = None,
     ) -> Manifest:
@@ -169,7 +183,7 @@ class Sweep:
             metadata: anything a task needs, e.g. a dataset name or a seed count.
             notes: free text recorded with the sweep.
             n_tasks: array width. Defaults to the smaller of 'max_tasks' and the grid size.
-            max_tasks: the cap applied when 'n_tasks' is not given.
+            max_tasks: the cap applied when 'n_tasks' is not given. Defaults to the project's 'max-array'.
             tuple_params: parameters whose values are tuples rather than lists.
             artefact_key: the key under which the evaluation returns output too bulky for a results row.
 
@@ -178,7 +192,8 @@ class Sweep:
 
         """
         combinations = expand_grid(grid, constants, tuple_params=tuple_params)
-        tasks = n_tasks or min(max_tasks, len(combinations))
+        cap = max_tasks if max_tasks is not None else current_project().sweep.max_array
+        tasks = n_tasks or min(cap, len(combinations))
         tasks = max(1, min(tasks, len(combinations)))
 
         manifest = Manifest(
@@ -194,6 +209,55 @@ class Sweep:
         manifest.save(run_dir)
         return manifest
 
+    def plan_config(self, config: Path | str, run_dir: Path | str, n_tasks: int | None = None) -> Manifest:
+        """Plan a sweep from a config file, as the 'plan' command does.
+
+        Arguments:
+            config: the sweep config, TOML, JSON or YAML.
+            run_dir: directory to hold the manifest, parts and results.
+            n_tasks: array width, overriding the config's 'max_tasks' cap.
+
+        Returns:
+            The manifest.
+
+        """
+        settings = read_config(config)
+        return self.plan(
+            run_dir,
+            grid=settings['grid'],
+            constants=settings.get('constants'),
+            metadata=settings.get('metadata'),
+            notes=settings.get('notes', ''),
+            n_tasks=n_tasks,
+            max_tasks=settings.get('max_tasks'),
+            tuple_params=settings.get('tuple_params', ()),
+            artefact_key=settings.get('artefact_key'),
+        )
+
+    def run_unit(self, unit: Unit, *, resume: bool = True) -> Path:
+        """Run a slice of a sweep, as an element of a queue does.
+
+        The context is rebuilt for every unit and never shared between slices,
+        even between two of the same sweep.
+
+        Arguments:
+            unit: the run directory and the slice's task index.
+            resume: skip combinations already recorded.
+
+        Returns:
+            The part file.
+
+        """
+        run_dir = Path(unit.run_dir)
+        manifest = Manifest.load(run_dir)
+        return run_slice(
+            run_dir,
+            self.evaluation,
+            task_index=unit.task,
+            context=self.build_context(manifest, run_dir),
+            resume=resume,
+        )
+
     def main(self, argv: list[str] | None = None) -> int:
         """Run the sweep command line.
 
@@ -205,48 +269,40 @@ class Sweep:
 
         """
         args = self._parser().parse_args(argv)
-        # every subcommand requires --run-dir, so this is always present
-        run_dir = Path(args.run_dir)
-
-        if args.command == 'plan':
-            return self._plan(args, run_dir)
-        if args.command == 'run':
-            return self._run(args, run_dir)
-        if args.command == 'collect':
-            return self._collect(args, run_dir)
-        if args.command == 'status':
-            return self._status(run_dir)
-        return self._estimate(args, run_dir)
+        handlers: dict[str, Callable[[argparse.Namespace], int]] = {
+            'plan': self._plan,
+            'run': self._run,
+            'collect': self._collect,
+            'status': self._status,
+            'estimate': self._estimate,
+            'plan-list': self._plan_list,
+            'queue': self._queue,
+            'run-units': self._run_units,
+            'quarantine': self._quarantine,
+        }
+        return handlers[args.command](args)
 
     # subcommands
-    def _plan(self, args: argparse.Namespace, run_dir: Path) -> int:
-        config = read_config(args.config)
-        manifest = self.plan(
-            run_dir,
-            grid=config['grid'],
-            constants=config.get('constants'),
-            metadata=config.get('metadata'),
-            notes=config.get('notes', ''),
-            n_tasks=args.tasks,
-            max_tasks=config.get('max_tasks', LARGE_ARRAY),
-            tuple_params=config.get('tuple_params', ()),
-            artefact_key=config.get('artefact_key'),
-        )
+    def _plan(self, args: argparse.Namespace) -> int:
+        run_dir = Path(args.run_dir)
+        manifest = self.plan_config(args.config, run_dir, args.tasks)
+        limit = current_project().sweep.max_array
         per_task = math.ceil(manifest.n_combinations / manifest.n_tasks)
         print(
             f'planned {manifest.n_combinations} combinations over {manifest.n_tasks} array tasks '
             f'(~{per_task} per task)',
         )
         print(f'manifest: {run_dir / "manifest.json"}')
-        if manifest.n_tasks > LARGE_ARRAY:
+        if manifest.n_tasks > limit:
             print(
-                f'note: many schedulers discourage arrays wider than {LARGE_ARRAY}; '
+                f'note: many schedulers discourage arrays wider than {limit} (max-array); '
                 'raise the combinations per task instead of the task count.',
             )
         print(f'\nsubmit with:\n  sbatch --array=1-{manifest.n_tasks} <your sbatch script> {run_dir}')
         return 0
 
-    def _run(self, args: argparse.Namespace, run_dir: Path) -> int:
+    def _run(self, args: argparse.Namespace) -> int:
+        run_dir = Path(args.run_dir)
         manifest = Manifest.load(run_dir)
         context = self.build_context(manifest, run_dir)
         part = run_slice(
@@ -261,7 +317,21 @@ class Sweep:
         print(f'wrote {part}')
         return 0
 
-    def _collect(self, args: argparse.Namespace, run_dir: Path) -> int:
+    def _collect(self, args: argparse.Namespace) -> int:
+        run_dirs = _run_dirs(args.run_dir)
+        if len(run_dirs) > 1:
+            empty = []
+            for number, run_dir in enumerate(run_dirs, start=1):
+                if collect_results(run_dir, leading=args.leading or None).empty:
+                    empty.append(run_dir)
+                if number % COLLECT_PROGRESS == 0:
+                    print(f'  {number} of {len(run_dirs)} sweeps', flush=True)
+            print(f'collected {len(run_dirs) - len(empty)} of {len(run_dirs)} sweeps')
+            for run_dir in empty:
+                print(f'  no results yet: {run_dir}')
+            return 1 if empty else 0
+
+        [run_dir] = run_dirs
         frame = collect_results(run_dir, leading=args.leading or None)
         if frame.empty:
             print('no results found.')
@@ -270,7 +340,12 @@ class Sweep:
         print(frame.head(10).to_string(index=False))
         return 0
 
-    def _status(self, run_dir: Path) -> int:
+    def _status(self, args: argparse.Namespace) -> int:
+        run_dirs = _run_dirs(args.run_dir)
+        if len(run_dirs) > 1:
+            return _campaign_status(run_dirs)
+
+        [run_dir] = run_dirs
         status = run_status(run_dir)
         width = max(len(key) for key in status)
         for key, value in status.items():
@@ -287,7 +362,8 @@ class Sweep:
             )
         return 0
 
-    def _estimate(self, args: argparse.Namespace, run_dir: Path) -> int:
+    def _estimate(self, args: argparse.Namespace) -> int:
+        run_dir = Path(args.run_dir)
         manifest = Manifest.load(run_dir)
         context = self.build_context(manifest, run_dir)
         timings = estimate_runtime(
@@ -345,6 +421,89 @@ class Sweep:
             )
         print('\nPick a width whose per-task wall time is comfortably inside your time limit.')
 
+    # many sweeps through few arrays
+    def _plan_list(self, args: argparse.Namespace) -> int:
+        # one process for the whole list
+        sweeps = combinations = slices = 0
+        for listing in args.list:
+            for config, run_dir in read_plan_list(listing):
+                manifest = self.plan_config(config, run_dir)
+                sweeps += 1
+                combinations += manifest.n_combinations
+                slices += manifest.n_tasks
+        print(f'planned {sweeps} sweeps: {combinations} combinations in {slices} slices')
+        print('queue them with the queue command instead of submitting one array per sweep')
+        return 0
+
+    def _queue(self, args: argparse.Namespace) -> int:
+        patterns = list(args.run_dir or [])
+        for listing in args.list or []:
+            patterns += [str(run_dir) for _config, run_dir in read_plan_list(listing)]
+        if not patterns:
+            print('name the sweeps with --run-dir (paths or quoted globs) or --list', file=sys.stderr)
+            return 1
+
+        run_dirs = select_run_dirs(
+            expand_run_dirs(patterns),
+            where=_pairs(args.where),
+            where_not=_pairs(args.where_not),
+        )
+        units = build_units(run_dirs, pending=args.pending)
+        if args.shuffle is not None:
+            units = shuffled(units, args.shuffle)
+        if not units:
+            print(f'{len(run_dirs)} sweeps, nothing {"pending" if args.pending else "planned"}.')
+            return 0
+
+        try:
+            written = write_queues(units, args.out, args.per_task, args.max_array, force=args.force)
+        except FileExistsError as error:
+            print(error, file=sys.stderr)
+            return 1
+        print(
+            f'{len(run_dirs)} sweeps, {len(units)} {"pending " if args.pending else ""}units, '
+            f'{args.per_task} per array element, {len(written)} queue file(s)',
+        )
+        print('\nsubmit with:')
+        for path, width in written:
+            print(f'  sbatch --array=1-{width} <your queue script> {path} {args.per_task}')
+        return 0
+
+    def _run_units(self, args: argparse.Namespace) -> int:
+        # a unit that raises is reported and the rest of the block still runs
+        element = task_index_from_env(args.element)
+        units = read_units(args.units, element, args.per_task)
+        print(f'element {element}: {len(units)} unit(s) from {args.units}', flush=True)
+
+        failed = []
+        for unit in units:
+            print(f'\n=== {unit.run_dir} task {unit.task} ===', flush=True)
+            try:
+                part = self.run_unit(unit, resume=not args.no_resume)
+            except Exception as error:  # noqa: BLE001
+                print(f'FAILED {unit.line()}: {type(error).__name__}: {error}', file=sys.stderr, flush=True)
+                failed.append(unit)
+                continue
+            print(f'wrote {part}', flush=True)
+
+        if failed:
+            print(f'\n{len(failed)} of {len(units)} unit(s) failed:', file=sys.stderr)
+            for unit in failed:
+                print(f'  {unit.line()}', file=sys.stderr)
+            return 1
+        return 0
+
+    def _quarantine(self, args: argparse.Namespace) -> int:
+        units = [unit for element in args.elements for unit in read_units(args.units, element, args.per_task)]
+        counts = quarantine(units, apply=args.apply)
+        found = ', '.join(f'{counts[key]} {key}' for key in ('units', 'part files', 'damaged part files', 'artefacts'))
+        print(f'{len(args.elements)} element(s) of {args.units}: {found}')
+        if not args.apply:
+            print(f'nothing changed. With --apply, the part files and artefacts are renamed *{QUARANTINE_SUFFIX}')
+            return 0
+        print(f'set aside {counts["set aside"]} file(s). Queue what is missing with queue --pending')
+        return 0
+
     # parser
     @staticmethod
     def _parser() -> argparse.ArgumentParser:
@@ -364,11 +523,11 @@ class Sweep:
         run.add_argument('--artefact-key', default=None, help="override the manifest's artefact key")
 
         collect = commands.add_parser('collect', help='merge part files into results.csv')
-        collect.add_argument('--run-dir', required=True)
+        collect.add_argument('--run-dir', required=True, nargs='+', help='run directories, or quoted globs')
         collect.add_argument('--leading', nargs='*', default=None, help='columns to show first')
 
         status = commands.add_parser('status', help='report sweep progress')
-        status.add_argument('--run-dir', required=True)
+        status.add_argument('--run-dir', required=True, nargs='+', help='run directories, or quoted globs')
 
         estimate = commands.add_parser('estimate', help='time a sample to size the array')
         estimate.add_argument('--run-dir', required=True)
@@ -376,4 +535,92 @@ class Sweep:
         estimate.add_argument('--seed', type=int, default=0)
         estimate.add_argument('--contention', type=float, default=None, help='override the configured factor')
 
+        _add_campaign_commands(commands)
         return parser
+
+
+def _add_campaign_commands(commands: Any) -> None:
+    """Register the commands that put many sweeps through few arrays."""
+    plan_list = commands.add_parser('plan-list', help='plan every sweep of one or more plan lists')
+    plan_list.add_argument('--list', required=True, nargs='+', help='plan lists of config<TAB>run_dir lines')
+
+    queue = commands.add_parser('queue', help="pack sweeps' slices into queue files for few arrays")
+    queue.add_argument('--run-dir', nargs='+', default=None, help='run directories, or quoted globs')
+    queue.add_argument('--list', nargs='+', default=None, help='plan lists naming the run directories')
+    queue.add_argument('--out', required=True, help='queue file stem: queues/c1 writes queues/c1.01.units')
+    queue.add_argument('--per-task', type=int, required=True, help='units each array element runs')
+    queue.add_argument('--max-array', type=int, default=None, help='elements per array (default: max-array)')
+    queue.add_argument('--pending', action='store_true', help='only slices with an unfinished combination')
+    queue.add_argument('--force', action='store_true', help='rewrite an existing queue, only once no array reads it')
+    queue.add_argument('--where', action='append', type=_pair, default=None, metavar='KEY=VALUE', help='keep matching')
+    queue.add_argument(
+        '--where-not',
+        action='append',
+        type=_pair,
+        default=None,
+        metavar='KEY=VALUE',
+        help='drop matching',
+    )
+    queue.add_argument('--shuffle', type=int, default=None, metavar='SEED', help='mix every sweep across elements')
+
+    run_units = commands.add_parser('run-units', help="run one array element's block of a queue file")
+    run_units.add_argument('--units', required=True, help='queue file')
+    run_units.add_argument('--per-task', type=int, required=True, help='units per element')
+    run_units.add_argument('--element', type=int, default=None, help='1-based element (default: from the scheduler)')
+    run_units.add_argument('--no-resume', action='store_true', help='recompute combinations already recorded')
+
+    hold = commands.add_parser('quarantine', help='set aside the results of elements that ran twice')
+    hold.add_argument('--units', required=True, help='queue file the elements ran')
+    hold.add_argument('--per-task', type=int, required=True, help='units per element')
+    hold.add_argument('--elements', type=int, nargs='+', required=True, help='the elements that ran twice')
+    hold.add_argument('--apply', action='store_true', help='rename the files. Without it, it only counts them')
+
+
+def _pair(text: str) -> tuple[str, str]:
+    """Parse a 'KEY=VALUE' argument.
+
+    Raises:
+        argparse.ArgumentTypeError: if there is no '='.
+
+    """
+    key, separator, value = text.partition('=')
+    if not separator or not key:
+        msg = f'expected KEY=VALUE, got {text!r}'
+        raise argparse.ArgumentTypeError(msg)
+    return key, value
+
+
+def _pairs(pairs: list[tuple[str, str]] | None) -> dict[str, set[str]]:
+    """Group repeated 'KEY=VALUE' arguments by key."""
+    grouped: dict[str, set[str]] = {}
+    for key, value in pairs or []:
+        grouped.setdefault(key, set()).add(value)
+    return grouped
+
+
+def _run_dirs(arguments: list[str]) -> list[Path]:
+    """Return the run directories named on the command line.
+
+    A single plain path is taken as given, so 'collect' still reads the parts of
+    a run whose manifest is gone. Anything else is expanded and must be planned.
+    """
+    if len(arguments) == 1 and not glob.has_magic(arguments[0]):
+        return [Path(arguments[0])]
+    return expand_run_dirs(arguments)
+
+
+def _campaign_status(run_dirs: list[Path]) -> int:
+    """Print one line of progress per sweep, and resume instructions."""
+    width = max(len(str(run_dir)) for run_dir in run_dirs)
+    unfinished = 0
+    for run_dir in run_dirs:
+        status = run_status(run_dir)
+        line = f'  {run_dir!s:<{width}}  {status["completed"]}/{status["planned"]}  {status["percent"]:>5}%'
+        if status.get('unfinished_tasks'):
+            unfinished += 1
+            line += f'  unfinished slices {status["unfinished_tasks"]}'
+        print(line)
+    print(f'\n{len(run_dirs) - unfinished} of {len(run_dirs)} sweeps finished')
+    if unfinished:
+        print('queue the unfinished slices with queue --pending, under a new --out')
+    return 0
