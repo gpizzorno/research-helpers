@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from research_helpers.build import FIGURES, TABLES, Drift, Registry
-from research_helpers.project import _load
+from research_helpers.build import FIGURES, TABLES, Document, Drift, Registry
+from research_helpers.project import PaperSettings, _load
+from research_helpers.prose import ProseNumber, ProseRegistry
 
 PAPER = r"""
 \documentclass{article}
@@ -385,3 +386,123 @@ def test_the_command_line_reports_a_missing_manuscript_without_a_traceback(tmp_p
     assert printed.out == ''
     assert 'no manuscript at' in printed.err
     assert 'paper.main' in printed.err, 'the message should name the setting to fix'
+
+
+# --- documents: one manuscript and everything it carries ----------------------------------------
+
+NOTE = r"""
+\documentclass{article}
+\begin{document}
+The note's scores are in Table~\ref{tab:scores}.
+\input{tables/scores}
+It finds 143 communities.
+\end{document}
+"""
+
+
+def _two_documents(tmp_path, monkeypatch):
+    """Make a project with a paper and a note, each its own manuscript, and work from it."""
+    root = tmp_path / 'project'
+    (root / 'tex' / 'note').mkdir(parents=True)
+    (root / 'tex' / 'paper.tex').write_text(PAPER, encoding='utf-8')
+    (root / 'tex' / 'note' / 'note.tex').write_text(NOTE, encoding='utf-8')
+    (root / 'pyproject.toml').write_text(
+        '[tool.research-helpers.paper]\n[tool.research-helpers.documents.note]\nmain = "tex/note/note.tex"\n',
+        encoding='utf-8',
+    )
+    monkeypatch.chdir(root)
+    _load.cache_clear()
+    return root
+
+
+def test_a_document_builds_and_installs_into_its_own_directories(tables, tmp_path, monkeypatch):
+    root = _two_documents(tmp_path, monkeypatch)
+    note = Document('note', tables)
+
+    built = note.write_all()
+    installed = note.install()
+
+    assert built == [root / 'build' / 'note' / 'tables' / 'scores.tex']
+    assert installed == [root / 'tex' / 'note' / 'tables' / 'scores.tex']
+    assert not (root / 'tex' / 'tables').exists(), "nothing lands in the paper's directory"
+
+
+def test_the_paper_document_uses_the_same_directories_as_a_bare_registry(tables, tmp_path, monkeypatch):
+    root = _two_documents(tmp_path, monkeypatch)
+
+    assert Document('paper', tables).build_dir(tables) == tables.build_dir() == root / 'build' / 'tables'
+    assert Document('paper', tables).install_dir(tables) == tables.install_dir() == root / 'tex' / 'tables'
+
+
+def test_a_document_reports_drift_in_its_own_name(tables, tmp_path, monkeypatch, capsys):
+    _two_documents(tmp_path, monkeypatch)
+    note = Document('note', tables)
+
+    assert note.main(['--check']) == 1
+    assert 'stale, the note is behind the data: tab:scores' in capsys.readouterr().out
+
+    note.main(['--install'])
+    assert note.main(['--check']) == 0
+    assert 'OK: all 1 tables in the note are current' in capsys.readouterr().out
+
+
+def test_a_document_checks_its_prose_with_its_floats(tables, tmp_path, monkeypatch, capsys):
+    _two_documents(tmp_path, monkeypatch)
+    prose = ProseRegistry()
+    prose.add(
+        ProseNumber('k', 'It finds {} communities', lambda: ('148',), document='note'),
+        ProseNumber('p', 'not in the note {}', lambda: ('1',)),
+    )
+    note = Document('note', tables, prose=prose)
+    note.main(['--install'])
+    capsys.readouterr()
+
+    assert note.main(['--check']) == 1
+    printed = capsys.readouterr().out
+    assert 'OK: all 1 tables in the note are current' in printed
+    assert 'prints     It finds 143 communities' in printed
+    assert '1 checked' in printed, "the paper's entry is not the note's to check"
+
+
+def test_a_document_lists_every_kind_and_its_prose(tables, figures, capsys):
+    prose = ProseRegistry()
+    prose.add(ProseNumber('k', 'finds {}', lambda: ('1',), section='§2'))
+
+    assert Document('paper', tables, figures, prose=prose).main(['--list']) == 0
+
+    printed = capsys.readouterr().out
+    assert printed.index('tables:') < printed.index('tab:scores') < printed.index('figures:')
+    assert 'fig:curve' in printed
+    assert 'prose:' in printed
+    assert '§2' in printed
+
+
+def test_two_registries_of_one_kind_would_share_a_directory():
+    with pytest.raises(ValueError, match='more than one registry of tables'):
+        Document('paper', Registry(TABLES), Registry(TABLES))
+
+
+def test_a_document_with_no_manuscript_names_the_setting_that_locates_it(tables, tmp_path, monkeypatch, capsys):
+    (tmp_path / 'pyproject.toml').write_text(
+        '[tool.research-helpers.documents.note]\nmain = "tex/note/missing.tex"\n',
+        encoding='utf-8',
+    )
+    monkeypatch.chdir(tmp_path)
+    _load.cache_clear()
+
+    assert Document('note', tables).main(['--check']) == 1
+    assert 'documents.note.main' in capsys.readouterr().err
+
+
+def test_an_unconfigured_document_says_how_to_configure_it(tables, capsys):
+    assert Document('supplement', tables).main(['--check']) == 1
+    assert '[tool.research-helpers.documents.supplement]' in capsys.readouterr().err
+
+
+def test_explicit_settings_need_no_wiring(tables, paper, tmp_path):
+    settings = PaperSettings(main=paper, tables_dir=tmp_path / 'tables', build_dir=tmp_path / 'build')
+    document = Document('paper', tables, settings=settings)
+    document.write_all()
+    document.install()
+
+    assert not document.drift()['tables']

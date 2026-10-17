@@ -355,3 +355,93 @@ def test_doctor_says_so_when_there_are_no_settings(tmp_path):
 
     assert 'none found' in report
     assert 'Defaults apply throughout.' in report
+
+
+# --- further documents ----------------------------------------------------------------------------
+
+
+def _documents(tmp_path, body):
+    (tmp_path / 'pyproject.toml').write_text(body, encoding='utf-8')
+    return Project.from_pyproject(tmp_path)
+
+
+def test_a_document_needs_only_its_manuscript(tmp_path):
+    project = _documents(
+        tmp_path,
+        '[tool.research-helpers.paper]\nbuild-dir = "out"\ntext-width-pt = 468.295\n'
+        '[tool.research-helpers.documents.note]\nmain = "tex/note/technical_note.tex"\n',
+    )
+    note = project.document('note')
+
+    assert note.main == tmp_path / 'tex' / 'note' / 'technical_note.tex'
+    assert note.tables_dir == tmp_path / 'tex' / 'note' / 'tables'
+    assert note.figures_dir == tmp_path / 'tex' / 'note' / 'figures'
+    assert note.bbl == tmp_path / 'tex' / 'note' / 'out_dir' / 'technical_note.bbl'
+    assert note.build_dir == tmp_path / 'out' / 'note', "inside the paper's build directory, by name"
+    assert note.text_width_in == project.paper.text_width_in, 'same class, same geometry'
+
+
+def test_a_document_may_set_anything_the_paper_can(tmp_path):
+    note = _documents(
+        tmp_path,
+        '[tool.research-helpers.documents.note]\nmain = "note.tex"\ntables-dir = "generated"\ncolumn-width-mm = 80\n',
+    ).document('note')
+
+    assert note.tables_dir == tmp_path / 'generated'
+    assert note.column_width_in == pytest.approx(80 / 25.4)
+
+
+def test_each_document_setting_records_where_it_came_from(tmp_path):
+    project = _documents(tmp_path, '[tool.research-helpers.documents.note]\nmain = "note.tex"\n')
+
+    assert project.sources['documents.note.main'] == 'pyproject'
+    assert project.sources['documents.note.tables_dir'] == 'derived'
+    assert project.sources['documents.note.text_width_in'] == 'inherited'
+
+
+def test_the_paper_is_always_a_document(project_dir):
+    project = Project.from_pyproject(project_dir)
+
+    assert project.document() is project.paper
+    assert project.document('paper') is project.paper
+
+
+def test_an_unconfigured_document_says_how_to_configure_it(project_dir):
+    with pytest.raises(KeyError, match=r'configured: paper\). Add \[tool\.research-helpers\.documents\.note\]'):
+        Project.from_pyproject(project_dir).document('note')
+
+
+def test_a_document_without_a_manuscript_warns_and_is_ignored(tmp_path):
+    with pytest.warns(ConfigWarning, match='has no "main"'):
+        project = _documents(tmp_path, '[tool.research-helpers.documents.note]\ntables-dir = "t"\n')
+
+    assert 'note' not in project.documents
+
+
+def test_the_paper_cannot_be_configured_twice(tmp_path):
+    with pytest.warns(ConfigWarning, match=r'configured under \[tool\.research-helpers\.paper\]'):
+        project = _documents(tmp_path, '[tool.research-helpers.documents.paper]\nmain = "other.tex"\n')
+
+    assert project.paper.main == tmp_path / 'tex' / 'paper.tex'
+
+
+def test_an_unknown_key_in_a_document_warns(tmp_path):
+    with pytest.warns(ConfigWarning, match=r'unknown key "colour" in \[tool\.research-helpers\.documents\.note\]'):
+        _documents(tmp_path, '[tool.research-helpers.documents.note]\nmain = "n.tex"\ncolour = "red"\n')
+
+
+@pytest.mark.parametrize('body', ['documents = 3\n', '[tool.research-helpers.documents]\nnote = 3\n'])
+def test_a_documents_value_that_is_not_a_table_warns(tmp_path, body):
+    text = body if body.startswith('[') else f'[tool.research-helpers]\n{body}'
+    with pytest.warns(ConfigWarning, match='is not a table'):
+        project = _documents(tmp_path, text)
+
+    assert not project.documents
+
+
+def test_doctor_lists_every_document(tmp_path):
+    report = _documents(tmp_path, '[tool.research-helpers.documents.note]\nmain = "note.tex"\n').doctor()
+
+    assert 'documents.note.main' in report
+    assert '[derived]' in report
+    assert '[inherited]' in report
