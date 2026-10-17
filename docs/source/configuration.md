@@ -61,11 +61,15 @@ colour        = "auto"
 [tool.research-helpers.sweep]
 runs-dir          = "runs"
 contention-factor = 1.8          # no default is provided, has to be measured
+max-array         = 1000
 
 [tool.research-helpers.arxiv]
 engine     = "xelatex"
 texlive    = 2025
 bbl-format = "3.3"
+
+[tool.research-helpers.documents.note]
+main = "tex/note/note.tex"       # additional document (besides paper)
 ```
 
 ## Subsections
@@ -195,6 +199,7 @@ pyproject  pyproject.toml
 
   sweep.runs_dir           runs                          [default]   MISSING
   sweep.contention_factor  None                          [default]
+  sweep.max_array          1000                          [default]
 
   arxiv.engine             xelatex                       [pyproject]
   arxiv.texlive            2025                          [pyproject]
