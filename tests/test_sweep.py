@@ -606,7 +606,7 @@ def test_a_toml_config_is_still_the_default(tmp_path):
 # --- the templates --------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize('name', ['sweep.sbatch', 'job.sbatch', 'diagnose-env.sbatch'])
+@pytest.mark.parametrize('name', ['sweep.sbatch', 'queue.sbatch', 'job.sbatch', 'diagnose-env.sbatch'])
 def test_every_template_ships_with_the_package(name):
     template = Path(__file__).parent.parent / 'src' / 'research_helpers' / 'templates' / name
 
