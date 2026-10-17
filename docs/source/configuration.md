@@ -164,6 +164,29 @@ reports its numbers as optimistic and lists instructions on how to measure the f
 | `texlive` | int | `2025` | The TeX Live year selected on arXiv. Used in diagnostic messages. |
 | `bbl-format` | str | `3.3` | The *biblatex* `.bbl` format version that TeX Live year reads. |
 
+### `documents`
+
+Further manuscripts beside the paper, one table each, named by the document: a technical note, a
+supplement, a second paper. The paper itself is always configured under `[paper]`.
+
+```toml
+[tool.research-helpers.documents.note]
+main = "tex/note/note.tex"
+```
+
+Each takes the same keys as `paper`. Only `main` is required, and the rest are derived from it:
+
+| Key | Default |
+| --- | --- |
+| `tables-dir` | `tables/` beside `main` |
+| `figures-dir` | `figures/` beside `main` |
+| `bbl` | `out_dir/<stem of main>.bbl` beside `main` |
+| `build-dir` | the paper's `build-dir`, then the document's name |
+| `text-width-*`, `column-width-*` | the paper's |
+
+`doctor` marks a value that follows from `main` as `[derived]`, and one taken from the paper as
+`[inherited]`. See [several documents](guide/documents.md).
+
 ## Checking settings resolution
 
 The `doctor` utility can be used to check settings resolution:
