@@ -146,11 +146,12 @@ Settings are stored in inches internally, because that is the unit `matplotlib` 
 | --- | --- | --- | --- |
 | `runs-dir` | path | `runs` | Location where a sweep's manifest, parts, and results are written. |
 | `contention-factor` | float | *(unset)* | A value indicating how much slower a task runs when the node is full. |
+| `max-array` | int | `1000` | The most elements one array should carry. Caps a sweep's planned width, and splits a [queue](guide/queues.md) across files. |
 
 :::{note}
 `contention-factor` is the ratio between a task's runtime alone on a node and its runtime with every 
 core busy, and it depends on the specifics of the setup (*i.e.* the code, the node, and the scheduler). 
-No default is provided since a wrong one would lead to incorrect walltime estimates that either waste 
+No default is provided since a wrong one would lead to incorrect wall-time estimates that either waste 
 a queue slot or get the job killed before completion. Left unset, {py:func}`~research_helpers.sweep.estimate_runtime` 
 reports its numbers as optimistic and lists instructions on how to measure the factor.
 :::
