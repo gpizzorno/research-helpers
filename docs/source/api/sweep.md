@@ -2,8 +2,7 @@
 
 This module provides tools for planning and running parameter sweeps as scheduler job arrays 
 and collecting the results. Planning, running, and status checks need only the standard library. 
-`collect` and `aggregate_runs` require the `sweep` extra. See [parameter sweeps](../guide/sweeps.md)
-and [cluster jobs](../guide/cluster.md).
+`collect` and `aggregate_runs` require the `sweep` extra. See [parameter sweeps](../guide/sweeps.md) and [cluster jobs](../guide/cluster.md).
 
 ```{eval-rst}
 .. automodule:: research_helpers.sweep
@@ -15,4 +14,13 @@ and [cluster jobs](../guide/cluster.md).
 ```{eval-rst}
 .. automodule:: research_helpers.sweep.stats
    :members:
+```
+
+## `research_helpers.sweep.queue`
+
+See [many sweeps through few arrays](../guide/queues.md).
+
+```{eval-rst}
+.. automodule:: research_helpers.sweep.queue
+   :no-members:
 ```

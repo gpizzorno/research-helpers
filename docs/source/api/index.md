@@ -8,6 +8,7 @@ helpers are deliberately absent.
 
 project
 build
+prose
 latex
 display
 figures
