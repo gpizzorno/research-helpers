@@ -84,7 +84,7 @@ def collect_results(
 ) -> pd.DataFrame:
     """Merge the part files into a table de-duplicating by combination id.
 
-    Duplicates are legitimate: a requeued task can recompute a combination whose result was
+    Duplicates are legitimate: a re-queued task can recompute a combination whose result was
     already flushed. The last record written wins.
 
     Arguments:

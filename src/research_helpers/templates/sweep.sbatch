@@ -8,7 +8,7 @@
 #SBATCH --error=logs/sweep_%A_%a.err
 #SBATCH --open-mode=append
 #SBATCH --no-requeue
-# --no-requeue: when a node stops responding, a requeue can start a second copy
+# --no-requeue: when a node stops responding, a re-queue can start a second copy
 # of a task while the first is still running. Both then append to the same
 # part file from two nodes, which on network storage leaves NUL bytes and
 # spliced lines. A failed task is resubmitted instead, and resumes from its 

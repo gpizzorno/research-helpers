@@ -342,7 +342,7 @@ def quarantine(
 ) -> Counter[str]:
     """Set aside every result of these units, so that a pending queue runs them again.
 
-    This is for units that two processes ran at once. When a scheduler requeues an element whose
+    This is for units that two processes ran at once. When a scheduler re-queues an element whose
     node has stopped answering, the original process can keep running, and the same block then runs
     twice, from two nodes, appending to the same part files. On network storage that leaves runs of
     NUL bytes and lines spliced together.

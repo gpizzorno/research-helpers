@@ -203,7 +203,7 @@ def run_slice(  # noqa: PLR0913
             result['runtime_seconds'] = round(time.monotonic() - began, 3)
 
             handle.write(json.dumps(jsonable(result)) + '\n')
-            handle.flush()  # a kill on a requeue partition then costs one combination
+            handle.flush()  # a kill on a re-queue partition then costs one combination
 
             if not quiet:
                 print(

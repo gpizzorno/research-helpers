@@ -450,5 +450,5 @@ def test_the_queue_template_sets_up_the_job_exactly_as_the_sweep_template_does()
 
 @pytest.mark.parametrize('name', ['sweep.sbatch', 'queue.sbatch'])
 def test_array_templates_refuse_a_requeue(name):
-    """A requeued element can run beside its still-running original, and both append to one file."""
+    """A re-queued element can run beside its still-running original, and both append to one file."""
     assert '#SBATCH --no-requeue' in (TEMPLATES / name).read_text(encoding='utf-8')

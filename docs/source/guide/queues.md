@@ -133,7 +133,7 @@ queues/slow.01.units exists. Give this queue a new stem (e.g. slow_r1), or rewri
 
 ## Elements that ran twice
 
-When a node stops answering, a scheduler can requeue an element while the original is still running.
+When a node stops answering, a scheduler can re-queue an element while the original is still running.
 The block then runs twice, from two nodes, both appending to the same part files, and on network
 storage that leaves runs of NUL bytes and lines spliced together. The damage is not confined to the
 lines `collect` reports as malformed since a valid line written after the NULs is linked to them, and a

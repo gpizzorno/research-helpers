@@ -8,10 +8,10 @@
 #SBATCH --error=logs/queue_%A_%a.err
 #SBATCH --open-mode=append
 #SBATCH --no-requeue
-# --no-requeue: when a node stops answering, a requeue can start a second copy
+# --no-requeue: when a node stops answering, a re-queue can start a second copy
 # of an element while the first is still running. Both then append to the same
 # part files from two nodes, which on network storage leaves NUL bytes and
-# spliced lines that no resume repairs. A failed element is queued again with
+# spliced lines that no resume repairs. A failed element is re-queued again with
 # 'queue --pending' instead; 'quarantine' sets aside what a duplicate damaged.
 
 # ---------------------------------------------------------------------------
