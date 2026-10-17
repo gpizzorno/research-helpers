@@ -307,3 +307,6 @@ projected in-array: ~0.0s/combination at 1.8x contention, ~0.0 compute-hours tot
 
 Templates for `sbatch` ship with the package, along with the environment diagnostic for when a job
 fails before it reaches the code. See [cluster jobs](cluster.md).
+
+A campaign of many sweeps is better submitted through a few queues than as one array per sweep.
+See [many sweeps through few arrays](queues.md).
