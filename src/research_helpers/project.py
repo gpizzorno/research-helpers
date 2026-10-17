@@ -48,6 +48,11 @@ ROOT_ENV_VAR = 'RESEARCH_HELPERS_ROOT'
 
 TOOL_TABLE = 'research-helpers'
 
+# the table naming further documents, beside the paper. 'paper' itself is configured by
+# '[tool.research-helpers.paper]' and is always present
+DOCUMENTS_TABLE = 'documents'
+PAPER_DOCUMENT = 'paper'
+
 PROFILES = ('screen', 'print')
 COLOURS = ('auto', 'always', 'never')
 
@@ -164,7 +169,34 @@ class Project:
     pyproject: Path | None = None  # the file the settings were read from, or None if they are pure defaults
     sources: Mapping[str, str] = field(
         default_factory=lambda: MappingProxyType({}),
-    )  # dotted setting name to 'pyproject' or 'default'
+    )  # dotted setting name to 'pyproject', 'default', 'derived', or 'inherited'
+    documents: Mapping[str, PaperSettings] = field(
+        default_factory=lambda: MappingProxyType({}),
+    )  # further documents beside the paper, by name
+
+    def document(self, name: str = PAPER_DOCUMENT) -> PaperSettings:
+        """Return the settings of a document: the paper, or one under '[tool.research-helpers.documents]'.
+
+        Arguments:
+            name: the document's name. 'paper' is always present.
+
+        Returns:
+            Its settings, with every path absolute.
+
+        Raises:
+            KeyError: if no document of that name is configured.
+
+        """
+        if name == PAPER_DOCUMENT:
+            return self.paper
+        if name in self.documents:
+            return self.documents[name]
+        configured = ', '.join([PAPER_DOCUMENT, *self.documents])
+        msg = (
+            f'no document named {name!r} (configured: {configured}). '
+            f'Add [tool.{TOOL_TABLE}.{DOCUMENTS_TABLE}.{name}] with at least "main"'
+        )
+        raise KeyError(msg)
 
     @classmethod
     def from_pyproject(cls, start: Path | str | None = None, **overrides: Any) -> Project:
@@ -202,9 +234,10 @@ class Project:
             lines.append('           (no [tool.research-helpers] settings. Defaults apply throughout.)')
         lines.append('')
 
-        width = max(len(f'{s}.{f.name}') for s, cls in SECTIONS.items() for f in fields(cls))
-        for section in SECTIONS:
-            settings = getattr(self, section)
+        groups = [(section, getattr(self, section)) for section in SECTIONS]
+        groups += [(f'{DOCUMENTS_TABLE}.{name}', settings) for name, settings in self.documents.items()]
+        width = max(len(f'{section}.{f.name}') for section, settings in groups for f in fields(settings))
+        for section, settings in groups:
             for field_ in fields(settings):
                 dotted = f'{section}.{field_.name}'
                 value = getattr(settings, field_.name)
@@ -294,7 +327,7 @@ def _load(root: Path) -> Project:
     if path.exists():
         table = tomllib.loads(path.read_text(encoding='utf-8')).get('tool', {}).get(TOOL_TABLE, {})
 
-    unknown = set(table) - set(SECTIONS)
+    unknown = set(table) - set(SECTIONS) - {DOCUMENTS_TABLE}
     for name in sorted(unknown):
         _warn(f'unknown section [tool.{TOOL_TABLE}.{name}], ignored', path)
 
@@ -315,6 +348,7 @@ def _load(root: Path) -> Project:
     log = LogSettings(**read('log', LogSettings))
     sweep = SweepSettings(**read('sweep', SweepSettings))
     arxiv = ArxivSettings(**read('arxiv', ArxivSettings))
+    documents = _documents(table.get(DOCUMENTS_TABLE), paper, path, sources)
 
     return Project(
         root=root,
@@ -325,7 +359,73 @@ def _load(root: Path) -> Project:
         arxiv=_resolve(arxiv, root),
         pyproject=path if table else None,
         sources=MappingProxyType(sources),
+        documents=MappingProxyType({name: _resolve(settings, root) for name, settings in documents.items()}),
     )
+
+
+def _documents(
+    raw: Any,
+    paper: PaperSettings,
+    path: Path,
+    sources: dict[str, str],
+) -> dict[str, PaperSettings]:
+    """Read '[tool.research-helpers.documents.<name>]' into one 'PaperSettings' per document.
+
+    Only 'main' is required. The rest follows the manuscript unless given: 'tables' and 'figures'
+    directories beside it, 'out_dir/<stem>.bbl' beside it, and a build directory named after the
+    document inside the paper's. The widths are the paper's, since a second document set in the
+    same class has the same geometry.
+
+    Arguments:
+        raw: the 'documents' table, or None if absent.
+        paper: the paper's settings, not yet resolved against the root.
+        path: the pyproject, for warnings.
+        sources: provenance, updated in place.
+
+    Returns:
+        Each document's settings, not yet resolved against the root.
+
+    """
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        _warn(f'[tool.{TOOL_TABLE}.{DOCUMENTS_TABLE}] is not a table, ignored', path)
+        return {}
+
+    documents = {}
+    for name, entry in raw.items():
+        section = f'{DOCUMENTS_TABLE}.{name}'
+        if name == PAPER_DOCUMENT:
+            _warn(
+                f'[tool.{TOOL_TABLE}.{section}] ignored: the paper is configured under [tool.{TOOL_TABLE}.paper]',
+                path,
+            )
+            continue
+        if not isinstance(entry, dict):
+            _warn(f'[tool.{TOOL_TABLE}.{section}] is not a table, ignored', path)
+            continue
+        values, provenance = _section(PaperSettings, entry, section, path)
+        if 'main' not in values:
+            _warn(f'[tool.{TOOL_TABLE}.{section}] has no "main", so there is no manuscript to describe; ignored', path)
+            continue
+
+        main = values['main']
+        derived = {
+            'tables_dir': main.parent / 'tables',
+            'figures_dir': main.parent / 'figures',
+            'bbl': main.parent / 'out_dir' / f'{main.stem}.bbl',
+            'build_dir': paper.build_dir / name,
+        }
+        inherited = {'text_width_in': paper.text_width_in, 'column_width_in': paper.column_width_in}
+        for origin, defaults in (('derived', derived), ('inherited', inherited)):
+            for key, value in defaults.items():
+                if key not in values:
+                    values[key] = value
+                    provenance[f'{section}.{key}'] = origin
+
+        documents[name] = PaperSettings(**values)
+        sources.update(provenance)
+    return documents
 
 
 def _length(name: str, known: set[str]) -> tuple[str, float]:

@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple, TypeVar
 
-from research_helpers.project import TOOL_TABLE, current_project
+from research_helpers.project import DOCUMENTS_TABLE, PAPER_DOCUMENT, TOOL_TABLE, current_project
 
 # The decorator hands the emitter back untouched, so it must hand back the *same* type
 EmitterT = TypeVar('EmitterT', bound='Callable[[], str | bytes]')
@@ -18,7 +18,10 @@ EmitterT = TypeVar('EmitterT', bound='Callable[[], str | bytes]')
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
-__all__ = ['FIGURES', 'TABLES', 'Artefact', 'Drift', 'Kind', 'Registry']
+    from research_helpers.project import PaperSettings
+    from research_helpers.prose import ProseCheck, ProseRegistry
+
+__all__ = ['FIGURES', 'TABLES', 'Artefact', 'Document', 'Drift', 'Kind', 'Registry']
 
 LABEL = re.compile(r'\\label\{([^}]*)\}')
 
@@ -316,25 +319,31 @@ class Registry:
 
         return Drift(stale=stale, missing=missing, ungenerated=sorted(self.kind.hand_written(text)))
 
-    def report(self, found: Drift) -> str:
-        """Return a description of what drifted, and what to do about it."""
+    def report(self, found: Drift, document: str = PAPER_DOCUMENT) -> str:
+        """Return a description of what drifted.
+
+        Arguments:
+            found: what 'drift' returned.
+            document: what to call the manuscript in the message.
+
+        """
         if not found:
-            return f'OK: all {len(self)} {self.kind.name} in the paper are current\n'
+            return f'OK: all {len(self)} {self.kind.name} in the {document} are current\n'
 
         lines = []
         if found.stale:
-            lines.append(f'stale, the paper is behind the data: {", ".join(found.stale)}')
+            lines.append(f'stale, the {document} is behind the data: {", ".join(found.stale)}')
         if found.missing:
-            lines.append(f'emitted but never used by the paper: {", ".join(found.missing)}')
+            lines.append(f'emitted but never used by the {document}: {", ".join(found.missing)}')
         if found.ungenerated:
-            lines.append(f'written into the paper by hand, with no emitter: {", ".join(found.ungenerated)}')
+            lines.append(f'written into the {document} by hand, with no emitter: {", ".join(found.ungenerated)}')
 
         # only suggest the remedies for what actually drifted
         remedies = []
         if found.stale:
             remedies.append(f'rebuild and install the {self.kind.name}')
         if found.missing or found.ungenerated:
-            remedies.append('edit the paper')
+            remedies.append(f'edit the {document}')
         lines.append('to fix: ' + ', then '.join(remedies))
         return '\n'.join(lines) + '\n'
 
@@ -387,3 +396,175 @@ class Registry:
             for path in self.install(args.install or None):
                 print(f'installed {_relative(path, root)}')
         return 0
+
+
+def _main_setting(name: str) -> str:
+    """Name the setting that locates a document's manuscript, for messages."""
+    if name == PAPER_DOCUMENT:
+        return f'paper.main under [tool.{TOOL_TABLE}.paper]'
+    return f'{DOCUMENTS_TABLE}.{name}.main under [tool.{TOOL_TABLE}.{DOCUMENTS_TABLE}.{name}]'
+
+
+class Document:
+    """One manuscript, the registries of what it carries, and the checks over them.
+
+    A project with one paper can use its registries directly. A project with a second document (a
+    technical note, a supplement, the second half of a split paper) gives each document its own
+    registries and a 'Document' class, so that each is built into its own directories and
+    checked against its own manuscript:
+
+        paper = Document('paper', tables, figures, prose=prose)
+        note = Document('note', note_tables, note_figures, prose=prose)
+
+    A float both documents carry is registered in both documents' registries. The decorator returns
+    the emitter unchanged, so it stacks. A prose registry may be shared, since each document checks
+    only the entries it prints.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        *registries: Registry,
+        prose: ProseRegistry | None = None,
+        settings: PaperSettings | None = None,
+    ) -> None:
+        """Group elements carried by a document.
+
+        Arguments:
+            name: the document's name: 'paper', or a name under '[tool.research-helpers.documents]'.
+            *registries: its artefact registries, at most one of each kind.
+            prose: the registry of numbers stated in prose, if any.
+            settings: where the document lives, overriding the project's wiring.
+
+        Raises:
+            ValueError: if two registries are of the same kind.
+
+        """
+        kinds = [registry.kind.name for registry in registries]
+        repeated = sorted({kind for kind in kinds if kinds.count(kind) > 1})
+        if repeated:
+            msg = f'the {name} has more than one registry of {", ".join(repeated)}. Each kind is one directory'
+            raise ValueError(msg)
+        self.name = name
+        self.registries = tuple(registries)
+        self.prose = prose
+        self._settings = settings
+
+    @property
+    def settings(self) -> PaperSettings:
+        """Return where the document lives."""
+        return self._settings if self._settings is not None else current_project().document(self.name)
+
+    def build_dir(self, registry: Registry) -> Path:
+        """Return where a registry's artefacts are built."""
+        return self.settings.build_dir / registry.kind.directory
+
+    def install_dir(self, registry: Registry) -> Path:
+        """Return where a registry's artefacts are read from."""
+        return Path(getattr(self.settings, registry.kind.setting))
+
+    def write_all(self) -> list[Path]:
+        """Build every artefact of every registry, and return the paths."""
+        return [path for registry in self.registries for path in registry.write_all(self.build_dir(registry))]
+
+    def install(self) -> list[Path]:
+        """Copy every built artefact to where the document reads it, and return the paths."""
+        return [
+            path
+            for registry in self.registries
+            for path in registry.install(self.install_dir(registry), self.build_dir(registry))
+        ]
+
+    def manuscript(self) -> Path:
+        """Return the manuscript.
+
+        Raises:
+            FileNotFoundError: if it does not exist.
+
+        """
+        main = self.settings.main
+        if not main.exists():
+            msg = (
+                f'no manuscript at {main}, so there is nothing to check the {self.name} against. '
+                f'Set {_main_setting(self.name)}.'
+            )
+            raise FileNotFoundError(msg)
+        return main
+
+    def drift(self) -> dict[str, Drift]:
+        """Compare the manuscript against every registry by kind."""
+        main = self.manuscript()
+        return {registry.kind.name: registry.drift(main, self.install_dir(registry)) for registry in self.registries}
+
+    def check_prose(self) -> ProseCheck | None:
+        """Check the numbers this document states in prose, or return None if it has no prose registry."""
+        if self.prose is None:
+            return None
+        return self.prose.check({self.name: self.manuscript()}, document=self.name)
+
+    def report(self, drift: dict[str, Drift], prose: ProseCheck | None = None) -> str:
+        """Return a description of everything that drifted."""
+        parts = [
+            registry.report(drift[registry.kind.name], self.name)
+            for registry in self.registries
+            if registry.kind.name in drift
+        ]
+        if prose is not None and self.prose is not None:
+            parts.append(self.prose.report(prose))
+        return ''.join(parts)
+
+    def main(self, argv: list[str] | None = None) -> int:
+        """Run the document's command line.
+
+        Arguments:
+            argv: command line arguments, or None to read 'sys.argv'.
+
+        Returns:
+            A process exit status: 0 on success, 1 if '--check' found anything.
+
+        """
+        parser = argparse.ArgumentParser(description=f'Generate and check what the {self.name} carries.')
+        parser.add_argument('--install', action='store_true', help=f'after building, copy where the {self.name} reads')
+        parser.add_argument(
+            '--check',
+            action='store_true',
+            help=f'do not rebuild, report whether the {self.name} is current',
+        )
+        parser.add_argument('--list', action='store_true', help='list what is registered')
+        args = parser.parse_args(argv)
+
+        if args.list:
+            self._list()
+            return 0
+
+        if args.check:
+            try:
+                drift = self.drift()
+                prose = self.check_prose()
+            except (FileNotFoundError, KeyError) as error:
+                print(error.args[0] if error.args else error, file=sys.stderr)
+                return 1
+            print(self.report(drift, prose), end='')
+            return 1 if any(drift.values()) or prose else 0
+
+        root = current_project().root
+        for path in self.write_all():
+            print(f'wrote {_relative(path, root)}')
+        if args.install:
+            for path in self.install():
+                print(f'installed {_relative(path, root)}')
+        return 0
+
+    def _list(self) -> None:
+        """Print what is registered, by kind."""
+        entries = [entry for entry in self.prose or () if entry.document == self.name]
+        labels = [artefact.label for registry in self.registries for artefact in registry]
+        width = max((len(label) for label in labels + [entry.key for entry in entries]), default=0)
+        for registry in self.registries:
+            print(f'{registry.kind.name}:')
+            for artefact in registry:
+                print(f'  {artefact.label:<{width}}  {artefact.description}')
+        if entries:
+            print('prose:')
+            for entry in entries:
+                print(f'  {entry.key:<{width}}  {entry.section}')
