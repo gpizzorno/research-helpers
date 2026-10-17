@@ -83,7 +83,7 @@ that is already part-way through.
 
 ## Plan
 
-```console
+```bash
 $ python sweep_demo.py plan --config config.toml --run-dir runs/demo --tasks 4
 planned 12 combinations over 4 array tasks (~3 per task)
 manifest: runs/demo/manifest.json
@@ -105,7 +105,7 @@ than from the size of the array.
 Each task writes its own part file, so no two tasks write to the same file, and no locking is
 needed:
 
-```console
+```bash
 $ python sweep_demo.py run --run-dir runs/demo --task 1
 [task 1/4] combinations 0..2 (3 assigned, 0 already done, 3 to run)
 [task 1] 1/3 7789d6bcd687 in 0.0s
@@ -119,7 +119,7 @@ and the SGE, PBS, and LSF equivalents.
 
 If a task that has already finished is resubmitted, it does nothing:
 
-```console
+```bash
 $ python sweep_demo.py run --run-dir runs/demo --task 1
 [task 1/4] combinations 0..2 (3 assigned, 3 already done, 0 to run)
 ```
@@ -146,7 +146,7 @@ from research_helpers.sweep import jsonable
 
 ## Status
 
-```console
+```bash
 $ python sweep_demo.py status --run-dir runs/demo
   planned                12
   completed              3
@@ -178,7 +178,7 @@ fails anywhere, and the sweep stops short. That is what happens when a config's 
 
 ## Collect
 
-```console
+```bash
 $ python sweep_demo.py collect --run-dir runs/demo --leading combination_id alpha beta objective
 collected 12 combinations -> runs/demo/results.csv
 combination_id  alpha  beta  objective  tolerance  seeds  task_index  runtime_seconds
@@ -272,7 +272,7 @@ see {mod}`research_helpers.sweep.stats` for details on its accuracy and limits.
 
 ## Sizing the array
 
-```console
+```bash
 $ python sweep_demo.py estimate --run-dir runs/demo --samples 4
 mean 12.4s/combination over 4 random samples (min 9.8, median 12.1, max 15.6)
   95% confidence interval on the mean: 8.7s to 16.1s

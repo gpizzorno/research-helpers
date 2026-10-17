@@ -9,7 +9,7 @@ checksums for identical content (Zenodo).
 `--dry-run` runs the inventory and the checks and writes nothing, so it is safe in CI, and it
 exits with `1` if anything is wrong.
 
-```console
+```bash
 $ research-helpers arxiv --dry-run
   paper.tex                                         125.3 KB
   paper.bbl                                         341.2 KB

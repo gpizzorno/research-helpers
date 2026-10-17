@@ -94,7 +94,7 @@ Our system improves over the baseline (Table~\ref{tab:scores}).
 
 ## 4. Build the table
 
-```console
+```bash
 $ python -m paperdemo.tables --list
   tab:scores  Accuracy and F1 for the baseline and our system.
 
@@ -124,7 +124,7 @@ goes anywhere near the paper:
 
 At this point the check would already fail, because the paper does not have this table yet:
 
-```console
+```bash
 $ python -m paperdemo.tables --check
 stale, the paper is behind the data: tab:scores
 to fix: rebuild and install the tables
@@ -134,7 +134,7 @@ $ echo $?
 
 ## 5. Install the table
 
-```console
+```bash
 $ python -m paperdemo.tables --install
 wrote build/tables/scores.tex
 installed tex/tables/scores.tex
@@ -148,7 +148,7 @@ OK: all 1 tables in the paper are current
 **The data changes, but the paper is not rebuilt.** This is the main failure mode the pipeline is 
 designed to prevent—i.e., the PDF keeps compiling cleanly but also keeps showing superceded numbers.
 
-```console
+```bash
 $ # data/scores.json is updated: ours.accuracy 0.8456 -> 0.8712
 $ python -m paperdemo.tables --check
 stale, the paper is behind the data: tab:scores
@@ -157,7 +157,7 @@ stale, the paper is behind the data: tab:scores
 **A table is generated but never used.** For example, a `tab:ablation` emitter is registered but the
 `\input` is never added to the paper:
 
-```console
+```bash
 $ python -m paperdemo.tables --check
 emitted but never used by the paper: tab:ablation
 ```
@@ -165,7 +165,7 @@ emitted but never used by the paper: tab:ablation
 **A table is typed by hand.** For example, a `table` float is added to the paper with its own `tabular` 
 in it:
 
-```console
+```bash
 $ python -m paperdemo.tables --check
 written into the paper by hand, with no emitter: tab:corpus
 to fix: edit the paper
