@@ -154,7 +154,7 @@ def test_a_changed_number_is_stale_and_the_report_shows_what_is_printed():
     assert [mismatch.key for mismatch in found.stale] == ['mean-k']
     report = prose.report(found)
     assert 'prints     OSLOM finds 143 communities on average' in report
-    assert 'data give  OSLOM finds 148.6 communities on average' in report
+    assert 'data contains  OSLOM finds 148.6 communities on average' in report
     assert 'correct the text' in report
 
 
@@ -195,7 +195,7 @@ def test_an_entry_whose_data_is_missing_is_reported_not_raised():
 @pytest.mark.usefixtures('project')
 def test_a_known_discrepancy_that_is_still_wrong_is_open_not_a_failure():
     prose = registry(debris='7.9')
-    prose.known_discrepancies['debris'] = 'the data give 7.9; the text is corrected in the next pass'
+    prose.known_discrepancies['debris'] = 'the data contains 7.9; the text is corrected in the next pass'
 
     found = prose.check()
 
