@@ -1,6 +1,6 @@
 # Cluster jobs
 
-Three `sbatch` templates ship with the package. Copy one out with:
+Four `sbatch` templates ship with the package. Copy one out with:
 
 ```sh
 cp "$(python -c 'from importlib.resources import files; print(files("research_helpers")/"templates"/"sweep.sbatch")')" .
@@ -9,6 +9,7 @@ cp "$(python -c 'from importlib.resources import files; print(files("research_he
 | Template | Description |
 | --- | --- |
 | `sweep.sbatch` | Runs one array task per slice of a planned grid. See [parameter sweeps](sweeps.md). |
+| `queue.sbatch` | Runs one block of a queue file per array element, for many sweeps at once. See [many sweeps through few arrays](queues.md). |
 | `job.sbatch` | Runs one script as a single job. |
 | `diagnose-env.sbatch` | Diagnostics for when a job cannot find the interpreter. |
 
@@ -24,7 +25,18 @@ this, a task granted one core still sees the whole node through BLAS and spawns 
 **The interpreter.** They call `$CONDA_PREFIX/bin/python` by absolute path rather than trusting
 `PATH`. This prevents a common occurrence where after an apparently successful activation the 
 `PATH` is wrong and `python` falls through to the base install leading to failed jobs at the 
-first third-party import.
+first third-party import. `sweep.sbatch` and `queue.sbatch` share this setup line for line, and a
+test keeps the two identical.
+
+**Re-queuing.** The two array templates set `--no-requeue`. When a node stops answering, a re-queue
+can start a second copy of a task while the first is still running, and both append to the same
+part file from two nodes. That corrupts it beyond repair (see
+[elements that ran twice](queues.md#elements-that-ran-twice)). A failed task is resubmitted instead,
+and resumes from its last recorded combination.
+
+**Forcing a re-run.** Set `SWEEP_NO_RESUME=1` on the `sbatch` line to recompute combinations
+already recorded. After a change to the code or the environment, a resumed task that finds
+everything done exits cleanly, exactly like a success.
 
 ## Single jobs
 
