@@ -175,6 +175,16 @@ def test_the_logger_name_is_shown_rather_than_unknown(console):
     assert 'logger=' not in output, 'the name is shown once, not also in the context'
 
 
+def test_percent_style_arguments_are_interpolated(console):
+    """The standard library's idiom, and the one ruff's G rules ask for over an f-string."""
+    get_logger('research_helpers.demo').info('merged %d nodes, rate %.1f%%', 12, 3.5)
+
+    output = console.getvalue()
+
+    assert 'merged 12 nodes, rate 3.5%' in output
+    assert 'positional_args' not in output
+
+
 def test_a_traceback_is_written_below_the_line_not_inside_the_context(console):
     try:
         1 / 0
