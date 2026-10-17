@@ -10,7 +10,7 @@ from tqdm.auto import tqdm as tqdm_auto
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
 __all__ = ['LoggingTqdm', 'progress']
 
@@ -26,7 +26,7 @@ class LoggingTqdm(tqdm_auto):  # ty: ignore[unsupported-base]
 
 
 @contextmanager
-def progress() -> Iterator[None]:
+def progress() -> Generator[None]:
     """Route log output through 'tqdm.write' for the duration."""
     with logging_redirect_tqdm():
         yield

@@ -27,7 +27,7 @@ except ModuleNotFoundError as error:  # pragma: no cover - exercised by installi
 from research_helpers.project import PROFILES, FigureSettings, current_project, resolve
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from matplotlib.axes import Axes
     from matplotlib.figure import Figure
@@ -212,7 +212,7 @@ def _apply_print_overrides() -> None:
 
 
 @contextmanager
-def style(**kwargs: Any) -> Iterator[FigureSettings]:
+def style(**kwargs: Any) -> Generator[FigureSettings]:
     """Apply a style for the duration of the block, then restore the previous rcParams.
 
     Takes the same arguments as 'apply_style'. For use in notebooks, where an
@@ -249,7 +249,7 @@ def save(
     """
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    cropping = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
+    cropping: dict[str, Any] = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
     figure.savefig(destination, **cropping, **kwargs)
     return destination
 
@@ -269,7 +269,7 @@ def render(figure: Figure, *, fmt: str = 'png', tight: bool = True, pad_inches: 
 
     """
     buffer = io.BytesIO()
-    cropping = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
+    cropping: dict[str, Any] = {'bbox_inches': 'tight', 'pad_inches': pad_inches} if tight else {}
     figure.savefig(buffer, format=fmt, **cropping, **kwargs)
     return buffer.getvalue()
 
