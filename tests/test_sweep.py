@@ -360,7 +360,7 @@ def test_estimate_times_a_sample_and_projects_the_array(sweep, planned, capsys):
 
     output = capsys.readouterr().out
     assert 'mean' in output
-    assert 'per-task wall time' in output
+    assert 'per-task wall-time' in output
     assert 'No contention factor is set' in output, 'an unmeasured factor must not be invented'
 
 

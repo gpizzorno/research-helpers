@@ -39,7 +39,7 @@ __all__ = ['Sweep', 'estimate_runtime', 'read_config']
 DEFAULT_SAMPLES = 12
 # config extensions read as YAML rather than TOML
 YAML_SUFFIXES = ('.yaml', '.yml')
-# array widths the estimate reports per-task wall time for
+# array widths the estimate reports per-task wall-time for
 REPORTED_WIDTHS = (100, 500, 1000)
 # how often a collect over many sweeps reports progress
 COLLECT_PROGRESS = 250
@@ -394,7 +394,7 @@ class Sweep:
 
     @staticmethod
     def _report_projection(manifest: Manifest, mean: float, contention: float | None) -> None:
-        """Print the per-task wall time an array of each width would need."""
+        """Print the per-task wall-time an array of each width would need."""
         alone = mean * manifest.n_combinations / SECONDS_PER_HOUR
         print(f'estimated serial total: {alone:.1f} compute-hours, measured alone on a node')
 
@@ -413,13 +413,13 @@ class Sweep:
                 f'~{alone * contention:.1f} compute-hours total',
             )
 
-        print('\nper-task wall time:')
+        print('\nper-task wall-time:')
         for width in REPORTED_WIDTHS:
             per_task = math.ceil(manifest.n_combinations / width)
             print(
                 f'  {width:>4} tasks -> ~{per_task} combinations/task -> {per_task * projected / SECONDS_PER_HOUR:.2f} h',
             )
-        print('\nPick a width whose per-task wall time is comfortably inside your time limit.')
+        print('\nPick a width whose per-task wall-time is comfortably inside your time limit.')
 
     # many sweeps through few arrays
     def _plan_list(self, args: argparse.Namespace) -> int:

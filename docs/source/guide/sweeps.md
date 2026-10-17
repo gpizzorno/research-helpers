@@ -124,7 +124,7 @@ $ python sweep_demo.py run --run-dir runs/demo --task 1
 [task 1/4] combinations 0..2 (3 assigned, 3 already done, 0 to run)
 ```
 
-The ability to resume is per *combination*, not per task, so a task killed by the walltime keeps
+The ability to resume is per *combination*, not per task, so a task killed by the wall-time keeps
 everything it had finished. Part files are [JSON Lines](https://jsonlines.org) written one at a 
 time and flushed. A truncated final line from a task killed mid-write is skipped on read rather 
 than corrupting the output file.
@@ -169,7 +169,7 @@ Standard library only (runs on a login node without anything installed).
 
 An unfinished run names the array indices still holding work, collapsed into the syntax `--array`
 takes. A task counts as unfinished if *any* combination in its slice is missing, so a task
-killed by the walltime part-way through comes back and resumes where it stopped.
+killed by the wall-time part-way through comes back and resumes where it stopped.
 
 The width matters as much as the range. Slices come from the manifest, not from the width of the
 array submitted, so an array narrower than the manifest plans leaves the tail simply unrun: nothing
@@ -283,7 +283,7 @@ many tasks on one node, competing for memory bandwidth, and each combination tak
 longer than it does alone. Measure yours by timing the same combinations both ways,
 then set contention-factor under [tool.research-helpers.sweep].
 
-per-task wall time:
+per-task wall-time:
    100 tasks -> ~1 combinations/task -> 0.00 h
    500 tasks -> ~1 combinations/task -> 0.00 h
   1000 tasks -> ~1 combinations/task -> 0.00 h
