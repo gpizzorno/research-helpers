@@ -146,7 +146,7 @@ from research_helpers.sweep import jsonable
 
 ## Status
 
-```bash
+```console
 $ python sweep_demo.py status --run-dir runs/demo
   planned                12
   completed              3
