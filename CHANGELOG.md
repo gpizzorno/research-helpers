@@ -4,6 +4,48 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-10-17
+
+### Added
+
+- **`research_helpers.prose`: numbers stated in prose.** `ProseRegistry` holds numbers in the prose
+  as the fragment of the sentence that carries it, with `{}` where the number goes, and a function 
+  computing it from the data. The check reads the document and reports every fragment that no longer 
+  says what the data contains, with what the document prints in its place, plus sentences that have 
+  vanished and entries whose data could not be computed.
+- **Several documents.** `[tool.research-helpers.documents.<name>]` configures a manuscript beside
+  the paper. Only `main` is required: the tables and figures directories, the `.bbl` and the build
+  directory follow from it, and the widths are inherited from `[paper]`. `doctor` lists every
+  document, marking values `[derived]` or `[inherited]`. New: `Project.documents`,
+  `Project.document(name)`.
+- **`build.Document`**: one manuscript's registries, and optionally its prose registry, built,
+  installed, and checked together into and against that document's own directories and source.
+  `Document.main()` gives `--install`, `--check` and `--list`.
+- **`research_helpers.sweep.queue`: many sweeps through few arrays.** The unit of work is one slice
+  of one sweep, a queue is a text file of units, and each element of one array runs a block of them.
+  `plan-list`, `queue`, `run-units` and `quarantine` are new subcommands of every `Sweep`. Queues
+  can be filtered by what the manifests record (`--where`, `--where-not`), shuffled by seed,
+  resumed with `--pending` (re-running slices, never re-partitioning them), and refuse to overwrite
+  a queue an array may still be reading.
+- **`queue.sbatch`** template, its environment setup identical to `sweep.sbatch`'s (a test holds
+  the two together).
+- **`sweep.max-array`** setting (default 1,000): the most elements one array should carry. It
+  splits queues across files and caps a sweep's planned width.
+- **`collect` and `status` take several run directories or quoted globs.** `status` then prints one
+  line per sweep.
+- **`SWEEP_NO_RESUME=1`** on the `sbatch` line of either array template recomputes combinations
+  already recorded.
+
+### Changed
+
+- **`sweep.sbatch` sets `--no-requeue`.** A re-queue after a node stopped answering can start a
+  second copy of a task while the first still runs and corrupt the output, this prevents that 
+  behaviour. A failed task is resubmitted instead, and resumes.
+- **`Sweep.plan`'s `max_tasks` defaults to the project's `max-array`** rather than a fixed 1,000.
+  Unchanged unless the setting is configured.
+- **`Registry.report` takes the document's name**, so a second document's messages name it rather
+  than "the paper". The default wording is unchanged.
+
 ## [1.1.0] — 2026-09-15
 
 ### Added
