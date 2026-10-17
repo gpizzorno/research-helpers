@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] — 2026-10-17
+
+### Fixed
+
+- **`log`: `%`-style arguments are interpolated.** `logger.info('merged %d nodes', 12)` printed the
+  template verbatim with `positional_args=(12,)` appended, because the processor chain lacked
+  structlog's `PositionalArgumentsFormatter`. That is the standard library's idiom, and the one
+  ruff's `G` rules ask for over an f-string.
+
 ## [1.2.0] — 2026-10-17
 
 ### Added
