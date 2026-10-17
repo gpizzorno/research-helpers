@@ -7,6 +7,12 @@
 #SBATCH --output=logs/sweep_%A_%a.out
 #SBATCH --error=logs/sweep_%A_%a.err
 #SBATCH --open-mode=append
+#SBATCH --no-requeue
+# --no-requeue: when a node stops responding, a requeue can start a second copy
+# of a task while the first is still running. Both then append to the same
+# part file from two nodes, which on network storage leaves NUL bytes and
+# spliced lines. A failed task is resubmitted instead, and resumes from its 
+# last recorded combination.
 
 # ---------------------------------------------------------------------------
 # One array task per slice of a parameter grid.
@@ -28,7 +34,10 @@
 # 'status' prints that range, already collapsed into --array syntax:
 #   python -m my_project.sweep status --run-dir runs/my-sweep
 #
-# --open-mode=append keeps logs across a requeue.
+# Set SWEEP_NO_RESUME=1 to recompute combinations already recorded. After a
+# change to the environment or the code, a resumed task that finds everything
+# done exits cleanly having run nothing:
+#   SWEEP_NO_RESUME=1 sbatch --array=1-500 sweep.sbatch runs/my-sweep
 # ---------------------------------------------------------------------------
 
 set -euo pipefail
@@ -90,6 +99,7 @@ echo "host=$(hostname) task=${SLURM_ARRAY_TASK_ID:-1} started=$(date -Is)"
 # Set SWEEP_TASKS only to deliberately re-partition.
 "$PYTHON" -u -m "$SWEEP_MODULE" run \
   --run-dir "$RUN_DIR" \
-  ${SWEEP_TASKS:+--tasks "$SWEEP_TASKS"}
+  ${SWEEP_TASKS:+--tasks "$SWEEP_TASKS"} \
+  ${SWEEP_NO_RESUME:+--no-resume}
 
 echo "finished=$(date -Is)"
