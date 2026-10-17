@@ -4,9 +4,12 @@
 :maxdepth: 1
 
 generated-table
+prose
+documents
 figures
 tables
 sweeps
+queues
 cluster
 submission
 logging
