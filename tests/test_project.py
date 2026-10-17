@@ -445,3 +445,13 @@ def test_doctor_lists_every_document(tmp_path):
     assert 'documents.note.main' in report
     assert '[derived]' in report
     assert '[inherited]' in report
+
+
+# --- the sweep's array width ----------------------------------------------------------------------
+
+
+def test_the_array_width_defaults_to_a_thousand_and_is_configurable(tmp_path):
+    assert Project(root=tmp_path).sweep.max_array == 1000
+    project = _documents(tmp_path, '[tool.research-helpers.sweep]\nmax-array = 500\n')
+
+    assert project.sweep.max_array == 500

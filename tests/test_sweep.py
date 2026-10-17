@@ -891,3 +891,12 @@ def test_jsonable_output_actually_serialises():
     numpy = pytest.importorskip('numpy')
 
     json.dumps(jsonable({'f1': numpy.float64(0.83), 'window': (4, 12), 'seen': {1, 2}}))
+
+
+def test_the_planned_width_is_capped_by_the_configured_max_array(sweep, tmp_path, monkeypatch):
+    (tmp_path / 'pyproject.toml').write_text('[tool.research-helpers.sweep]\nmax-array = 2\n', encoding='utf-8')
+    monkeypatch.chdir(tmp_path)
+    _load.cache_clear()
+
+    assert sweep.plan(tmp_path / 'run', GRID).n_tasks == 2
+    assert sweep.plan(tmp_path / 'wide', GRID, max_tasks=4).n_tasks == 4, 'an explicit cap still wins'
