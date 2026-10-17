@@ -131,6 +131,7 @@ class SweepSettings:
     contention_factor: float | None = None  # how much slower a combination runs inside a full array vs. alone on a node
     # deliberately unset by default: it depends on the partition, the array width and the workload,
     # should be measured once by timing the same combinations alone and inside an array
+    max_array: int = 1000  # the most elements one array should carry: caps a planned width and cuts queue files
 
 
 @dataclass(frozen=True)
