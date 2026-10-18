@@ -217,7 +217,8 @@ log.info('scoring', corpus='perseus', sentences=18_000)
 [INFO    ] 19:41:47 __main__ scoring (corpus=perseus, sentences=18000)
 ```
 
-The console and the log file take separate levels. Colour is applied only when the stream is a terminal, 
+The console and the log file take separate levels, and other libraries' loggers are held at `WARNING` so
+their routine output stays out of both. Colour is applied only when the stream is a terminal,
 so no escape codes are included in a redirected log.
 
 Details in the [logging guide](https://gpizzorno.github.io/research-helpers/guide/logging.html).
