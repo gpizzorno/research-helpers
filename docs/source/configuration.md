@@ -56,6 +56,7 @@ dpi     = 300
 directory     = "data/logs"      # omit for console output only
 console-level = "INFO"
 file-level    = "DEBUG"
+library-level = "WARNING"        # other libraries' loggers
 colour        = "auto"
 
 [tool.research-helpers.sweep]
@@ -138,6 +139,7 @@ Settings are stored in inches internally, because that is the unit `matplotlib` 
 | `directory` | path | *(unset)* | Location where log files should be written. Omit it for console output only. |
 | `console-level` | str | `INFO` | Any level name accepted by the standard library, including custom ones. |
 | `file-level` | str | `DEBUG` | Same as above. Usually more verbose than the console. |
+| `library-level` | str | `WARNING` | The level of every logger not obtained from `get_logger`, *i.e.*, those belonging to other libraries. Keeps their routine output out of the console and the file. See [Other libraries](guide/logging.md#other-libraries). |
 | `colour` | `auto` \| `always` \| `never` | `auto` | `auto` uses colours only when stderr is a terminal, so redirected output stays clean. |
 
 ### `sweep`
@@ -219,6 +221,7 @@ pyproject  pyproject.toml
   log.directory            None                          [default]
   log.console_level        INFO                          [default]
   log.file_level           DEBUG                         [default]
+  log.library_level        WARNING                       [default]
   log.colour               auto                          [default]
 
   sweep.runs_dir           runs                          [default]   MISSING
