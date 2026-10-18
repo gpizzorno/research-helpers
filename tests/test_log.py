@@ -145,14 +145,16 @@ def test_pytest_can_still_capture_logs(caplog):
     assert 'captured' in caplog.text
 
 
-def test_the_root_level_is_lowered_even_when_logging_was_configured_first(tmp_path):
+def test_the_levels_are_set_even_when_logging_was_configured_first(tmp_path):
     """basicConfig() does nothing once anything has configured logging. So the level was left high."""
     logging.getLogger().addHandler(logging.NullHandler())
-    logging.getLogger().setLevel(logging.WARNING)
+    logging.getLogger().setLevel(logging.ERROR)
 
     setup_logging(directory=tmp_path / 'logs', file_level='DEBUG', stream=io.StringIO())
+    get_logger('demo').debug('a detail')
 
-    assert logging.getLogger().level == logging.DEBUG
+    assert logging.getLogger().level == logging.WARNING, 'the root carries the library level'
+    assert 'a detail' in (tmp_path / 'logs' / 'app.log').read_text(encoding='utf-8')
 
 
 def test_a_debug_record_reaches_the_file_while_the_console_stays_quiet(tmp_path):
@@ -262,6 +264,90 @@ def test_a_level_can_be_given_as_an_int():
     assert 'loud' in stream.getvalue()
 
 
+def test_a_logger_obtained_before_setup_takes_the_levels_configured_after_it():
+    """Modules obtain their loggers at import time, before main() configures."""
+    log = get_logger('imported.early')  # implicitly configures, with the console at INFO
+
+    stream = io.StringIO()
+    setup_logging(console_level='DEBUG', stream=stream)
+    log.debug('a detail')
+
+    assert 'a detail' in stream.getvalue()
+
+
+def test_get_logger_without_a_name_is_named_after_the_calling_module(console):
+    get_logger().info('unnamed')
+
+    assert f'{__name__} unnamed' in console.getvalue()
+    assert logging.getLogger(__name__).level == logging.INFO
+
+
+def test_reset_gives_back_the_levels_it_set():
+    setup_logging(stream=io.StringIO())
+    get_logger('demo')
+    assert logging.getLogger('demo').level == logging.INFO
+
+    reset_logging()
+
+    assert logging.getLogger('demo').level == logging.NOTSET
+
+
+# --- other libraries --------------------------------------------------------------------------------
+
+
+@pytest.fixture
+def library():
+    """Return a logger standing in for another library's, left with no level of its own afterwards."""
+    logger = logging.getLogger('otherlib.client')
+    yield logger
+    logger.setLevel(logging.NOTSET)
+
+
+def test_a_record_from_another_library_is_rendered_rather_than_lost(console, library, capsys):
+    """The level filter used to run on these too, with no logger to ask, and raised instead."""
+    library.warning('retrying %s after %d s', 'POST', 2)
+
+    assert 'otherlib.client retrying POST after 2 s' in console.getvalue()
+    assert 'Logging error' not in capsys.readouterr().err
+
+
+def test_another_librarys_info_and_debug_are_withheld_by_default(tmp_path, library):
+    stream = io.StringIO()
+    setup_logging(directory=tmp_path / 'logs', console_level='DEBUG', file_level='DEBUG', stream=stream)
+
+    library.debug('chatter')
+    library.info('more chatter')
+    library.warning('worth knowing')
+    get_logger('demo').debug('our detail')
+
+    written = (tmp_path / 'logs' / 'app.log').read_text(encoding='utf-8')
+    for output in (stream.getvalue(), written):
+        assert 'chatter' not in output
+        assert 'worth knowing' in output
+        assert 'our detail' in output, 'the project keeps its own levels'
+
+
+def test_the_library_level_can_be_lowered(library):
+    stream = io.StringIO()
+    setup_logging(library_level='INFO', stream=stream)
+
+    library.info('now audible')
+
+    assert 'now audible' in stream.getvalue()
+
+
+def test_one_library_can_be_let_through_with_the_standard_library(library):
+    stream = io.StringIO()
+    setup_logging(stream=stream)
+
+    library.setLevel(logging.INFO)
+    library.info('let through')
+    logging.getLogger('otherlib.server').info('still withheld')
+
+    assert 'let through' in stream.getvalue()
+    assert 'still withheld' not in stream.getvalue()
+
+
 # --- files ------------------------------------------------------------------------------------------
 
 
@@ -332,6 +418,20 @@ def test_settings_come_from_the_project(tmp_path, monkeypatch):
     assert 'quiet' not in stream.getvalue()
     assert 'loud' in stream.getvalue()
     assert (root / 'var' / 'logs' / 'app.log').exists()
+
+
+def test_the_library_level_comes_from_the_project(tmp_path, monkeypatch, library):
+    root = tmp_path / 'project'
+    root.mkdir()
+    (root / 'pyproject.toml').write_text('[tool.research-helpers.log]\nlibrary-level = "INFO"\n', encoding='utf-8')
+    monkeypatch.chdir(root)
+    _load.cache_clear()
+
+    stream = io.StringIO()
+    setup_logging(stream=stream)
+    library.info('audible')
+
+    assert 'audible' in stream.getvalue()
 
 
 def test_arguments_override_the_project(tmp_path, monkeypatch):
