@@ -120,6 +120,7 @@ class LogSettings:
     directory: Path | None = None  # log directory, relative to the project root, None for console output only
     console_level: str = 'INFO'
     file_level: str = 'DEBUG'
+    library_level: str = 'WARNING'  # every logger not obtained from get_logger, i.e. other libraries'
     colour: str = 'auto'  # console logging level, file logging level, and colour setting
 
 
