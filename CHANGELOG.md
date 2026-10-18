@@ -4,6 +4,31 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] — 2026-10-18
+
+### Added
+
+- **`log`: `library-level`** (default `WARNING`), the level of every logger not obtained from
+  `get_logger`, i.e. other libraries'. Also `setup_logging(library_level=...)`.
+
+### Changed
+
+- **`log`: other libraries' records below `WARNING` are no longer logged.** The root logger used to
+  take the lower of the console and file levels, so a file at `DEBUG` would have collected every
+  library's debug output once the fix below let it through. The root now carries the library level,
+  and each logger from `get_logger` carries the console and file levels itself. A specific library is let through by giving its logger a level of its own. The same for all libraries can be set with `library-level`.
+- **`log`: `get_logger()` without a name** takes the calling module's name when it is called,
+  rather than at its first event, so that the logger can be given its level.
+- **`reset_logging`** also clears the levels it gave loggers from `get_logger`.
+
+### Fixed
+
+- **`log`: records from other libraries are rendered.** A record logged through the standard
+  library by anything but `get_logger`, e.g. matplotlib or an HTTP client, was lost, and a
+  `--- Logging error ---` traceback printed in its place: structlog's level filter ran on it with no
+  logger to ask. The filter now runs on structlog's own events only. The standard library has
+  already filtered every other record by level before it gets there.
+
 ## [1.2.1] — 2026-10-17
 
 ### Fixed
