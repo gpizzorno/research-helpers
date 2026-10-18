@@ -24,6 +24,11 @@ _console_handler: logging.Handler | None = None
 _file_handler: MultiFileHandler | None = None
 _configured = False
 
+# loggers requested through get_logger take the project's level
+# every other logger inherits the root's, which is set to the library level
+_project_loggers: set[str] = set()
+_project_level = logging.NOTSET
+
 
 def _level(value: int | str) -> int:
     """Return a logging level as an int, whether given as one or as a name.
@@ -62,9 +67,12 @@ def add_module_name(_logger: WrappedLogger, _method_name: str, event_dict: Event
 
 
 def _processors() -> list[structlog.types.Processor]:
-    """Return the chain shared by console output, file output, and foreign records."""
+    """Return the chain shared by console output, file output, and foreign records.
+
+    It holds no level filter: a foreign record reaches the chain with no logger to ask (structlog
+    passes None), and the standard library has already filtered it by level by then.
+    """
     return [
-        structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
@@ -75,10 +83,11 @@ def _processors() -> list[structlog.types.Processor]:
     ]
 
 
-def setup_logging(
+def setup_logging(  # noqa: PLR0913
     *,
     console_level: int | str | None = None,
     file_level: int | str | None = None,
+    library_level: int | str | None = None,
     directory: Path | str | None = None,
     colour: str | None = None,
     stream: TextIO | None = None,
@@ -88,28 +97,37 @@ def setup_logging(
     Arguments:
         console_level: minimum level shown on the console.
         file_level: minimum level written to file.
+        library_level: minimum level of every logger not obtained from 'get_logger'.
+            A library given a level of its own with 'logging.getLogger(name).setLevel' keeps it.
         directory: where to write log files. None means console output only.
         colour: 'auto' to colour only a terminal, or 'always' / 'never'.
         stream: where console output goes, defaulting to stdout.
 
     """
-    global _console_handler, _file_handler, _configured  # noqa: PLW0603
+    global _console_handler, _file_handler, _configured, _project_level  # noqa: PLW0603
 
     settings = resolve(
         current_project().log,
         console_level=console_level,
         file_level=file_level,
+        library_level=library_level,
         directory=directory,
         colour=colour,
     )
     console = _level(settings.console_level)
     to_file = _level(settings.file_level)
+    libraries = _level(settings.library_level)
     output = stream if stream is not None else sys.stdout
 
     reset_logging()
 
     structlog.configure(
-        processors=[*_processors(), structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
+        # level filtering here only: this chain runs for structlog's own events
+        processors=[
+            structlog.stdlib.filter_by_level,
+            *_processors(),
+            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+        ],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
@@ -143,13 +161,17 @@ def setup_logging(
         )
         root.addHandler(_file_handler)
 
-    root.setLevel(min(console, to_file) if settings.directory is not None else console)
+    root.setLevel(libraries)
+    _project_level = min(console, to_file) if settings.directory is not None else console
+    # loggers obtained before this call, e.g. at import time, take the levels
+    for name in tuple(_project_loggers):
+        logging.getLogger(name).setLevel(_project_level)
     _configured = True
 
 
 def reset_logging() -> None:
-    """Remove the handlers this module installed."""
-    global _console_handler, _file_handler, _configured  # noqa: PLW0603
+    """Remove the handlers this module installed, and the levels assigned to loggers from 'get_logger'."""
+    global _console_handler, _file_handler, _configured, _project_level  # noqa: PLW0603
 
     root = logging.getLogger()
     for handler in (_console_handler, _file_handler):
@@ -157,14 +179,18 @@ def reset_logging() -> None:
             root.removeHandler(handler)
             handler.close()
     _console_handler = _file_handler = None
+    # the names are kept, so that the next setup gives them the project's level again
+    for name in tuple(_project_loggers):
+        logging.getLogger(name).setLevel(logging.NOTSET)
+    _project_level = logging.NOTSET
     _configured = False
 
 
 def get_logger(name: str | None = None, **context: Any) -> structlog.stdlib.BoundLogger:
-    """Return a logger.
+    """Return a logger at the project's level.
 
     Arguments:
-        name: logger name, normally '__name__'.
+        name: logger name, normally '__name__'. None names the calling module.
         **context: fields bound to every event from this logger, e.g. task='resolution'.
 
     Returns:
@@ -173,6 +199,12 @@ def get_logger(name: str | None = None, **context: Any) -> structlog.stdlib.Boun
     """
     if not _configured:
         setup_logging()
+
+    if name is None:
+        # the name structlog would infer at the first event
+        name = str(sys._getframe(1).f_globals.get('__name__', '__main__'))  # noqa: SLF001
+    _project_loggers.add(name)
+    logging.getLogger(name).setLevel(_project_level)
 
     logger: structlog.stdlib.BoundLogger = structlog.get_logger(name)
     return logger.bind(**context) if context else logger
