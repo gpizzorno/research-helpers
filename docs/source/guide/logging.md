@@ -27,7 +27,8 @@ setup_logging(console_level='DEBUG', directory='data/logs', colour='never')
 
 It should be called once, at the entry point. Calling it again reconfigures rather than stacking handlers, 
 so a notebook that re-runs its first cell does not end up printing everything twice.
-{py:func}`~research_helpers.log.reset_logging` removes the handlers entirely.
+{py:func}`~research_helpers.log.reset_logging` removes the handlers entirely, along with the levels
+given to loggers obtained from `get_logger`.
 
 ## Console and file levels
 
@@ -35,6 +36,29 @@ Console and file get different levels—`INFO` and `DEBUG`—by default, in orde
 and readable while sending the detail to disk.
 
 If `directory` is not set, there is no file and only the console is configured.
+
+These levels apply to loggers obtained from {py:func}`~research_helpers.log.get_logger`, including
+those obtained at import time, before `setup_logging` runs.
+
+## Other libraries
+
+Every other logger, which in practice means those of the libraries a project imports, is held at
+`WARNING`. Their routine output stays out of both the console and the file and whatever
+gets through is rendered like the project's own lines:
+
+```bash
+[WARNING ] 19:41:47 httpx retrying POST after 2 s
+```
+
+`library_level`, or `library-level` in `[tool.research-helpers.log]`, moves the hold for all of
+them. To let only a specific library through, give its logger a level of its own with the standard library:
+
+```python
+import logging
+
+setup_logging()
+logging.getLogger('httpx').setLevel('INFO')  # one line per request
+```
 
 ## Colour
 
