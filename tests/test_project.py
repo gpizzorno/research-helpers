@@ -411,8 +411,8 @@ def test_an_unconfigured_document_says_how_to_configure_it(project_dir):
         Project.from_pyproject(project_dir).document('note')
 
 
-def test_a_document_without_a_manuscript_warns_and_is_ignored(tmp_path):
-    with pytest.warns(ConfigWarning, match='has no "main"'):
+def test_a_document_with_no_main_warns_and_is_ignored(tmp_path):
+    with pytest.warns(ConfigWarning, match=r'has no "main".*Set manuscript = false'):
         project = _documents(tmp_path, '[tool.research-helpers.documents.note]\ntables-dir = "t"\n')
 
     assert 'note' not in project.documents
@@ -445,6 +445,87 @@ def test_doctor_lists_every_document(tmp_path):
     assert 'documents.note.main' in report
     assert '[derived]' in report
     assert '[inherited]' in report
+
+
+# --- without a manuscript --------------------------------------------------------------------------
+
+
+def test_a_paper_has_a_manuscript_unless_it_says_otherwise(tmp_path):
+    project = _documents(tmp_path, '[tool.research-helpers.paper]\n')
+
+    assert project.paper.manuscript is True
+    assert project.paper.tables_dir == tmp_path / 'tex' / 'tables'
+
+
+def test_a_paper_without_a_manuscript_reads_its_floats_where_they_are_built(tmp_path):
+    project = _documents(tmp_path, '[tool.research-helpers.paper]\nmanuscript = false\nbuild-dir = "out"\n')
+
+    assert project.paper.manuscript is False
+    assert project.paper.tables_dir == tmp_path / 'out' / 'tables'
+    assert project.paper.figures_dir == tmp_path / 'out' / 'figures'
+    assert project.sources['paper.tables_dir'] == 'derived'
+
+
+def test_a_paper_without_a_manuscript_keeps_the_directories_it_is_given(tmp_path):
+    project = _documents(tmp_path, '[tool.research-helpers.paper]\nmanuscript = false\ntables-dir = "released"\n')
+
+    assert project.paper.tables_dir == tmp_path / 'released'
+    assert project.sources['paper.tables_dir'] == 'pyproject'
+    assert project.paper.figures_dir == tmp_path / 'build' / 'figures'
+
+
+def test_a_document_without_a_manuscript_needs_no_main(tmp_path):
+    note = _documents(tmp_path, '[tool.research-helpers.documents.note]\nmanuscript = false\n').document('note')
+
+    assert note.manuscript is False
+    assert note.build_dir == tmp_path / 'build' / 'note'
+    assert note.tables_dir == tmp_path / 'build' / 'note' / 'tables'
+    assert note.figures_dir == tmp_path / 'build' / 'note' / 'figures'
+
+
+def test_manuscript_takes_only_a_boolean(tmp_path):
+    with pytest.warns(ConfigWarning, match='paper.manuscript must be a bool, not str'):
+        project = _documents(tmp_path, '[tool.research-helpers.paper]\nmanuscript = "no"\n')
+
+    assert project.paper.manuscript is True
+
+
+def test_doctor_marks_what_a_document_without_a_manuscript_does_not_use(tmp_path):
+    report = _documents(tmp_path, '[tool.research-helpers.documents.note]\nmanuscript = false\n').doctor()
+    entries = {line.split()[0]: line for line in report.splitlines() if line.startswith('  ') and line.strip()}
+
+    assert '[no manuscript]' in entries['documents.note.main']
+    assert '[no manuscript]' in entries['documents.note.bbl']
+    assert 'MISSING' not in entries['documents.note.main']
+    assert 'False' in entries['documents.note.manuscript']
+
+
+# --- markers ------------------------------------------------------------------------------------
+
+
+def test_markers_are_read_as_a_list_of_strings(tmp_path):
+    project = _documents(tmp_path, '[tool.research-helpers.arxiv]\nmarkers = ["[PAGE]", "[CITATION NEEDED]"]\n')
+
+    assert project.arxiv.markers == ('[PAGE]', '[CITATION NEEDED]')
+    assert project.sources['arxiv.markers'] == 'pyproject'
+
+
+def test_no_markers_are_set_by_default(tmp_path):
+    assert _documents(tmp_path, '[tool.research-helpers.arxiv]\n').arxiv.markers == ()
+
+
+@pytest.mark.parametrize('value', ['"[PAGE]"', '["[PAGE]", 3]'])
+def test_markers_that_are_not_a_list_of_strings_warn_and_fall_back(tmp_path, value):
+    with pytest.warns(ConfigWarning, match='arxiv.markers must be a list of strings'):
+        project = _documents(tmp_path, f'[tool.research-helpers.arxiv]\nmarkers = {value}\n')
+
+    assert project.arxiv.markers == ()
+
+
+def test_doctor_shows_markers_as_pyproject_writes_them(tmp_path):
+    report = _documents(tmp_path, '[tool.research-helpers.arxiv]\nmarkers = ["[ID]", "[PAGE]"]\n').doctor()
+
+    assert '["[ID]", "[PAGE]"]' in report
 
 
 # --- the sweep's array width ----------------------------------------------------------------------

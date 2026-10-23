@@ -259,6 +259,24 @@ def test_an_explicit_path_overrides_the_wiring(tmp_path):
     assert not registry().check({'paper': manuscript})
 
 
+def test_a_document_configured_without_a_manuscript_is_not_read(tmp_path):
+    """Its 'main' is not used, and left at the default would read the paper's source instead."""
+    (tmp_path / 'pyproject.toml').write_text(
+        '[tool.research-helpers.documents.note]\nmanuscript = false\n',
+        encoding='utf-8',
+    )
+    (tmp_path / 'tex').mkdir()
+    (tmp_path / 'tex' / 'paper.tex').write_text('the note says 2\n', encoding='utf-8')
+    _load.cache_clear()
+    prose = ProseRegistry()
+    prose.add(ProseNumber('n', 'the note says {}', lambda: ('2',), document='note'))
+
+    with pytest.raises(FileNotFoundError, match="'note' is configured without a manuscript"):
+        prose.check(document='note')
+    with pytest.raises(FileNotFoundError, match='configured without a manuscript'):
+        prose.audit('note')
+
+
 def test_a_missing_manuscript_says_so():
     with pytest.raises(FileNotFoundError, match='nothing to check against'):
         registry().check()

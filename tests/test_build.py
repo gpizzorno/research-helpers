@@ -388,6 +388,112 @@ def test_the_command_line_reports_a_missing_manuscript_without_a_traceback(tmp_p
     assert 'paper.main' in printed.err, 'the message should name the setting to fix'
 
 
+# --- without a manuscript: a repository that publishes the floats but not their source ----------
+
+
+def _without_manuscript(tmp_path, monkeypatch):
+    """Make a project whose paper is configured without a manuscript, and work from it."""
+    root = tmp_path / 'project'
+    root.mkdir()
+    (root / 'pyproject.toml').write_text('[tool.research-helpers.paper]\nmanuscript = false\n', encoding='utf-8')
+    monkeypatch.chdir(root)
+    _load.cache_clear()
+    return root
+
+
+def test_without_a_manuscript_each_artefact_is_compared_with_its_installed_copy(tables, tmp_path):
+    installed = tmp_path / 'released'
+    tables.write_all(installed)
+
+    found = tables.drift(destination=installed, manuscript=False)
+
+    assert not found
+    assert found.missing is None, 'only a manuscript says what it pulls in'
+
+
+def test_without_a_manuscript_a_changed_copy_is_stale(tables, tmp_path):
+    installed = tmp_path / 'released'
+    installed.mkdir()
+    (installed / 'scores.tex').write_text('an older table\n', encoding='utf-8')
+
+    assert tables.drift(destination=installed, manuscript=False).stale == ['tab:scores']
+
+
+def test_without_a_manuscript_an_absent_copy_is_stale(figures, tmp_path):
+    assert figures.drift(destination=tmp_path / 'released', manuscript=False).stale == ['fig:curve']
+
+
+def test_without_a_manuscript_a_file_no_emitter_writes_is_reported(tables, tmp_path):
+    installed = tmp_path / 'released'
+    tables.write_all(installed)
+    (installed / 'retired.tex').write_text('a table whose emitter has gone\n', encoding='utf-8')
+    (installed / '.retired.tex').write_text('hidden\n', encoding='utf-8')
+    (installed / 'notes.txt').write_text('not a table\n', encoding='utf-8')
+
+    found = tables.drift(destination=installed, manuscript=False)
+
+    assert found.ungenerated == ['tab:retired']
+    assert not found.stale
+    assert 'installed with no emitter: tab:retired' in tables.report(found)
+    assert 'to fix: delete the files without an emitter' in tables.report(found)
+
+
+def test_a_manuscript_given_while_none_is_declared_is_refused(tables, paper, tmp_path):
+    with pytest.raises(ValueError, match='manuscript=False'):
+        tables.drift(paper, tmp_path, manuscript=False)
+
+
+def test_the_mode_is_declared_in_the_wiring_not_inferred(tables, tmp_path, monkeypatch):
+    """A manuscript gone missing must still fail the check, rather than quietly narrow it."""
+    root = _without_manuscript(tmp_path, monkeypatch)
+    tables.write_all()
+
+    assert not tables.drift(), 'declared, so compared where they are built'
+
+    (root / 'pyproject.toml').write_text('[tool.research-helpers.paper]\n', encoding='utf-8')
+    _load.cache_clear()
+    with pytest.raises(FileNotFoundError, match='manuscript = false in the same table'):
+        tables.drift()
+
+
+def test_without_a_manuscript_the_check_says_what_it_could_not_check(tables, tmp_path, monkeypatch, capsys):
+    _without_manuscript(tmp_path, monkeypatch)
+    tables.main([])
+    capsys.readouterr()
+
+    assert tables.main(['--check']) == 0
+    assert capsys.readouterr().out.splitlines() == [
+        'OK: all 1 tables match their copies in build/tables',
+        (
+            'not checked without the manuscript: whether the paper uses each one and whether it carries any '
+            'written in by hand'
+        ),
+    ]
+
+
+def test_without_a_manuscript_a_stale_copy_fails_the_check(tables, tmp_path, monkeypatch, capsys):
+    root = _without_manuscript(tmp_path, monkeypatch)
+    tables.main([])
+    (root / 'build' / 'tables' / 'scores.tex').write_text('an older table\n', encoding='utf-8')
+    capsys.readouterr()
+
+    assert tables.main(['--check']) == 1
+    printed = capsys.readouterr().out
+    assert 'stale, build/tables is behind the data: tab:scores' in printed
+    assert 'to fix: rebuild and install the tables' in printed
+
+
+def test_installing_where_the_paper_already_reads_copies_nothing(tables, tmp_path, monkeypatch, capsys):
+    root = _without_manuscript(tmp_path, monkeypatch)
+
+    assert tables.main(['--install']) == 0
+    printed = capsys.readouterr().out
+    assert 'wrote build/tables/scores.tex' in printed
+    assert 'installed' not in printed
+    assert 'nothing to install: the tables are read from where they are built' in printed
+    assert (root / 'build' / 'tables' / 'scores.tex').read_text(encoding='utf-8') == SCORES
+
+
 # --- documents: one manuscript and everything it carries ----------------------------------------
 
 NOTE = r"""
@@ -506,3 +612,51 @@ def test_explicit_settings_need_no_wiring(tables, paper, tmp_path):
     document.install()
 
     assert not document.drift()['tables']
+
+
+def test_a_document_without_a_manuscript_checks_its_floats_and_names_what_it_cannot(
+    tables,
+    tmp_path,
+    monkeypatch,
+    capsys,
+):
+    root = tmp_path / 'project'
+    root.mkdir()
+    (root / 'pyproject.toml').write_text(
+        '[tool.research-helpers.documents.note]\nmanuscript = false\n',
+        encoding='utf-8',
+    )
+    monkeypatch.chdir(root)
+    _load.cache_clear()
+    computed = []
+    prose = ProseRegistry()
+    prose.add(ProseNumber('k', 'It finds {} communities', lambda: computed.append('k') or ('148',), document='note'))
+    note = Document('note', tables, prose=prose)
+    note.main(['--install'])
+    capsys.readouterr()
+
+    assert note.main(['--check']) == 0
+    assert capsys.readouterr().out.splitlines() == [
+        'OK: all 1 tables match their copies in build/note/tables',
+        (
+            'not checked without the manuscript: whether the note uses each one, whether it carries any written '
+            'in by hand, and the numbers its prose states'
+        ),
+    ]
+    assert computed == [], 'with no sentence to compare it with, a prose number is not computed'
+
+
+def test_a_document_without_a_manuscript_has_none_to_read(tables):
+    document = Document('note', tables, settings=PaperSettings(manuscript=False))
+
+    with pytest.raises(FileNotFoundError, match='configured without a manuscript'):
+        document.manuscript()
+
+
+def test_explicit_settings_without_a_manuscript_need_no_wiring(tables, tmp_path):
+    settings = PaperSettings(manuscript=False, tables_dir=tmp_path / 'tables', build_dir=tmp_path)
+    document = Document('paper', tables, settings=settings)
+    document.write_all()
+
+    assert document.install() == [], 'already where the paper reads them'
+    assert document.drift() == {'tables': Drift(stale=[], missing=None, ungenerated=[])}

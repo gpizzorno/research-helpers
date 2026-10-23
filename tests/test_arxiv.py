@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import tarfile
+from pathlib import Path
 
 import pytest
 
-from research_helpers.arxiv import bbl_format, build, check, manifest, pack, report
+from research_helpers.arxiv import bbl_format, build, check, manifest, pack, preview, report, unused
 from research_helpers.project import _load
 
 PAPER = r"""
@@ -93,6 +95,171 @@ def test_the_manifest_ignores_build_leftovers(project):
     assert 'tables/scores.aux' not in manifest()
 
 
+def test_the_manifest_uploads_only_the_floats_the_manuscript_reads(project):
+    (project / 'tex' / 'tables' / 'retired.tex').write_text('a table nothing inputs', encoding='utf-8')
+    (project / 'tex' / 'figures' / 'retired.png').write_bytes(b'\x89PNG a figure nothing includes')
+
+    files = manifest()
+
+    assert set(files) == {'paper.tex', 'paper.bbl', 'tables/scores.tex', 'figures/curve.png'}
+    assert unused(files) == ['tables/retired.tex', 'figures/retired.png']
+
+
+def test_a_float_read_only_in_a_comment_is_not_uploaded(project):
+    (project / 'tex' / 'tables' / 'retired.tex').write_text('a table', encoding='utf-8')
+    paper = project / 'tex' / 'paper.tex'
+    paper.write_text(paper.read_text(encoding='utf-8') + '% \\input{tables/retired}\n', encoding='utf-8')
+
+    assert 'tables/retired.tex' not in manifest()
+
+
+def test_a_reference_names_its_file_with_or_without_the_extension(project):
+    paper = project / 'tex' / 'paper.tex'
+    paper.write_text(
+        paper.read_text(encoding='utf-8').replace('figures/curve}', 'figures/curve.png}'),
+        encoding='utf-8',
+    )
+
+    assert manifest()['figures/curve.png'] == project / 'tex' / 'figures' / 'curve.png'
+
+
+def test_an_option_holding_brackets_does_not_hide_a_figure(project):
+    paper = project / 'tex' / 'paper.tex'
+    text = paper.read_text(encoding='utf-8')
+    paper.write_text(text.replace('\\includegraphics{', '\\includegraphics[alt={a [dashed] line}]{'), encoding='utf-8')
+
+    assert 'figures/curve.png' in manifest()
+
+
+def test_a_reference_with_no_file_behind_it_is_reported_missing(project):
+    paper = project / 'tex' / 'paper.tex'
+    paper.write_text(paper.read_text(encoding='utf-8') + '\\input{tables/absent}\n', encoding='utf-8')
+    _touch_bbl_after_paper(project)
+
+    files = manifest()
+
+    assert 'missing: tables/absent' in check(files)
+
+
+def test_a_second_document_is_submitted_from_its_own_settings(project):
+    note = project / 'tex' / 'note'
+    for directory in ('tables', 'figures', 'out_dir'):
+        (note / directory).mkdir(parents=True)
+    (note / 'note.tex').write_text('\\begin{document}\n\\input{tables/rates}\n\\end{document}\n', encoding='utf-8')
+    (note / 'tables' / 'rates.tex').write_text('a table\n', encoding='utf-8')
+    (note / 'out_dir' / 'note.bbl').write_text(BBL, encoding='utf-8')
+    os.utime(note / 'note.tex', (MTIME, MTIME))
+    os.utime(note / 'out_dir' / 'note.bbl', (MTIME + 10, MTIME + 10))
+    pyproject = project / 'pyproject.toml'
+    pyproject.write_text(
+        pyproject.read_text(encoding='utf-8') + '[tool.research-helpers.documents.note]\nmain = "tex/note/note.tex"\n',
+        encoding='utf-8',
+    )
+    _load.cache_clear()
+
+    files = manifest(document='note')
+
+    assert files == {
+        'note.tex': note / 'note.tex',
+        'note.bbl': note / 'out_dir' / 'note.bbl',
+        'tables/rates.tex': note / 'tables' / 'rates.tex',
+    }
+    assert check(files, document='note') == []
+
+
+@pytest.mark.usefixtures('project')
+def test_an_unconfigured_document_says_how_to_configure_it():
+    with pytest.raises(KeyError, match=r'\[tool\.research-helpers\.documents\.supplement\]'):
+        manifest(document='supplement')
+
+
+def test_the_preview_compiles_the_documents_own_manuscript(project, monkeypatch):
+    commands = []
+
+    def fake_engine(command, *, cwd, **_):
+        commands.append(command)
+        (Path(cwd) / 'paper.pdf').write_bytes(b'%PDF')
+
+    # the real preview shells out to xelatex, which a test machine need not have
+    monkeypatch.setattr(subprocess, 'run', fake_engine)
+    build(manifest(), project / 'dist')
+
+    pdf = preview(project / 'dist', project / 'compiled', passes=2)
+
+    assert commands == [['xelatex', '-interaction=nonstopmode', 'paper.tex']] * 2
+    assert pdf == project / 'compiled' / 'paper.pdf'
+
+
+# --- markers --------------------------------------------------------------------------------------
+
+
+def _mark(project, *, markers):
+    """Configure the markers, and leave one in the manuscript, one in its comments and one in the .bbl."""
+    (project / 'pyproject.toml').write_text(
+        '[tool.research-helpers.arxiv]\nengine = "xelatex"\nmarkers = [' + ', '.join(f'"{m}"' for m in markers) + ']\n',
+        encoding='utf-8',
+    )
+    paper = project / 'tex' / 'paper.tex'
+    text = paper.read_text(encoding='utf-8')
+    paper.write_text(
+        text.replace('\\end{document}', 'As shown [PAGE]. % [CITATION NEEDED] here is a note\n\\end{document}'),
+        encoding='utf-8',
+    )
+    bbl = project / 'tex' / 'out_dir' / 'paper.bbl'
+    bbl.write_text(BBL + '\\field{eprint}{[ID]}\n', encoding='utf-8')
+    _touch_bbl_after_paper(project)
+    _load.cache_clear()
+
+
+def test_a_marker_left_in_the_upload_is_reported_with_its_lines(project):
+    _mark(project, markers=['[PAGE]', '[ID]', '[CITATION NEEDED]'])
+    lines = (project / 'tex' / 'paper.tex').read_text(encoding='utf-8').splitlines()
+    page = next(number for number, line in enumerate(lines, start=1) if '[PAGE]' in line)
+
+    problems = check(manifest())
+
+    assert problems == [f'marker [PAGE] left in paper.tex: line {page}', 'marker [ID] left in paper.bbl: line 4']
+
+
+def test_no_marker_is_looked_for_unless_one_is_configured(project):
+    _mark(project, markers=[])
+
+    assert check(manifest()) == []
+
+
+def test_markers_given_to_the_check_replace_the_projects(project):
+    _mark(project, markers=['[ID]'])
+
+    assert check(manifest(), markers=['As shown']) == [
+        f'marker As shown left in paper.tex: line {_line_of(project, "As shown")}',
+    ]
+
+
+def test_a_marker_is_not_looked_for_in_an_image(project):
+    (project / 'tex' / 'figures' / 'curve.png').write_bytes(b'\x89PNG [ID]')
+    _mark(project, markers=['[ID]'])
+    (project / 'tex' / 'out_dir' / 'paper.bbl').write_text(BBL, encoding='utf-8')
+    _touch_bbl_after_paper(project)
+
+    assert check(manifest()) == []
+
+
+def test_a_marker_on_many_lines_names_the_first_few_and_the_count(project):
+    _mark(project, markers=['[ID]'])
+    (project / 'tex' / 'out_dir' / 'paper.bbl').write_text(BBL + '[ID]\n' * 12, encoding='utf-8')
+    _touch_bbl_after_paper(project)
+
+    assert check(manifest()) == [
+        'marker [ID] left in paper.bbl: lines 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ... (12 in all)',
+    ]
+
+
+def _line_of(project, text):
+    """Return the line of the manuscript that first holds the text."""
+    lines = (project / 'tex' / 'paper.tex').read_text(encoding='utf-8').splitlines()
+    return next(number for number, line in enumerate(lines, start=1) if text in line)
+
+
 # --- the rules --------------------------------------------------------------------------------
 
 
@@ -100,6 +267,13 @@ def test_a_correct_submission_has_no_problems(project):
     _touch_bbl_after_paper(project)
 
     assert check(manifest()) == []
+
+
+def test_a_paper_configured_without_a_manuscript_has_nothing_to_submit(project):
+    (project / 'pyproject.toml').write_text('[tool.research-helpers.paper]\nmanuscript = false\n', encoding='utf-8')
+    _load.cache_clear()
+
+    assert check(manifest()) == ['the paper is configured without a manuscript: nothing to submit']
 
 
 def test_a_missing_file_is_reported(project):
@@ -247,6 +421,15 @@ def test_the_report_lists_the_problems(project):
     assert 'MISSING' in text
     assert 'problem(s)' in text
     assert 'ready to upload' not in text
+
+
+def test_the_report_names_what_was_left_out(project):
+    (project / 'tex' / 'tables' / 'retired.tex').write_text('a table nothing inputs', encoding='utf-8')
+    files = manifest()
+
+    text = report(files, check(files), unused_files=unused(files))
+
+    assert 'not uploaded, since paper.tex does not read them: tables/retired.tex' in text
 
 
 def test_an_empty_manifest_says_so():

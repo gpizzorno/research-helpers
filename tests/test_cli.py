@@ -215,9 +215,10 @@ def test_arxiv_tar_packs_the_built_submission(project):
 def test_arxiv_preview_compiles_with_the_engine_arxiv_will_use(project, monkeypatch, capsys):
     compiled = {}
 
-    def fake_preview(source, destination):
+    def fake_preview(source, destination, *, document):
         compiled['source'] = source
         compiled['destination'] = destination
+        compiled['document'] = document
         return destination / 'paper.pdf'
 
     # the real preview shells out to xelatex, which a test machine need not have
@@ -228,7 +229,60 @@ def test_arxiv_preview_compiles_with_the_engine_arxiv_will_use(project, monkeypa
     assert status == 0
     assert compiled['source'] == project / 'build' / 'arxiv'
     assert compiled['destination'] == project / 'build' / 'arxiv-preview'
+    assert compiled['document'] == 'paper'
     assert 'preview at' in capsys.readouterr().out
+
+
+def _add_a_note(root):
+    """Give the project a second document, with one table of its own."""
+    note = root / 'tex' / 'note'
+    for directory in ('tables', 'out_dir'):
+        (note / directory).mkdir(parents=True)
+    (note / 'note.tex').write_text('\\begin{document}\n\\input{tables/rates}\n\\end{document}\n', encoding='utf-8')
+    (note / 'tables' / 'rates.tex').write_text('a table\n', encoding='utf-8')
+    (note / 'out_dir' / 'note.bbl').write_text(BBL, encoding='utf-8')
+    pyproject = root / 'pyproject.toml'
+    pyproject.write_text(
+        pyproject.read_text(encoding='utf-8') + '[tool.research-helpers.documents.note]\nmain = "tex/note/note.tex"\n',
+        encoding='utf-8',
+    )
+    _load.cache_clear()
+
+
+def test_arxiv_builds_a_second_document_into_its_own_directory(project, capsys):
+    _add_a_note(project)
+
+    status = main(['arxiv', '--document', 'note', '--tar'])
+
+    submission = project / 'build' / 'note' / 'arxiv'
+    printed = capsys.readouterr().out
+    assert status == 0, printed
+    assert 'wrote build/note/arxiv/' in printed, 'named relative to the project, as the build commands do'
+    assert 'packed build/note/arxiv.tar.gz' in printed
+    assert sorted(path.relative_to(submission).as_posix() for path in submission.rglob('*.*')) == [
+        'note.bbl',
+        'note.tex',
+        'tables/rates.tex',
+    ]
+    assert (project / 'build' / 'note' / 'arxiv.tar.gz').exists()
+    assert not (project / 'build' / 'arxiv').exists(), "the paper's submission is not touched"
+
+
+def test_arxiv_names_an_unconfigured_document_without_a_traceback(project, capsys):
+    status = main(['arxiv', '--document', 'supplement'])
+
+    printed = capsys.readouterr()
+    assert status == 1
+    assert printed.out == ''
+    assert '[tool.research-helpers.documents.supplement]' in printed.err
+    assert project.exists()
+
+
+def test_arxiv_says_what_it_left_out(project, capsys):
+    (project / 'tex' / 'tables' / 'retired.tex').write_text('a table nothing inputs\n', encoding='utf-8')
+
+    assert main(['arxiv', '--dry-run']) == 0
+    assert 'not uploaded, since paper.tex does not read them: tables/retired.tex' in capsys.readouterr().out
 
 
 def test_arxiv_reports_what_would_be_rejected_and_fails(project, capsys):
