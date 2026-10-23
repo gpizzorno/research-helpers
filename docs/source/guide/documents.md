@@ -94,6 +94,13 @@ stale [abstract] mean-k:
 `--check` exits with `1` if anything the document carries has drifted. `--list` shows what is registered,
 by kind.
 
+`research-helpers arxiv --document note` assembles the note's arXiv submission in its own build
+directory. See [arXiv and Zenodo](submission.md#a-second-document).
+
+A document whose source is not in the repository takes `manuscript = false` in its own table, and
+then needs no `main`: its floats are read from the build directory, and `--check` compares each one
+with the copy there. See [without the manuscript](../configuration.md#without-the-manuscript).
+
 A project with a single paper can keep calling each registry's own `main()`, or wrap them in
 `Document('paper', ...)` for one command over tables, figures, and prose together. The paper's
 `Document` builds and installs into the same directories a bare registry does.

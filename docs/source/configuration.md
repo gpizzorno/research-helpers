@@ -88,6 +88,7 @@ Describes the document's geometry and the locations of its different components.
 | `build-dir` | path | `build` | Scratch space for generated artefacts. |
 | `text-width-in` | float | `6.45` | `\textwidth`. |
 | `column-width-in` | float | `3.04` | `\columnwidth`. |
+| `manuscript` | bool | `true` | Whether the manuscript is part of this repository. See [without the manuscript](#without-the-manuscript). |
 
 :::{note}
 Both figures *and* tables are laid out against the document's width, so a figure or a table is
@@ -165,6 +166,7 @@ reports its numbers as optimistic and lists instructions on how to measure the f
 | `engine` | str | `xelatex` | The engine you select on arXiv. Used to check for engine-specific hazards, e.g. microtype font expansion under XeTeX. |
 | `texlive` | int | `2025` | The TeX Live year selected on arXiv. Used in diagnostic messages. |
 | `bbl-format` | str | `3.3` | The *biblatex* `.bbl` format version that TeX Live year reads. |
+| `markers` | list of str | `[]` | Text that must not reach a submission, such as `"[PAGE]"`. The check reports each one it finds outside a comment in an uploaded TeX file, the `.bbl` included. See [arXiv and Zenodo](guide/submission.md#what-the-check-finds). |
 
 ### `documents`
 
@@ -176,7 +178,8 @@ supplement, a second paper. The paper itself is always configured under `[paper]
 main = "tex/note/note.tex"
 ```
 
-Each takes the same keys as `paper`. Only `main` is required, and the rest are derived from it:
+Each takes the same keys as `paper`. Only `main` is required, unless the document is configured
+[without its manuscript](#without-the-manuscript), and the rest are derived from it:
 
 | Key | Default |
 | --- | --- |
@@ -188,6 +191,28 @@ Each takes the same keys as `paper`. Only `main` is required, and the rest are d
 
 `doctor` marks a value that follows from `main` as `[derived]`, and one taken from the paper as
 `[inherited]`. See [several documents](guide/documents.md).
+
+### Without the manuscript
+
+A repository can publish a document's tables and figures without its source using `manuscript = false`:
+
+```toml
+[tool.research-helpers.paper]
+manuscript = false
+tables-dir = "build/tables"
+figures-dir = "build/figures"
+```
+
+`--check` then compares every registered float with its installed copy, and reports an installed
+file without an emitter. Those items that require a manuscript are reported as not checked:
+whether the manuscript uses each float, whether it carries one written in by hand, and the numbers
+its prose states. `main` and `bbl` are not used, and `doctor` shows them as `[no manuscript]`.
+
+Without a manuscript `tables-dir` and `figures-dir` default to the build directory's `tables/` and `figures/`, 
+and `--install` has nothing to copy. A document under `[documents]` can also have a `manuscript` key, and needs no 
+`main` if it is set to `false`.
+
+The setting is declared to ensure that a repository that does carry its manuscript still fails the check when the manuscript goes missing. See [publishing the floats without the paper](guide/generated-table.md#8-publishing-the-floats-without-the-paper).
 
 ## Checking settings resolution
 

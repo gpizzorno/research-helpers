@@ -183,6 +183,56 @@ It cannot go stale, because nothing checks it.
 
 `--check` exits with `1` if it detects any drift.
 
+## 8. Publishing the floats without the paper
+
+A repository can publish the tables and figures without the paper's source by setting `manuscript` to
+`false` in `pyproject.toml`:
+
+```toml
+[tool.research-helpers.paper]
+manuscript = false
+```
+
+The tables are then read from where the build directory, so there is nothing to install:
+
+```bash
+$ python -m paperdemo.tables --install
+wrote build/tables/scores.tex
+nothing to install: the tables are read from where they are built
+```
+
+The check compares each table with its copy in `build/tables`, and states the items it could not check
+without the paper:
+
+```bash
+$ python -m paperdemo.tables --check
+OK: all 1 tables match their copies in build/tables
+not checked without the manuscript: whether the paper uses each one and whether it carries any written in by hand
+```
+
+A copy that no longer renders from the data is stale, as before:
+
+```bash
+$ # data/scores.json is updated: ours.accuracy 0.8456 -> 0.8712
+$ python -m paperdemo.tables --check
+stale, build/tables is behind the data: tab:scores
+to fix: rebuild and install the tables
+not checked without the manuscript: whether the paper uses each one and whether it carries any written in by hand
+```
+
+And a file without an emitter, such as one left behind when its emitter was removed, is
+still reported:
+
+```bash
+$ python -m paperdemo.tables --check
+in build/tables with no emitter: tab:ablation
+to fix: delete the files without an emitter
+not checked without the manuscript: whether the paper uses each one and whether it carries any written in by hand
+```
+
+The mode is explicitly declared to ensure that a repository that carries a paper
+keeps the default, so its check still fails if the paper goes missing.
+
 ## Figures work the same way
 
 Figures work the same way, only using bytes instead of strings. The keyword to use with 

@@ -34,7 +34,51 @@ submission, relative to the manuscript's directory. So a table installed at `tex
 and read as `\input{tables/scores}` is uploaded as `tables/scores.tex` and resolves identically on
 arXiv.
 
-### Testing with `--check`
+From the tables and figures directories, only the files read by the manuscript are uploaded, *i.e.*, those
+used by `\input` or `\includegraphics`, outside a comment. Files that the manuscript does
+not read, such as a table left behind when its `\input` was removed, are listed in the report:
+
+```bash
+$ research-helpers arxiv --dry-run
+  paper.tex                        0.3 KB
+  paper.bbl                        0.1 KB
+  tables/scores.tex                0.0 KB
+  figures/learning-curve.png      16.3 KB
+
+  4 files, 0.02 MB
+  bbl format 3.3 (TeX Live 2025)
+  not uploaded, since paper.tex does not read them: tables/ablation.tex
+
+ready to upload: select xelatex and TeX Live 2025
+
+(dry run, nothing written)
+```
+
+A float read in some other way, *e.g.,* through a macro, is also omitted, and `--preview`
+shows that the submission cannot compile without it. To include them, write the reference out, 
+or pass the file to {py:func}`~research_helpers.arxiv.manifest` in `extra`.
+
+### A second document
+
+A [second document](documents.md) is submitted with `--document` and its name. Its submission is
+built in its own build directory, so the paper's is left as is:
+
+```bash
+$ research-helpers arxiv --document note --tar
+  note.tex               0.1 KB
+  note.bbl               0.1 KB
+  tables/rates.tex       0.0 KB
+
+  3 files, 0.00 MB
+  bbl format 3.3 (TeX Live 2025)
+
+ready to upload: select xelatex and TeX Live 2025
+
+wrote build/note/arxiv/
+packed build/note/arxiv.tar.gz (0.00 MB)
+```
+
+### What the check finds
 
 {py:func}`~research_helpers.arxiv.check` returns every reason why the submission would be rejected 
 or would fail to build:
@@ -46,6 +90,33 @@ bibliography.
 
 **`microtype` font expansion under XeTeX.** `expansion=true` is a hard error under `xelatex` and
 `xetex`, which have no font expansion.
+
+**A marker left in the text.** A project can list text that must not reach a submission, such as
+the placeholders it writes for a page number or a citation still to be found:
+
+```toml
+[tool.research-helpers.arxiv]
+markers = ["[PAGE]", "[CITATION NEEDED]"]
+```
+
+Each is looked for in every TeX file uploaded, the `.bbl` included, outside comments:
+
+```bash
+$ research-helpers arxiv --dry-run
+  paper.tex                        0.3 KB
+  paper.bbl                        0.1 KB
+  tables/scores.tex                0.0 KB
+  figures/learning-curve.png      16.3 KB
+
+  4 files, 0.02 MB
+  bbl format 3.3 (TeX Live 2025)
+  not uploaded, since paper.tex does not read them: tables/ablation.tex
+
+1 problem(s):
+  - marker [PAGE] left in paper.tex: line 4
+```
+
+No marker is looked for unless one is configured.
 
 ## Reproducible archives
 
