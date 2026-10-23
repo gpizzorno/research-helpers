@@ -15,7 +15,7 @@ and [Zenodo](https://zenodo.org), structured logging, and a parameter-sweep engi
 ## Features
 
 - **Generated Tables and Figures**: Build the paper's tables and figures from the repository's own data
-- **Drift Detection**: Detect when the paper and the data differ
+- **Drift Detection**: Detect when the paper and the data differ, even in a repository that publishes the floats without the paper
 - **Numbers in the Prose**: Track every number a sentence states back to the data that supports it, and audit the prose for any untracked values
 - **Several Documents**: Give a technical note or a supplement its own generated tables, figures, and checks
 - **LaTeX Assembly**: Compose tables for LaTeX and also display them in Jupyter
