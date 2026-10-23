@@ -4,6 +4,50 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-10-23
+
+### Added
+
+- **A check without the manuscript.** `manuscript = false`, under `[tool.research-helpers.paper]` or
+  a document's own table, declares a repository that publishes a document's floats but not its
+  source. `--check` then compares every registered float with its installed copy, and reports an 
+  installed file without an emitter. New: `PaperSettings.manuscript`, and `Registry.drift(manuscript=...)` 
+  for a check with no wiring.
+- **A document without a manuscript needs no `main`.** Its tables and figures directories default
+  to its build directory's. `doctor` shows `main` and `bbl` as `[no manuscript]`.
+- **`Registry.report(destination=...)`**: the directory named in the output when there was no
+  manuscript.
+- **`research-helpers arxiv --document NAME`**, and a `document` argument to `manifest`, `check`,
+  `report` and `preview`. A document under `[documents]` is submitted from its own manuscript,
+  `.bbl` and float directories, and built in its own build directory, so the paper's submission is
+  not overwritten. 1.3.0 could submit the paper only.
+- **`markers` under `[tool.research-helpers.arxiv]`**: text that must not reach a submission, such as
+  a placeholder. `check` reports each one it finds outside a comment in an uploaded TeX file, the `.bbl` 
+  included, with the lines it is on; `check(markers=...)` overrides the setting. 
+  None is configured by default.
+- **`arxiv.unused`**: what the tables and figures directories hold that the upload leaves out.
+
+### Changed
+
+- **`Drift.missing` is `None` when there is no manuscript to read**, rather than an empty list, so
+  that "not checked" can be told apart from "nothing missing". A check against a manuscript is
+  unchanged.
+- **The message for a missing manuscript names `manuscript = false`** as the alternative to
+  setting `main`.
+- **The prose check and audit refuse a document configured without a manuscript**.
+- **`arxiv.check` reports that a document configured without a manuscript has nothing to submit.**
+- **The arXiv upload carries only the floats the manuscript reads**: the files used by `\input` or
+  `\includegraphics` outside a comment.
+- **`research-helpers arxiv` lists the paths it writes relative to the project**, as the build
+  commands do.
+
+### Fixed
+
+- **`--install` no longer copies a float onto itself.** When a document reads its floats from
+  where they are built, `install` copied each file onto itself and `shutil` raised `SameFileError`.
+  It now leaves them where they are, returns no paths, and the command line says there was nothing
+  to install.
+
 ## [1.3.0] — 2026-10-18
 
 ### Added
