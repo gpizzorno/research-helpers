@@ -143,10 +143,14 @@ class Artefact:
 
 
 class Drift(NamedTuple):
-    """The three ways a paper and its emitters can disagree."""
+    """The three ways a paper and its emitters can disagree.
+
+    Checked without a manuscript, in a repository that publishes a document's floats but not its
+    source, 'missing' is None.
+    """
 
     stale: list[str]  # installed, but no longer what the emitter produces
-    missing: list[str]  # emitted here, but the paper never pulls it in
+    missing: list[str] | None  # emitted here, but the paper never pulls it in. None: no manuscript to ask
     ungenerated: list[str]  # carried by the paper by hand, with no emitter behind it
 
     def __bool__(self) -> bool:
@@ -275,6 +279,8 @@ class Registry:
                 msg = f'{origin} does not exist. Build the {self.kind.name} before installing them'
                 raise FileNotFoundError(msg)
             path = target / origin.name
+            if path.resolve() == origin.resolve():
+                continue  # already where the paper reads it
             shutil.copyfile(origin, path)
             copied.append(path)
         return copied
@@ -283,28 +289,43 @@ class Registry:
         self,
         paper: Path | str | None = None,
         destination: Path | str | None = None,
+        *,
+        manuscript: bool | None = None,
     ) -> Drift:
         """Compare what the paper carries against what the emitters produce.
 
         Arguments:
             paper: the manuscript. Defaults to the project's 'paper.main'.
             destination: where the paper reads artefacts from. Defaults to the project's setting.
+            manuscript: whether there is a manuscript to read. Defaults to true if 'paper' is given,
+                and otherwise to the project's 'paper.manuscript'.
 
         Returns:
             The three ways they disagree; falsy when they do not.
 
+        Raises:
+            FileNotFoundError: if a manuscript is expected and is not there.
+            ValueError: if 'paper' is given while 'manuscript' is false.
+
         """
-        manuscript = Path(paper) if paper is not None else current_project().paper.main
+        if manuscript is None:
+            manuscript = paper is not None or current_project().paper.manuscript
+        elif not manuscript and paper is not None:
+            msg = f'{paper} was given as the manuscript, but manuscript=False says there is none'
+            raise ValueError(msg)
         target = self.install_dir(destination)
-        if not manuscript.exists():
-            # a repository can legitimately generate artefacts without carrying the manuscript
+        if not manuscript:
+            return self._against_installed(target)
+
+        source = Path(paper) if paper is not None else current_project().paper.main
+        if not source.exists():
             msg = (
-                f'no manuscript at {manuscript}, so there is nothing to check against. '
-                f'Set paper.main under [tool.{TOOL_TABLE}.paper], or build without --check '
-                f'in a repository that carries no paper.'
+                f'no manuscript at {source}, so there is nothing to check against. '
+                f'Set paper.main under [tool.{TOOL_TABLE}.paper], or, if this repository publishes '
+                f"the paper's floats without its source, manuscript = false in the same table."
             )
             raise FileNotFoundError(msg)
-        text = manuscript.read_text(encoding='utf-8')
+        text = source.read_text(encoding='utf-8')
         referenced = self.kind.referenced(text)
 
         stale, missing = [], []
@@ -319,32 +340,42 @@ class Registry:
 
         return Drift(stale=stale, missing=missing, ungenerated=sorted(self.kind.hand_written(text)))
 
-    def report(self, found: Drift, document: str = PAPER_DOCUMENT) -> str:
+    def _against_installed(self, target: Path) -> Drift:
+        """Compare every registered artefact with its installed copy, for a check without a manuscript."""
+        stale = []
+        for artefact in self:
+            installed = target / self.kind.filename(artefact.label)
+            if not installed.exists() or self.kind.read(installed) != artefact.emitter():
+                stale.append(artefact.label)
+
+        # 'write_all' never removes a file whose emitter has gone, and nothing re-renders one
+        files = sorted(target.glob(f'*{self.kind.suffix}')) if target.is_dir() else []
+        installed_labels = [
+            self.kind.label_prefix + path.name.removesuffix(self.kind.suffix)
+            for path in files
+            if path.is_file() and not path.name.startswith('.')
+        ]
+        return Drift(stale=stale, missing=None, ungenerated=[label for label in installed_labels if label not in self])
+
+    def report(
+        self,
+        found: Drift,
+        document: str = PAPER_DOCUMENT,
+        *,
+        destination: Path | str | None = None,
+    ) -> str:
         """Return a description of what drifted.
 
         Arguments:
             found: what 'drift' returned.
             document: what to call the manuscript in the message.
+            destination: the directory of the installed copies, included in the message if there
+                is no manuscript to check against.
 
         """
-        if not found:
-            return f'OK: all {len(self)} {self.kind.name} in the {document} are current\n'
-
-        lines = []
-        if found.stale:
-            lines.append(f'stale, the {document} is behind the data: {", ".join(found.stale)}')
-        if found.missing:
-            lines.append(f'emitted but never used by the {document}: {", ".join(found.missing)}')
-        if found.ungenerated:
-            lines.append(f'written into the {document} by hand, with no emitter: {", ".join(found.ungenerated)}')
-
-        # only suggest the remedies for what actually drifted
-        remedies = []
-        if found.stale:
-            remedies.append(f'rebuild and install the {self.kind.name}')
-        if found.missing or found.ungenerated:
-            remedies.append(f'edit the {document}')
-        lines.append('to fix: ' + ', then '.join(remedies))
+        lines = _findings(self, found, document, destination)
+        if found.missing is None:
+            lines.append(_unchecked(document))
         return '\n'.join(lines) + '\n'
 
     def main(self, argv: list[str] | None = None) -> int:
@@ -379,30 +410,89 @@ class Registry:
                 print(f'  {artefact.label:<{width}}  {artefact.description}')
             return 0
 
+        root = current_project().root
         if args.check:
             try:
                 found = self.drift()
             except FileNotFoundError as error:
                 print(error, file=sys.stderr)
                 return 1
-            print(self.report(found), end='')
+            print(self.report(found, destination=_relative(self.install_dir(), root)), end='')
             return 1 if found else 0
 
-        root = current_project().root
         for path in self.write_all():
             print(f'wrote {_relative(path, root)}')
 
         if args.install is not None:
-            for path in self.install(args.install or None):
+            installed = self.install(args.install or None)
+            for path in installed:
                 print(f'installed {_relative(path, root)}')
+            if len(self) and not installed:
+                print(f'nothing to install: the {self.kind.name} are read from where they are built')
         return 0
 
 
-def _main_setting(name: str) -> str:
-    """Name the setting that locates a document's manuscript, for messages."""
+def _findings(registry: Registry, found: Drift, document: str, destination: Path | str | None) -> list[str]:
+    """Describe what drifted in a registry, a line for each kind of drift and one for the remedies.
+
+    Checked without a manuscript ('found.missing' is None), the lines refer to the installed copies,
+    in 'destination' if it is given.
+    """
+    kind = registry.kind
+    no_manuscript = found.missing is None
+    if destination is not None:
+        copies, behind, extra = f'their copies in {destination}', f'{destination} is', f'in {destination}'
+    else:
+        copies, behind, extra = 'their installed copies', 'the installed copies are', 'installed'
+
+    if not found:
+        if no_manuscript:
+            return [f'OK: all {len(registry)} {kind.name} match {copies}']
+        return [f'OK: all {len(registry)} {kind.name} in the {document} are current']
+
+    lines = []
+    if found.stale:
+        where = behind if no_manuscript else f'the {document} is'
+        lines.append(f'stale, {where} behind the data: {", ".join(found.stale)}')
+    if found.missing:
+        lines.append(f'emitted but never used by the {document}: {", ".join(found.missing)}')
+    if found.ungenerated:
+        where = f'{extra} with no emitter' if no_manuscript else f'written into the {document} by hand, with no emitter'
+        lines.append(f'{where}: {", ".join(found.ungenerated)}')
+
+    # only suggest remedies for what actually drifted
+    remedies = []
+    if found.stale:
+        remedies.append(f'rebuild and install the {kind.name}')
+    if no_manuscript and found.ungenerated:
+        remedies.append('delete the files without an emitter')
+    elif found.missing or found.ungenerated:
+        remedies.append(f'edit the {document}')
+    lines.append('to fix: ' + ', then '.join(remedies))
+    return lines
+
+
+def _unchecked(document: str, *, prose: bool = False) -> str:
+    """List of items that require a manuscript to be present."""
+    unanswered = [f'whether the {document} uses each one', 'whether it carries any written in by hand']
+    if prose:
+        unanswered.append('the numbers its prose states')
+    return 'not checked without the manuscript: ' + _series(unanswered)
+
+
+def _series(items: list[str]) -> str:
+    """Join items as a sentence."""
+    *head, last = items
+    if len(head) > 1:
+        return ', '.join(head) + ', and ' + last
+    return ' and '.join([*head, last])
+
+
+def _setting(name: str, key: str) -> str:
+    """Return a setting of a document and the table it is set in, for messages."""
     if name == PAPER_DOCUMENT:
-        return f'paper.main under [tool.{TOOL_TABLE}.paper]'
-    return f'{DOCUMENTS_TABLE}.{name}.main under [tool.{TOOL_TABLE}.{DOCUMENTS_TABLE}.{name}]'
+        return f'paper.{key} under [tool.{TOOL_TABLE}.paper]'
+    return f'{DOCUMENTS_TABLE}.{name}.{key} under [tool.{TOOL_TABLE}.{DOCUMENTS_TABLE}.{name}]'
 
 
 class Document:
@@ -479,39 +569,71 @@ class Document:
         """Return the manuscript.
 
         Raises:
-            FileNotFoundError: if it does not exist.
+            FileNotFoundError: if it does not exist, or the document is configured without one.
 
         """
-        main = self.settings.main
+        settings = self.settings
+        if not settings.manuscript:
+            msg = (
+                f'the {self.name} is configured without a manuscript '
+                f'({_setting(self.name, "manuscript")} is false), so there is none to read'
+            )
+            raise FileNotFoundError(msg)
+        main = settings.main
         if not main.exists():
             msg = (
                 f'no manuscript at {main}, so there is nothing to check the {self.name} against. '
-                f'Set {_main_setting(self.name)}.'
+                f'Set {_setting(self.name, "main")}, or, if this repository publishes the '
+                f"{self.name}'s floats without its source, manuscript = false in the same table."
             )
             raise FileNotFoundError(msg)
         return main
 
     def drift(self) -> dict[str, Drift]:
-        """Compare the manuscript against every registry by kind."""
+        """Compare the manuscript against every registry by kind.
+
+        A document configured without a manuscript has each artefact compared with its installed
+        copy instead (see 'Drift').
+        """
+        if not self.settings.manuscript:
+            return {
+                registry.kind.name: registry.drift(destination=self.install_dir(registry), manuscript=False)
+                for registry in self.registries
+            }
         main = self.manuscript()
         return {registry.kind.name: registry.drift(main, self.install_dir(registry)) for registry in self.registries}
 
     def check_prose(self) -> ProseCheck | None:
-        """Check the numbers this document states in prose, or return None if it has no prose registry."""
-        if self.prose is None:
+        """Check the numbers this document states in prose.
+
+        Returns:
+            What the check found, or None if the document has no prose registry or no manuscript.
+
+        """
+        if self.prose is None or not self.settings.manuscript:
             return None
         return self.prose.check({self.name: self.manuscript()}, document=self.name)
 
     def report(self, drift: dict[str, Drift], prose: ProseCheck | None = None) -> str:
-        """Return a description of everything that drifted."""
-        parts = [
-            registry.report(drift[registry.kind.name], self.name)
+        """Return a description of everything that drifted, and of anything left unchecked."""
+        root = current_project().root
+        lines = [
+            line
             for registry in self.registries
             if registry.kind.name in drift
+            for line in _findings(
+                registry,
+                drift[registry.kind.name],
+                self.name,
+                _relative(self.install_dir(registry), root),
+            )
         ]
+        if not self.settings.manuscript:
+            lines.append(_unchecked(self.name, prose=self.prose is not None))
+        text = ''.join(f'{line}\n' for line in lines)
         if prose is not None and self.prose is not None:
-            parts.append(self.prose.report(prose))
-        return ''.join(parts)
+            text += self.prose.report(prose)
+        return text
 
     def main(self, argv: list[str] | None = None) -> int:
         """Run the document's command line.
@@ -551,8 +673,11 @@ class Document:
         for path in self.write_all():
             print(f'wrote {_relative(path, root)}')
         if args.install:
-            for path in self.install():
+            installed = self.install()
+            for path in installed:
                 print(f'installed {_relative(path, root)}')
+            if not installed and any(len(registry) for registry in self.registries):
+                print(f'nothing to install: the {self.name} reads its floats from where they are built')
         return 0
 
     def _list(self) -> None:

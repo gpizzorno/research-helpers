@@ -20,7 +20,7 @@ from dataclasses import dataclass, field, fields, replace
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, TypeVar, get_args, get_type_hints
+from typing import TYPE_CHECKING, Any, TypeVar, get_args, get_origin, get_type_hints
 
 if TYPE_CHECKING:
     from _typeshed import DataclassInstance
@@ -55,6 +55,9 @@ PAPER_DOCUMENT = 'paper'
 
 PROFILES = ('screen', 'print')
 COLOURS = ('auto', 'always', 'never')
+
+# the settings of a document that only its manuscript uses
+MANUSCRIPT_FIELDS = ('main', 'bbl')
 
 # settings whose value must be one of a fixed set, whatever section they appear in
 CHOICES: Mapping[str, tuple[str, ...]] = MappingProxyType({'profile': PROFILES, 'colour': COLOURS})
@@ -98,6 +101,9 @@ class PaperSettings:
     build_dir: Path = Path('build')
     text_width_in: float = 6.45  # the document's '\\textwidth', in inches
     column_width_in: float = 3.04  # the document's '\\columnwidth', in inches
+    # false in a repository that publishes the document's floats but not its source. A check then
+    # compares each float with its installed copy, and 'main' and 'bbl' are not used
+    manuscript: bool = True
 
 
 @dataclass(frozen=True)
@@ -142,6 +148,8 @@ class ArxivSettings:
     engine: str = 'xelatex'
     texlive: int = 2025
     bbl_format: str = '3.3'
+    # text that must not reach a submission, e.g. a placeholder for something
+    markers: tuple[str, ...] = ()
 
 
 Settings = PaperSettings | FigureSettings | LogSettings | SweepSettings | ArxivSettings
@@ -240,8 +248,12 @@ class Project:
         groups += [(f'{DOCUMENTS_TABLE}.{name}', settings) for name, settings in self.documents.items()]
         width = max(len(f'{section}.{f.name}') for section, settings in groups for f in fields(settings))
         for section, settings in groups:
+            unused = MANUSCRIPT_FIELDS if isinstance(settings, PaperSettings) and not settings.manuscript else ()
             for field_ in fields(settings):
                 dotted = f'{section}.{field_.name}'
+                if field_.name in unused:
+                    lines.append(f'  {dotted:<{width}}  {"-":<28}  [no manuscript]')
+                    continue
                 value = getattr(settings, field_.name)
                 source = self.sources.get(dotted, self.sources.get(f'{section}.*', 'default'))
                 note = ''
@@ -252,6 +264,8 @@ class Project:
                     # a length converted from another unit is exact to more digits than anyone
                     # wants to read: 468pt is 6.475716064757161in
                     value = f'{value:g}' if value == round(value, DISPLAY_PLACES) else f'{value:.{DISPLAY_PLACES}f}'
+                elif isinstance(value, tuple):
+                    value = '[' + ', '.join(f'"{item}"' for item in value) + ']'  # as pyproject.toml writes it
                 lines.append(f'  {dotted:<{width}}  {value!s:<28}  [{source}]{note}')
             lines.append('')
         return '\n'.join(lines).rstrip() + '\n'
@@ -345,7 +359,9 @@ def _load(root: Path) -> Project:
         return values
 
     # built one by one rather than in a loop so each keeps its own type rather than their union
-    paper = PaperSettings(**read('paper', PaperSettings))
+    paper_values = read('paper', PaperSettings)
+    _read_where_built(paper_values, PaperSettings.build_dir, 'paper', sources)
+    paper = PaperSettings(**paper_values)
     figures = FigureSettings(**read('figures', FigureSettings))
     log = LogSettings(**read('log', LogSettings))
     sweep = SweepSettings(**read('sweep', SweepSettings))
@@ -376,7 +392,8 @@ def _documents(
     Only 'main' is required. The rest follows the manuscript unless given: 'tables' and 'figures'
     directories beside it, 'out_dir/<stem>.bbl' beside it, and a build directory named after the
     document inside the paper's. The widths are the paper's, since a second document set in the
-    same class has the same geometry.
+    same class has the same geometry. A document configured without a manuscript needs no 'main',
+    and reads its floats from its build directory unless told otherwise.
 
     Arguments:
         raw: the 'documents' table, or None if absent.
@@ -407,27 +424,57 @@ def _documents(
             _warn(f'[tool.{TOOL_TABLE}.{section}] is not a table, ignored', path)
             continue
         values, provenance = _section(PaperSettings, entry, section, path)
-        if 'main' not in values:
-            _warn(f'[tool.{TOOL_TABLE}.{section}] has no "main", so there is no manuscript to describe; ignored', path)
+        if values.get('manuscript', True) and 'main' not in values:
+            _warn(
+                f'[tool.{TOOL_TABLE}.{section}] has no "main", so there is no manuscript to describe: ignored. '
+                f'Set manuscript = false for a document whose source is not in this repository',
+                path,
+            )
             continue
 
-        main = values['main']
-        derived = {
-            'tables_dir': main.parent / 'tables',
-            'figures_dir': main.parent / 'figures',
-            'bbl': main.parent / 'out_dir' / f'{main.stem}.bbl',
-            'build_dir': paper.build_dir / name,
-        }
         inherited = {'text_width_in': paper.text_width_in, 'column_width_in': paper.column_width_in}
-        for origin, defaults in (('derived', derived), ('inherited', inherited)):
+        for origin, defaults in (('derived', _derived(values, paper, name)), ('inherited', inherited)):
             for key, value in defaults.items():
                 if key not in values:
                     values[key] = value
                     provenance[f'{section}.{key}'] = origin
+        _read_where_built(values, values['build_dir'], section, provenance)
 
         documents[name] = PaperSettings(**values)
         sources.update(provenance)
     return documents
+
+
+def _derived(values: dict[str, Any], paper: PaperSettings, name: str) -> dict[str, Path]:
+    """Return the settings a document derives."""
+    derived = {'build_dir': paper.build_dir / name}
+    if values.get('manuscript', True):
+        main = values['main']
+        derived |= {
+            'tables_dir': main.parent / 'tables',
+            'figures_dir': main.parent / 'figures',
+            'bbl': main.parent / 'out_dir' / f'{main.stem}.bbl',
+        }
+    return derived
+
+
+def _read_where_built(values: dict[str, Any], build_dir: Path, section: str, sources: dict[str, str]) -> None:
+    """Read the floats of a document without a manuscript.
+
+    Arguments:
+        values: the document's constructor arguments, updated in place.
+        build_dir: its build directory, if 'values' does not give one.
+        section: the dotted name its settings are recorded under.
+        sources: provenance, updated in place.
+
+    """
+    if values.get('manuscript', True):
+        return
+    build = values.get('build_dir', build_dir)
+    for key, directory in (('tables_dir', 'tables'), ('figures_dir', 'figures')):
+        if key not in values:
+            values[key] = build / directory
+            sources[f'{section}.{key}'] = 'derived'
 
 
 def _length(name: str, known: set[str]) -> tuple[str, float]:
@@ -489,8 +536,11 @@ def _section(
 def _coerce(value: Any, target: type, dotted: str, path: Path) -> Any:
     """Return 'value' as 'target', or None if it cannot be."""
     target = _required(target)
-    # bool is a subclass of int, so it would otherwise pass an int field silently
-    if isinstance(value, bool) or (target is Path and not isinstance(value, str)):
+    if get_origin(target) is tuple:
+        return _strings(value, dotted, path)
+    # bool is a subclass of int, so it would otherwise pass an int field silently, and a bool
+    # field takes nothing but a bool
+    if isinstance(value, bool) != (target is bool) or (target is Path and not isinstance(value, str)):
         _warn(f'{dotted} must be a {target.__name__}, not {type(value).__name__}', path)
         return None
     if target is Path:
@@ -500,6 +550,14 @@ def _coerce(value: Any, target: type, dotted: str, path: Path) -> Any:
     if isinstance(value, target):
         return value
     _warn(f'{dotted} must be a {target.__name__}, not {type(value).__name__}', path)
+    return None
+
+
+def _strings(value: Any, dotted: str, path: Path) -> tuple[str, ...] | None:
+    """Return a TOML array of strings as a tuple, or None."""
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return tuple(value)
+    _warn(f'{dotted} must be a list of strings, not {type(value).__name__}', path)
     return None
 
 

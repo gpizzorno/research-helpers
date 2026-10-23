@@ -334,7 +334,7 @@ class ProseRegistry:
             What was found or falsy when every entry holds.
 
         Raises:
-            FileNotFoundError: if a manuscript does not exist.
+            FileNotFoundError: if a manuscript does not exist, or a document is configured without one.
             KeyError: if an entry names a document the project does not configure.
 
         """
@@ -397,9 +397,12 @@ class ProseRegistry:
         Returns:
             Every token, in document order.
 
+        Raises:
+            FileNotFoundError: if no 'path' is given and the document is configured without a manuscript.
+
         """
         settings = current_project().document(document)
-        manuscript = Path(path) if path is not None else settings.main
+        manuscript = Path(path) if path is not None else _manuscript(document)
         return audit(
             manuscript.read_text(encoding='utf-8'),
             [entry for entry in self if entry.document == document],
@@ -497,11 +500,25 @@ def _message(error: Exception) -> str:
     return error.args[0] if error.args else str(error)
 
 
+def _manuscript(name: str) -> Path:
+    """Return the manuscript for a given document.
+
+    Raises:
+        FileNotFoundError: if the document is configured without a manuscript.
+
+    """
+    settings = current_project().document(name)
+    if not settings.manuscript:
+        msg = f'the document {name!r} is configured without a manuscript, so there is nothing to check against'
+        raise FileNotFoundError(msg)
+    return settings.main
+
+
 def _read_documents(names: Mapping[str, None], paths: Mapping[str, Path | str]) -> dict[str, str]:
     """Read and normalise each named document, from 'paths' or else the project's wiring."""
     texts = {}
     for name in names:
-        path = Path(paths[name]) if name in paths else current_project().document(name).main
+        path = Path(paths[name]) if name in paths else _manuscript(name)
         if not path.exists():
             msg = f'no manuscript at {path} for the document {name!r}, so there is nothing to check against'
             raise FileNotFoundError(msg)
