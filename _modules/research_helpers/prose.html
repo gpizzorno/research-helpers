@@ -1,0 +1,1435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>research_helpers.prose &mdash; Research Helpers v1.4</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=9172181d"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#documents"><code class="docutils literal notranslate"><span class="pre">documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#without-the-manuscript">Without the manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#publishing-the-floats-without-the-paper">8. Publishing the floats without the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/prose.html">Numbers in the prose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#register-a-sentence">Register a sentence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#known-discrepancies">Known discrepancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#find-untracked-values">Find untracked values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#in-a-test-suite">In a test suite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#more-than-one-document">More than one document</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/documents.html">Several documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/documents.html#configure-the-second-document">Configure the second document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/documents.html#one-document-per-manuscript">One <code class="docutils literal notranslate"><span class="pre">Document</span></code> per manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/queues.html">Many sweeps through few arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#plan-the-campaign">Plan the campaign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#write-the-queue">Write the queue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#run-it">Run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#resume">Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#elements-that-ran-twice">Elements that ran twice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#other-libraries">Other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/prose.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.normalise_prose"><code class="docutils literal notranslate"><span class="pre">normalise_prose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseNumber"><code class="docutils literal notranslate"><span class="pre">ProseNumber</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.Mismatch"><code class="docutils literal notranslate"><span class="pre">Mismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseCheck"><code class="docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.Occurrence"><code class="docutils literal notranslate"><span class="pre">Occurrence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseRegistry"><code class="docutils literal notranslate"><span class="pre">ProseRegistry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.audit"><code class="docutils literal notranslate"><span class="pre">audit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.audit_report"><code class="docutils literal notranslate"><span class="pre">audit_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.unused"><code class="docutils literal notranslate"><span class="pre">unused()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.build_units"><code class="docutils literal notranslate"><span class="pre">build_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.chunk"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.expand_run_dirs"><code class="docutils literal notranslate"><span class="pre">expand_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.quarantine"><code class="docutils literal notranslate"><span class="pre">quarantine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_plan_list"><code class="docutils literal notranslate"><span class="pre">read_plan_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_units"><code class="docutils literal notranslate"><span class="pre">read_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.select_run_dirs"><code class="docutils literal notranslate"><span class="pre">select_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.shuffled"><code class="docutils literal notranslate"><span class="pre">shuffled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.write_queues"><code class="docutils literal notranslate"><span class="pre">write_queues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research-helpers-sweep-queue"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">research_helpers.prose</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for research_helpers.prose</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">"""Pin every number a document states in the prose to the data it comes from.</span>
+
+<span class="sd">This module is a registry for typed numbers: each entry is a fragment of a sentence as the</span>
+<span class="sd">document prints it, with '{}' where a number goes, and a function that computes the numbers</span>
+<span class="sd">from the data. The check then reads the document and reports every fragment that no longer</span>
+<span class="sd">says what the data contains.</span>
+
+<span class="sd">    prose = ProseRegistry()</span>
+
+<span class="sd">    @prose.register('mean-k', 'OSLOM finds {} communities on average', source='runs/oslom.json')</span>
+<span class="sd">    def mean_k():</span>
+<span class="sd">        return (f'{load_runs().mean_k:.1f}',)</span>
+
+<span class="sd">An entry whose printed numbers are knowingly wrong, pending a correction to the text, is listed in</span>
+<span class="sd">'known_discrepancies' with what the data contains. The check then requires that the sentence is still</span>
+<span class="sd">there and still wrong. Once the text is corrected it fails until the entry leaves the list.</span>
+
+<span class="sd">'audit' classifies every numeric token in a document's prose, to find the numbers that still need</span>
+<span class="sd">an entry.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bisect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="n">Formatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">PAPER_DOCUMENT</span><span class="p">,</span> <span class="n">current_project</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="n">ValuesT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">'ValuesT'</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">'Callable[[], Sequence[Any]]'</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'Mismatch'</span><span class="p">,</span>
+    <span class="s1">'Occurrence'</span><span class="p">,</span>
+    <span class="s1">'ProseCheck'</span><span class="p">,</span>
+    <span class="s1">'ProseNumber'</span><span class="p">,</span>
+    <span class="s1">'ProseRegistry'</span><span class="p">,</span>
+    <span class="s1">'audit'</span><span class="p">,</span>
+    <span class="s1">'audit_report'</span><span class="p">,</span>
+    <span class="s1">'normalise_prose'</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># a LaTeX comment: a '%' not escaped as '\%'</span>
+<span class="n">COMMENT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">'(?&lt;!</span><span class="se">\\</span><span class="s1">)%.*'</span><span class="p">)</span>
+
+<span class="c1"># a numeric token: 1,234 or 1\,234 (thousands), or an integer or decimal, not part of a longer word</span>
+<span class="n">NUMBER</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">'(?&lt;![\w.])(\d{1,3}(?:,\d</span><span class="si">{3}</span><span class="s1">)+|\d{1,3}(?:</span><span class="se">\\</span><span class="s1">,\d</span><span class="si">{3}</span><span class="s1">)+|\d+(?:\.\d+)?)(?!\w)'</span><span class="p">)</span>
+
+<span class="c1"># commands whose arguments are addresses or names, never prose numbers</span>
+<span class="n">SKIPPED_COMMANDS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">'autocite'</span><span class="p">,</span>
+    <span class="s1">'textcite'</span><span class="p">,</span>
+    <span class="s1">'parencite'</span><span class="p">,</span>
+    <span class="s1">'cite'</span><span class="p">,</span>
+    <span class="s1">'citep'</span><span class="p">,</span>
+    <span class="s1">'citet'</span><span class="p">,</span>
+    <span class="s1">'label'</span><span class="p">,</span>
+    <span class="s1">'ref'</span><span class="p">,</span>
+    <span class="s1">'eqref'</span><span class="p">,</span>
+    <span class="s1">'cref'</span><span class="p">,</span>
+    <span class="s1">'Cref'</span><span class="p">,</span>
+    <span class="s1">'autoref'</span><span class="p">,</span>
+    <span class="s1">'input'</span><span class="p">,</span>
+    <span class="s1">'include'</span><span class="p">,</span>
+    <span class="s1">'includegraphics'</span><span class="p">,</span>
+    <span class="s1">'url'</span><span class="p">,</span>
+    <span class="s1">'href'</span><span class="p">,</span>
+    <span class="s1">'begin'</span><span class="p">,</span>
+    <span class="s1">'end'</span><span class="p">,</span>
+    <span class="s1">'hspace'</span><span class="p">,</span>
+    <span class="s1">'vspace'</span><span class="p">,</span>
+    <span class="s1">'footnotetext'</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># display-math environments</span>
+<span class="n">DISPLAY_MATH</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">\[.*?</span><span class="se">\\</span><span class="s1">\]'</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">begin\{align\*?\}.*?</span><span class="se">\\</span><span class="s1">end\{align\*?\}'</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">begin\{equation\*?\}.*?</span><span class="se">\\</span><span class="s1">end\{equation\*?\}'</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># an inline formula holding one of these computes something</span>
+<span class="n">FORMULA_MARKS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">binom'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">times'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">sum'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">frac'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">cdot'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">in'</span><span class="p">)</span>
+
+<span class="c1"># the relations by which an inline formula sets a parameter to a value</span>
+<span class="n">RELATIONS</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'(=|</span><span class="se">\\</span><span class="s1">le|</span><span class="se">\\</span><span class="s1">leq|</span><span class="se">\\</span><span class="s1">ge|</span><span class="se">\\</span><span class="s1">geq|&lt;|&gt;|</span><span class="se">\\</span><span class="s1">in)'</span>
+
+<span class="c1"># the order in which an audit reports</span>
+<span class="n">CATEGORIES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'untraced'</span><span class="p">:</span> <span class="s1">'Untraced'</span><span class="p">,</span>
+    <span class="s1">'other-float'</span><span class="p">:</span> <span class="s1">'In a float the paragraph does not cite'</span><span class="p">,</span>
+    <span class="s1">'cited-float'</span><span class="p">:</span> <span class="s1">'In a float the paragraph cites'</span><span class="p">,</span>
+    <span class="s1">'notation'</span><span class="p">:</span> <span class="s1">'A parameter or a formula constant'</span><span class="p">,</span>
+    <span class="s1">'registered'</span><span class="p">:</span> <span class="s1">'Registered'</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># a token this short is too common to say anything by appearing in an uncited float</span>
+<span class="n">SHORTEST_TELLING_TOKEN</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># how much text either side of a token an audit shows</span>
+<span class="n">CONTEXT_BEFORE</span><span class="p">,</span> <span class="n">CONTEXT_AFTER</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">50</span>
+
+
+<div class="viewcode-block" id="normalise_prose">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.normalise_prose">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalise_prose</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return a manuscript as the registry matches against it: comments removed, whitespace collapsed.</span>
+
+<span class="sd">    A sentence that has been commented out no longer counts as printed.</span>
+<span class="sd">    """</span>
+    <span class="n">uncommented</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">COMMENT</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+    <span class="k">return</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uncommented</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fields</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Split a template into its literal stretches, each followed by whether a number comes after it."""</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">literal</span><span class="p">,</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">literal</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_spec</span><span class="p">,</span> <span class="n">_conversion</span> <span class="ow">in</span> <span class="n">Formatter</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">template</span><span class="p">)]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_flexible</span><span class="p">(</span><span class="n">literal</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return a pattern matching 'literal' with any run of whitespace where it has whitespace.</span>
+
+<span class="sd">    Whitespace at either end is kept, so 'found ' does not match the start of 'founder'.</span>
+<span class="sd">    """</span>
+    <span class="n">pieces</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">piece</span><span class="p">)</span> <span class="k">for</span> <span class="n">piece</span> <span class="ow">in</span> <span class="n">literal</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pieces</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s1">'\s+'</span> <span class="k">if</span> <span class="n">literal</span> <span class="k">else</span> <span class="s1">''</span>
+    <span class="n">lead</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'\s+'</span> <span class="k">if</span> <span class="n">literal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span> <span class="k">else</span> <span class="s1">''</span>
+    <span class="n">trail</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'\s+'</span> <span class="k">if</span> <span class="n">literal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span> <span class="k">else</span> <span class="s1">''</span>
+    <span class="k">return</span> <span class="n">lead</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">'\s+'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span> <span class="o">+</span> <span class="n">trail</span>
+
+
+<div class="viewcode-block" id="ProseNumber">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseNumber">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProseNumber</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""One fragment of a sentence as the document prints it, and how to compute its numbers.</span>
+
+<span class="sd">    'template' is the fragment with '{}' where each number goes and doubled braces for literal</span>
+<span class="sd">    ones, so '\(Q_{{ov}} = {}\)'. Whitespace is immaterial: the fragment and the document are</span>
+<span class="sd">    both compared with every run of whitespace collapsed to one space.</span>
+<span class="sd">    """</span>
+
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">template</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span>  <span class="c1"># the numbers, formatted as printed, one per '{}'</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>  <span class="c1"># where the numbers come from, for whoever has to fix a mismatch</span>
+    <span class="n">section</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>  <span class="c1"># where the sentence is, likewise</span>
+    <span class="n">document</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PAPER_DOCUMENT</span>  <span class="c1"># the document that prints it</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">placeholders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the count of numbers the template takes."""</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">follows</span> <span class="k">for</span> <span class="n">_literal</span><span class="p">,</span> <span class="n">follows</span> <span class="ow">in</span> <span class="n">_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ProseNumber.expected">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseNumber.expected">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the fragment with the numbers from the data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: if the values do not fill the template exactly.</span>
+
+<span class="sd">        """</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">placeholders</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1"> value(s) for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">placeholders</span><span class="si">}</span><span class="s1"> placeholder(s)'</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ProseNumber.pattern">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseNumber.pattern">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return a pattern matching the fragment whatever numbers it carries.</span>
+
+<span class="sd">        Used to find what the document prints when it does not print what the data contains. A number</span>
+<span class="sd">        is matched as a run without whitespace, so a sentence that now says something else entirely</span>
+<span class="sd">        does not pass for the same sentence with different numbers.</span>
+<span class="sd">        """</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">)</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">position</span><span class="p">,</span> <span class="p">(</span><span class="n">literal</span><span class="p">,</span> <span class="n">follows</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_flexible</span><span class="p">(</span><span class="n">literal</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">follows</span><span class="p">:</span>
+                <span class="c1"># a number with fixed text after it stops at that text; a number at either edge of</span>
+                <span class="c1"># the template has nothing to stop it but the next space</span>
+                <span class="n">interior</span> <span class="o">=</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">position</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">literal</span><span class="p">))</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s1">'(\S+?)'</span> <span class="k">if</span> <span class="n">interior</span> <span class="k">else</span> <span class="sa">r</span><span class="s1">'(\S+)'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ProseNumber.longest_literal">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseNumber.longest_literal">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">longest_literal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the longest stretch of fixed text, which must appear for the sentence to count as there."""</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">literal</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="k">for</span> <span class="n">literal</span><span class="p">,</span> <span class="n">_follows</span> <span class="ow">in</span> <span class="n">_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Mismatch">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.Mismatch">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mismatch</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""A fragment the document does not print as is in the data."""</span>
+
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">section</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">expected</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">printed</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>  <span class="c1"># what the document prints in its place, or None if the sentence is gone</span></div>
+
+
+
+<div class="viewcode-block" id="ProseCheck">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseCheck">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProseCheck</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""What a check of the registry against its documents found."""</span>
+
+    <span class="n">checked</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># entries compared</span>
+    <span class="n">stale</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mismatch</span><span class="p">]</span>  <span class="c1"># the sentence is there, the numbers are not the data's</span>
+    <span class="n">vanished</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mismatch</span><span class="p">]</span>  <span class="c1"># the sentence is no longer in the document at all</span>
+    <span class="n">fixed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>  <span class="c1"># known discrepancies the text now corrects; remove them from the list</span>
+    <span class="n">orphaned</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>  <span class="c1"># known discrepancies that name no entry</span>
+    <span class="n">failed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>  <span class="c1"># entries whose numbers could not be computed, with why</span>
+    <span class="n">open_discrepancies</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># known discrepancies still standing, as expected</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Report whether anything needs attention."""</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stale</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">vanished</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">orphaned</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">failed</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Occurrence">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.Occurrence">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Occurrence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""One numeric token in a document's prose, and what accounts for it."""</span>
+
+    <span class="n">line</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># a key of 'CATEGORIES'</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span>  <span class="c1"># the registry key, the kind of formula, or the floats carrying it</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ProseRegistry">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProseRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The numbers a project's documents state in prose, and their checks."""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">known_discrepancies</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">untraced</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parameter_symbols</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Create an empty registry.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            known_discrepancies: entry key to what the data contains, for each sentence knowingly wrong</span>
+<span class="sd">                pending a correction to the text.</span>
+<span class="sd">            untraced: numbers in the prose with no source to compute them from, by reason.</span>
+<span class="sd">            parameter_symbols: inline-math symbols whose assignment sets a parameter rather than</span>
+<span class="sd">                reports a result, e.g. '\mu' for '\(\mu = 0.4\)'.</span>
+
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ProseNumber</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">known_discrepancies</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">known_discrepancies</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">untraced</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">untraced</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter_symbols</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parameter_symbols</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProseRegistry.add">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">entries</span><span class="p">:</span> <span class="n">ProseNumber</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register entries built directly.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: if a key is already registered.</span>
+
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> is already registered'</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span></div>
+
+
+<div class="viewcode-block" id="ProseRegistry.register">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.register">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="n">document</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PAPER_DOCUMENT</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ValuesT</span><span class="p">],</span> <span class="n">ValuesT</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Register the decorated function that computes the numbers of a fragment.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            key: a short, unique name for the entry.</span>
+<span class="sd">            template: the fragment as printed, '{}' for each number.</span>
+<span class="sd">            source: where the numbers come from.</span>
+<span class="sd">            section: where the sentence is.</span>
+<span class="sd">            document: the document.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The decorator, which returns the function unchanged.</span>
+
+<span class="sd">        """</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">ValuesT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValuesT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ProseNumber</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="n">document</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">values</span>
+
+        <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return how many entries are registered."""</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ProseNumber</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Iterate the entries in registration order."""</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Report whether 'key' is registered."""</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProseNumber</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return one entry by key."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">documents</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the documents the entries name, in the order first named."""</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">document</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ProseRegistry.check">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">paths</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">document</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProseCheck</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Compare every entry against the document that prints it.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            paths: document name to manuscript, for any document not to be taken from the project's wiring.</span>
+<span class="sd">            document: check only the entries this document prints.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            What was found or falsy when every entry holds.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: if a manuscript does not exist, or a document is configured without one.</span>
+<span class="sd">            KeyError: if an entry names a document the project does not configure.</span>
+
+<span class="sd">        """</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">document</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">document</span> <span class="o">==</span> <span class="n">document</span><span class="p">]</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="n">_read_documents</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">document</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">),</span> <span class="n">paths</span> <span class="ow">or</span> <span class="p">{})</span>
+
+        <span class="n">stale</span><span class="p">,</span> <span class="n">vanished</span><span class="p">,</span> <span class="n">fixed</span><span class="p">,</span> <span class="n">failed</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">open_discrepancies</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">texts</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">document</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">expected</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">expected</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+                <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s1">'</span><span class="p">))</span>
+                <span class="k">continue</span>
+
+            <span class="n">printed</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">pattern</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">known_discrepancies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                    <span class="n">fixed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">printed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">longest_literal</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                    <span class="n">vanished</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Mismatch</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">open_discrepancies</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">printed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">vanished</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Mismatch</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stale</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Mismatch</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">printed</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+
+        <span class="n">orphaned</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">known_discrepancies</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ProseCheck</span><span class="p">(</span>
+            <span class="n">checked</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span>
+            <span class="n">stale</span><span class="o">=</span><span class="n">stale</span><span class="p">,</span>
+            <span class="n">vanished</span><span class="o">=</span><span class="n">vanished</span><span class="p">,</span>
+            <span class="n">fixed</span><span class="o">=</span><span class="n">fixed</span><span class="p">,</span>
+            <span class="n">orphaned</span><span class="o">=</span><span class="n">orphaned</span><span class="p">,</span>
+            <span class="n">failed</span><span class="o">=</span><span class="n">failed</span><span class="p">,</span>
+            <span class="n">open_discrepancies</span><span class="o">=</span><span class="n">open_discrepancies</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProseRegistry.report">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.report">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">found</span><span class="p">:</span> <span class="n">ProseCheck</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a description of what the check found."""</span>
+        <span class="n">noted</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' (</span><span class="si">{</span><span class="n">found</span><span class="o">.</span><span class="n">open_discrepancies</span><span class="si">}</span><span class="s1"> known discrepancies still open)'</span> <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">open_discrepancies</span> <span class="k">else</span> <span class="s1">''</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s1">'OK: all </span><span class="si">{</span><span class="n">found</span><span class="o">.</span><span class="n">checked</span><span class="si">}</span><span class="s1"> prose numbers are current</span><span class="si">{</span><span class="n">noted</span><span class="si">}</span><span class="se">\n</span><span class="s1">'</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">_problems</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">found</span><span class="o">.</span><span class="n">checked</span><span class="si">}</span><span class="s1"> checked</span><span class="si">{</span><span class="n">noted</span><span class="si">}</span><span class="s1">. To fix: '</span> <span class="o">+</span> <span class="s1">', then '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_remedies</span><span class="p">(</span><span class="n">found</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span></div>
+
+
+<div class="viewcode-block" id="ProseRegistry.audit">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.audit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">audit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PAPER_DOCUMENT</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Occurrence</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Classify every numeric token in a document's prose.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            document: target document.</span>
+<span class="sd">            path: its manuscript, if not to be taken from the project's wiring.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Every token, in document order.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: if no 'path' is given and the document is configured without a manuscript.</span>
+
+<span class="sd">        """</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="n">current_project</span><span class="p">()</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="n">manuscript</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_manuscript</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">audit</span><span class="p">(</span>
+            <span class="n">manuscript</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">),</span>
+            <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">document</span> <span class="o">==</span> <span class="n">document</span><span class="p">],</span>
+            <span class="n">tables_dir</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">tables_dir</span><span class="p">,</span>
+            <span class="n">parameter_symbols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter_symbols</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProseRegistry.main">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.ProseRegistry.main">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Run the prose command line.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            argv: command line arguments, or None to read 'sys.argv'.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A process exit status: 0 on success, 1 if the check found anything.</span>
+
+<span class="sd">        """</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">'Check the numbers stated in the prose against the data.'</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--list'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">'store_true'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'list what is registered'</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--document'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'only this document (default: every one)'</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--audit'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">'store_true'</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"classify every number in a document's prose"</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--out'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">'write the audit here rather than to stdout'</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">list</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">document</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">document</span><span class="p">):</span>
+                    <span class="n">where</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">document</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">section</span><span class="si">}</span><span class="s1">'</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="si">:</span><span class="s1">&lt;</span><span class="si">{</span><span class="n">width</span><span class="si">}}</span><span class="s1">  </span><span class="si">{</span><span class="n">where</span><span class="si">:</span><span class="s1">&lt;24</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">audit</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">document</span> <span class="ow">or</span> <span class="n">PAPER_DOCUMENT</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audit</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">_message</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">markdown</span> <span class="o">=</span> <span class="n">audit_report</span><span class="p">(</span><span class="n">found</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">'Prose-number audit: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'wrote </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">out</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">document</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">_message</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">result</span> <span class="k">else</span> <span class="mi">0</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_problems</span><span class="p">(</span><span class="n">found</span><span class="p">:</span> <span class="n">ProseCheck</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Describe each thing a check found."""</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mismatch</span> <span class="ow">in</span> <span class="n">found</span><span class="o">.</span><span class="n">stale</span><span class="p">:</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' [</span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">section</span><span class="si">}</span><span class="s1">]'</span> <span class="k">if</span> <span class="n">mismatch</span><span class="o">.</span><span class="n">section</span> <span class="k">else</span> <span class="s1">''</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s1">'stale</span><span class="si">{</span><span class="n">where</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s1">:'</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">'    prints     </span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">printed</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">'    data contains  </span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">expected</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="k">for</span> <span class="n">mismatch</span> <span class="ow">in</span> <span class="n">found</span><span class="o">.</span><span class="n">vanished</span><span class="p">:</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">' [</span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">section</span><span class="si">}</span><span class="s1">]'</span> <span class="k">if</span> <span class="n">mismatch</span><span class="o">.</span><span class="n">section</span> <span class="k">else</span> <span class="s1">''</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'not found</span><span class="si">{</span><span class="n">where</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">expected</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'could not compute </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">reason</span> <span class="ow">in</span> <span class="n">found</span><span class="o">.</span><span class="n">failed</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">fixed</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'corrected in the text, still listed as known discrepancies: </span><span class="si">{</span><span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">found</span><span class="o">.</span><span class="n">fixed</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">orphaned</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'known discrepancies naming no entry: </span><span class="si">{</span><span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">found</span><span class="o">.</span><span class="n">orphaned</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lines</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_remedies</span><span class="p">(</span><span class="n">found</span><span class="p">:</span> <span class="n">ProseCheck</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Return what to do, only for what a check actually found."""</span>
+    <span class="n">remedies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">stale</span><span class="p">:</span>
+        <span class="n">remedies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'correct the text, or list the entry as a known discrepancy'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">vanished</span><span class="p">:</span>
+        <span class="n">remedies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'update the template to the sentence as it now reads, or remove the entry'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">failed</span><span class="p">:</span>
+        <span class="n">remedies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'produce the data the entry reads'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">fixed</span> <span class="ow">or</span> <span class="n">found</span><span class="o">.</span><span class="n">orphaned</span><span class="p">:</span>
+        <span class="n">remedies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'remove them from the known discrepancies'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">remedies</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_message</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return an error's message without the quotes."""</span>
+    <span class="k">return</span> <span class="n">error</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">args</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_manuscript</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return the manuscript for a given document.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: if the document is configured without a manuscript.</span>
+
+<span class="sd">    """</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">current_project</span><span class="p">()</span><span class="o">.</span><span class="n">document</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">manuscript</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'the document </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s1"> is configured without a manuscript, so there is nothing to check against'</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">settings</span><span class="o">.</span><span class="n">main</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_documents</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">paths</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Read and normalise each named document, from 'paths' or else the project's wiring."""</span>
+    <span class="n">texts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">paths</span> <span class="k">else</span> <span class="n">_manuscript</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'no manuscript at </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> for the document </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s1">, so there is nothing to check against'</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">texts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalise_prose</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">texts</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_not_prose</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Yield the spans of a manuscript that are not prose."""</span>
+    <span class="k">yield from</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">COMMENT</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">SKIPPED_COMMANDS</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">'</span> <span class="o">+</span> <span class="n">command</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">'\*?(\[[^\]]*\])*\{[^}]*\}'</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+    <span class="c1"># \autocites[pre][post]{key}[pre][post]{key}...: every bracket and brace of the chain</span>
+    <span class="k">yield from</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">autocites(\s*(\[[^\]]*\])*\s*\{[^}]*\})+'</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">DISPLAY_MATH</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">))</span>
+    <span class="c1"># a formula's own constants: superscripts, subscripts, fraction and root arguments</span>
+    <span class="n">formula</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'(\^|_)\{?-?\d+\}?|</span><span class="se">\\</span><span class="s1">frac\{[^}]*\}\{[^}]*\}|</span><span class="se">\\</span><span class="s1">sqrt\{[^}]*\}'</span>
+    <span class="k">yield from</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+    <span class="c1"># the preamble: prose starts at the abstract, or else at the document's body</span>
+    <span class="k">for</span> <span class="n">opening</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">'</span><span class="se">\\</span><span class="s1">begin</span><span class="si">{abstract}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">begin</span><span class="si">{document}</span><span class="s1">'</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">opening</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="mi">0</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">opening</span><span class="p">)</span>
+            <span class="k">return</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_masked</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Blank every span of a manuscript that is not prose, preserving offsets and line breaks."""</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">_not_prose</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">out</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="s1">' '</span>
+    <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_inline_kind</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parameter</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return 'parameter' or 'formula' for a token inside an inline formula, else None."""</span>
+    <span class="n">opening</span><span class="p">,</span> <span class="n">closing</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">'</span><span class="se">\\</span><span class="s1">('</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">),</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'</span><span class="se">\\</span><span class="s1">)'</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">opening</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">closing</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">text</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">'</span><span class="se">\\</span><span class="s1">)'</span><span class="p">,</span> <span class="n">opening</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">parameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parameter</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">opening</span><span class="p">:</span><span class="n">start</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="s1">'parameter'</span>
+    <span class="n">span</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">opening</span><span class="p">:</span><span class="n">closing</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s1">'formula'</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">mark</span> <span class="ow">in</span> <span class="n">span</span> <span class="k">for</span> <span class="n">mark</span> <span class="ow">in</span> <span class="n">FORMULA_MARKS</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parameter_pattern</span><span class="p">(</span><span class="n">symbols</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Match an inline formula, up to a number, that assigns a declared parameter symbol."""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">symbols</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">alternatives</span> <span class="o">=</span> <span class="s1">'|'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span> <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">'^</span><span class="se">\\</span><span class="s1">\(\s*('</span> <span class="o">+</span> <span class="n">alternatives</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">')\s*'</span> <span class="o">+</span> <span class="n">RELATIONS</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">'\s*\[?\s*$'</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_registered_spans</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ProseNumber</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Return where each registered fragment sits in the raw text."""</span>
+    <span class="n">spans</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="c1"># the template's own spaces, made flexible, also match the raw text's line breaks</span>
+        <span class="n">spans</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">pattern</span><span class="p">()</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">spans</span>
+
+
+<div class="viewcode-block" id="audit">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.audit">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">audit</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ProseNumber</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">tables_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameter_symbols</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Occurrence</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Classify every numeric token in a manuscript's prose.</span>
+
+<span class="sd">    Each token falls in the first category that accounts for it:</span>
+
+<span class="sd">    1. **registered**: it lies inside a fragment one of the entries describes.</span>
+<span class="sd">    2. **notation**: it is a constant of an inline formula, or a parameter's value in one that</span>
+<span class="sd">       assigns a declared parameter symbol. Not a result.</span>
+<span class="sd">    3. **cited-float**: it appears in a generated table the same paragraph cites, which carries it.</span>
+<span class="sd">    4. **other-float**: it appears in a generated table the paragraph does not cite.</span>
+<span class="sd">    5. **untraced**: none of the above. These are the numbers to pin.</span>
+
+<span class="sd">    Numbers in the preamble, comments, display math, citations, labels, references and the</span>
+<span class="sd">    arguments of '\input' and '\includegraphics' are not prose and are skipped.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        text: the manuscript, as written.</span>
+<span class="sd">        entries: the registry entries for this manuscript.</span>
+<span class="sd">        tables_dir: where its generated tables are, named by label without the 'tab:' prefix.</span>
+<span class="sd">        parameter_symbols: see 'ProseRegistry'.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Every token, in document order.</span>
+
+<span class="sd">    """</span>
+    <span class="n">masked</span> <span class="o">=</span> <span class="n">_masked</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">parameter</span> <span class="o">=</span> <span class="n">_parameter_pattern</span><span class="p">(</span><span class="n">parameter_symbols</span><span class="p">)</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tables_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">tables_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">directory</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">'*.tex'</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">directory</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">{}</span>
+    <span class="p">)</span>
+    <span class="n">spans</span> <span class="o">=</span> <span class="n">_registered_spans</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+    <span class="n">paragraph_breaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s1">'\n[ \t]*\n'</span><span class="p">,</span> <span class="n">masked</span><span class="p">)]</span>
+
+    <span class="n">found</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">NUMBER</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">masked</span><span class="p">):</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">()</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">bisect</span><span class="o">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">paragraph_breaks</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="n">opening</span> <span class="o">=</span> <span class="n">paragraph_breaks</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">index</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">closing</span> <span class="o">=</span> <span class="n">paragraph_breaks</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">paragraph_breaks</span><span class="p">)</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">paragraph</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">opening</span><span class="p">:</span><span class="n">closing</span><span class="p">]</span>
+        <span class="n">cited</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">'</span><span class="se">\\</span><span class="s1">(?:ref|cref|Cref|autoref)\{tab:([^}]+)\}'</span><span class="p">,</span> <span class="n">paragraph</span><span class="p">)</span>
+
+        <span class="n">category</span><span class="p">,</span> <span class="n">detail</span> <span class="o">=</span> <span class="s1">'untraced'</span><span class="p">,</span> <span class="s1">''</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">spans</span> <span class="k">if</span> <span class="n">low</span> <span class="o">&lt;=</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">]</span>
+        <span class="n">kind</span> <span class="o">=</span> <span class="n">_inline_kind</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">parameter</span><span class="p">)</span>
+        <span class="n">carrying</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cited</span> <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">''</span><span class="p">)]</span>
+        <span class="n">elsewhere</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">name</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">tables</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cited</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">SHORTEST_TELLING_TOKEN</span> <span class="ow">and</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">body</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">category</span><span class="p">,</span> <span class="n">detail</span> <span class="o">=</span> <span class="s1">'registered'</span><span class="p">,</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">kind</span><span class="p">:</span>
+            <span class="n">category</span><span class="p">,</span> <span class="n">detail</span> <span class="o">=</span> <span class="s1">'notation'</span><span class="p">,</span> <span class="n">kind</span>
+        <span class="k">elif</span> <span class="n">carrying</span><span class="p">:</span>
+            <span class="n">category</span><span class="p">,</span> <span class="n">detail</span> <span class="o">=</span> <span class="s1">'cited-float'</span><span class="p">,</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">carrying</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">elsewhere</span><span class="p">:</span>
+            <span class="n">category</span><span class="p">,</span> <span class="n">detail</span> <span class="o">=</span> <span class="s1">'other-float'</span><span class="p">,</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elsewhere</span><span class="p">)</span>
+
+        <span class="n">found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Occurrence</span><span class="p">(</span>
+                <span class="n">line</span><span class="o">=</span><span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="o">-</span> <span class="n">CONTEXT_BEFORE</span><span class="p">)</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="n">CONTEXT_AFTER</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+                <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span>
+                <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">found</span></div>
+
+
+
+<div class="viewcode-block" id="audit_report">
+<a class="viewcode-back" href="../../api/prose.html#research_helpers.prose.audit_report">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">audit_report</span><span class="p">(</span><span class="n">occurrences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Occurrence</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'Prose-number audit'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render an audit as Markdown, untraced numbers first.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        occurrences: what 'audit' found.</span>
+<span class="sd">        title: the heading.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The report.</span>
+
+<span class="sd">    """</span>
+    <span class="n">by_category</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Occurrence</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">category</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">CATEGORIES</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">occurrence</span> <span class="ow">in</span> <span class="n">occurrences</span><span class="p">:</span>
+        <span class="n">by_category</span><span class="p">[</span><span class="n">occurrence</span><span class="o">.</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">occurrence</span><span class="p">)</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">'**</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">by_category</span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="si">}</span><span class="s1">** </span><span class="si">{</span><span class="n">CATEGORIES</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CATEGORIES</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'# </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">occurrences</span><span class="p">)</span><span class="si">}</span><span class="s1"> numeric tokens in the prose: </span><span class="si">{</span><span class="n">counts</span><span class="si">}</span><span class="s1">.'</span><span class="p">,</span> <span class="s1">''</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">heading</span> <span class="ow">in</span> <span class="n">CATEGORIES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'## </span><span class="si">{</span><span class="n">heading</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">''</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">by_category</span><span class="p">[</span><span class="n">category</span><span class="p">]:</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">'None.'</span><span class="p">,</span> <span class="s1">''</span><span class="p">]</span>
+            <span class="k">continue</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">'| Line | Token | Detail | Context |'</span><span class="p">,</span> <span class="s1">'|---|---|---|---|'</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s1">'| </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">line</span><span class="si">}</span><span class="s1"> | `</span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s1">` | </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">detail</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"|"</span><span class="p">,</span><span class="w"> </span><span class="s2">"/"</span><span class="p">)</span><span class="si">}</span><span class="s1"> |'</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">by_category</span><span class="p">[</span><span class="n">category</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

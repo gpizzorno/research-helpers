@@ -1,0 +1,475 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Many sweeps through few arrays &mdash; Research Helpers v1.4</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9172181d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cluster jobs" href="cluster.html" />
+    <link rel="prev" title="Parameter sweeps" href="sweeps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#documents"><code class="docutils literal notranslate"><span class="pre">documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#without-the-manuscript">Without the manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#publishing-the-floats-without-the-paper">8. Publishing the floats without the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="prose.html">Numbers in the prose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#register-a-sentence">Register a sentence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#known-discrepancies">Known discrepancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#find-untracked-values">Find untracked values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#in-a-test-suite">In a test suite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="prose.html#more-than-one-document">More than one document</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documents.html">Several documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documents.html#configure-the-second-document">Configure the second document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documents.html#one-document-per-manuscript">One <code class="docutils literal notranslate"><span class="pre">Document</span></code> per manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Many sweeps through few arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plan-the-campaign">Plan the campaign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#write-the-queue">Write the queue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-it">Run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resume">Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elements-that-ran-twice">Elements that ran twice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#other-libraries">Other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/prose.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.normalise_prose"><code class="docutils literal notranslate"><span class="pre">normalise_prose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseNumber"><code class="docutils literal notranslate"><span class="pre">ProseNumber</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.Mismatch"><code class="docutils literal notranslate"><span class="pre">Mismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseCheck"><code class="docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.Occurrence"><code class="docutils literal notranslate"><span class="pre">Occurrence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseRegistry"><code class="docutils literal notranslate"><span class="pre">ProseRegistry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.audit"><code class="docutils literal notranslate"><span class="pre">audit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.audit_report"><code class="docutils literal notranslate"><span class="pre">audit_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.unused"><code class="docutils literal notranslate"><span class="pre">unused()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.build_units"><code class="docutils literal notranslate"><span class="pre">build_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.chunk"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_run_dirs"><code class="docutils literal notranslate"><span class="pre">expand_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.quarantine"><code class="docutils literal notranslate"><span class="pre">quarantine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_plan_list"><code class="docutils literal notranslate"><span class="pre">read_plan_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_units"><code class="docutils literal notranslate"><span class="pre">read_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.select_run_dirs"><code class="docutils literal notranslate"><span class="pre">select_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.shuffled"><code class="docutils literal notranslate"><span class="pre">shuffled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.write_queues"><code class="docutils literal notranslate"><span class="pre">write_queues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research-helpers-sweep-queue"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+      <li class="breadcrumb-item active">Many sweeps through few arrays</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/guide/queues.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="many-sweeps-through-few-arrays">
+<h1>Many sweeps through few arrays<a class="headerlink" href="#many-sweeps-through-few-arrays" title="Link to this heading"></a></h1>
+<p>A <a class="reference internal" href="sweeps.html"><span class="std std-doc">sweep</span></a> is one run directory, one manifest, and one array. This approach doesn’t necessarily
+scale well to a full campaign that may contain hundreds of them, since one array per sweep can quickly
+reach the scheduler’s per-user job limit.</p>
+<p><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.queue" title="research_helpers.sweep.queue"><code class="xref py py-mod docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a> decouples sweeps from arrays. The unit of work becomes a <em>slice</em>
+of a sweep (<em>i.e.</em>, what a single array task effectively runs). A <em>queue</em> is a text file of such units,
+and each element of one array runs a block of them, in sequence. Nothing about a sweep changes: every
+slice still writes its own part file into its own run directory, resuming still skips finished combinations,
+and <code class="docutils literal notranslate"><span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">collect</span></code> read each run directory as normal.</p>
+<p>The commands below are on every <a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Sweep" title="research_helpers.sweep.Sweep"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sweep</span></code></a>’s command line, so the
+<code class="docutils literal notranslate"><span class="pre">sweep_demo.py</span></code> from the <a class="reference internal" href="sweeps.html"><span class="std std-doc">sweeps guide</span></a> has them already.</p>
+<section id="plan-the-campaign">
+<h2>Plan the campaign<a class="headerlink" href="#plan-the-campaign" title="Link to this heading"></a></h2>
+<p>A <em>plan list</em> names each sweep’s config and run directory, one tab-separated pair per line, with
+blank lines and <code class="docutils literal notranslate"><span class="pre">#</span></code> comments allowed:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/g01-fast.toml	runs/g01-fast
+configs/g01-slow.toml	runs/g01-slow
+configs/g02-fast.toml	runs/g02-fast
+...
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">plan-list</span></code> plans all of them in one process.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>plan-list<span class="w"> </span>--list<span class="w"> </span>PLAN.tsv
+planned<span class="w"> </span><span class="m">6</span><span class="w"> </span>sweeps:<span class="w"> </span><span class="m">24</span><span class="w"> </span>combinations<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">12</span><span class="w"> </span>slices
+queue<span class="w"> </span>them<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>queue<span class="w"> </span>command,<span class="w"> </span>rather<span class="w"> </span>than<span class="w"> </span>submitting<span class="w"> </span>one<span class="w"> </span>array<span class="w"> </span>per<span class="w"> </span>sweep
+</pre></div>
+</div>
+</section>
+<section id="write-the-queue">
+<h2>Write the queue<a class="headerlink" href="#write-the-queue" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>queue<span class="w"> </span>--run-dir<span class="w"> </span><span class="s1">'runs/*'</span><span class="w"> </span>--where<span class="w"> </span><span class="nv">method</span><span class="o">=</span>slow<span class="w"> </span>--out<span class="w"> </span>queues/slow<span class="w"> </span>--per-task<span class="w"> </span><span class="m">3</span>
+<span class="m">3</span><span class="w"> </span>sweeps,<span class="w"> </span><span class="m">6</span><span class="w"> </span>units,<span class="w"> </span><span class="m">3</span><span class="w"> </span>per<span class="w"> </span>array<span class="w"> </span>element,<span class="w"> </span><span class="m">1</span><span class="w"> </span>queue<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span>
+
+submit<span class="w"> </span>with:
+<span class="w">  </span>sbatch<span class="w"> </span>--array<span class="o">=</span><span class="m">1</span>-2<span class="w"> </span>&lt;your<span class="w"> </span>queue<span class="w"> </span>script&gt;<span class="w"> </span>queues/slow.01.units<span class="w"> </span><span class="m">3</span>
+</pre></div>
+</div>
+<p>Each line of the file is one unit, a run directory, and a slice index:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>head<span class="w"> </span>-3<span class="w"> </span>queues/slow.01.units
+runs/g01-slow<span class="w">	</span><span class="m">1</span>
+runs/g01-slow<span class="w">	</span><span class="m">2</span>
+runs/g02-slow<span class="w">	</span><span class="m">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Naming sweeps.</strong> <code class="docutils literal notranslate"><span class="pre">--run-dir</span></code> takes paths and quoted globs, expanded by the command rather than
+the shell, so thousands of run directories can fit in a single argument. <code class="docutils literal notranslate"><span class="pre">--list</span></code> takes plan lists instead.</p></li>
+<li><p><strong>Splitting a campaign.</strong> Slices of different kinds can differ in cost by an order of magnitude, so
+queue them separately, each with its own block size and wall-time. <code class="docutils literal notranslate"><span class="pre">--where</span> <span class="pre">KEY=VALUE</span></code> keeps the
+sweeps whose manifest records that value, in its <code class="docutils literal notranslate"><span class="pre">metadata</span></code> or its <code class="docutils literal notranslate"><span class="pre">constants</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">--where-not</span> <span class="pre">KEY=VALUE</span></code> drops them. Both repeat.</p></li>
+<li><p><strong>Block size.</strong> <code class="docutils literal notranslate"><span class="pre">--per-task</span></code> is how many units each element runs. It is part of the queue: element
+<em>i</em> runs lines (<em>i</em> − 1)·K + 1 to <em>i</em>·K, so submit with the same number <code class="docutils literal notranslate"><span class="pre">queue</span></code> printed.</p></li>
+<li><p><strong>Array width.</strong> A queue longer than one array allows is split across several files, each printed
+with its own <code class="docutils literal notranslate"><span class="pre">sbatch</span></code> line. The width comes from <code class="docutils literal notranslate"><span class="pre">max-array</span></code> under
+<a class="reference internal" href="../configuration.html#sweep"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">[tool.research-helpers.sweep]</span></code></span></a>, 1,000 by default, or <code class="docutils literal notranslate"><span class="pre">--max-array</span></code>.</p></li>
+<li><p><strong>Mixing.</strong> <code class="docutils literal notranslate"><span class="pre">--shuffle</span> <span class="pre">SEED</span></code> puts the units in a seeded random order, so each element’s block is
+a sample of the whole campaign. Element wall-times then gather around the mean instead of
+inheriting the slowest sweep’s. The same seed always gives the same queue.</p></li>
+</ul>
+</section>
+<section id="run-it">
+<h2>Run it<a class="headerlink" href="#run-it" title="Link to this heading"></a></h2>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">queue.sbatch</span></code> out of the package (<a class="reference internal" href="cluster.html"><span class="std std-doc">cluster jobs</span></a>), set its <code class="docutils literal notranslate"><span class="pre">SWEEP_MODULE</span></code>, and
+submit the line <code class="docutils literal notranslate"><span class="pre">queue</span></code> printed. Each element calls <code class="docutils literal notranslate"><span class="pre">run-units</span></code>, which runs its block:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>run-units<span class="w"> </span>--units<span class="w"> </span>queues/slow.01.units<span class="w"> </span>--per-task<span class="w"> </span><span class="m">3</span><span class="w"> </span>--element<span class="w"> </span><span class="m">1</span>
+element<span class="w"> </span><span class="m">1</span>:<span class="w"> </span><span class="m">3</span><span class="w"> </span>unit<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>from<span class="w"> </span>queues/slow.01.units
+
+<span class="o">===</span><span class="w"> </span>runs/g01-slow<span class="w"> </span>task<span class="w"> </span><span class="nv">1</span><span class="w"> </span><span class="o">===</span>
+<span class="o">[</span>task<span class="w"> </span><span class="m">1</span>/2<span class="o">]</span><span class="w"> </span>combinations<span class="w"> </span><span class="m">0</span>..1<span class="w"> </span><span class="o">(</span><span class="m">2</span><span class="w"> </span>assigned,<span class="w"> </span><span class="m">0</span><span class="w"> </span>already<span class="w"> </span><span class="k">done</span>,<span class="w"> </span><span class="m">2</span><span class="w"> </span>to<span class="w"> </span>run<span class="o">)</span>
+<span class="o">[</span>task<span class="w"> </span><span class="m">1</span><span class="o">]</span><span class="w"> </span><span class="m">1</span>/2<span class="w"> </span>5024202ad27b<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.0s
+<span class="o">[</span>task<span class="w"> </span><span class="m">1</span><span class="o">]</span><span class="w"> </span><span class="m">2</span>/2<span class="w"> </span>7bc25422bde8<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.0s
+wrote<span class="w"> </span>runs/g01-slow/parts/task-00001.jsonl
+...
+</pre></div>
+</div>
+<p>Under the scheduler the element comes from <code class="docutils literal notranslate"><span class="pre">SLURM_ARRAY_TASK_ID</span></code>, as a task’s index does for
+<code class="docutils literal notranslate"><span class="pre">run</span></code>. A unit that raises is reported and the rest of the block still runs. The element then
+exits non-zero, which the scheduler records as a failure.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;sweep.context</span></code> factory runs once per <em>unit</em>, never once per element to avoid a shared
+context carrying one slice’s state into another’s results.</p>
+</section>
+<section id="resume">
+<h2>Resume<a class="headerlink" href="#resume" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">status</span></code> takes globs too, and reports one line per sweep:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>status<span class="w"> </span>--run-dir<span class="w"> </span><span class="s1">'runs/*-slow'</span>
+<span class="w">  </span>runs/g01-slow<span class="w">  </span><span class="m">4</span>/4<span class="w">  </span><span class="m">100</span>.0%
+<span class="w">  </span>runs/g02-slow<span class="w">  </span><span class="m">2</span>/4<span class="w">   </span><span class="m">50</span>.0%<span class="w">  </span>unfinished<span class="w"> </span>slices<span class="w"> </span><span class="m">2</span>
+<span class="w">  </span>runs/g03-slow<span class="w">  </span><span class="m">0</span>/4<span class="w">    </span><span class="m">0</span>.0%<span class="w">  </span>unfinished<span class="w"> </span>slices<span class="w"> </span><span class="m">1</span>-2
+
+<span class="m">1</span><span class="w"> </span>of<span class="w"> </span><span class="m">3</span><span class="w"> </span>sweeps<span class="w"> </span>finished
+queue<span class="w"> </span>the<span class="w"> </span>unfinished<span class="w"> </span>slices<span class="w"> </span>with<span class="w"> </span>queue<span class="w"> </span>--pending,<span class="w"> </span>under<span class="w"> </span>a<span class="w"> </span>new<span class="w"> </span>--out
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--pending</span></code> queues only the slices that still hold an unfinished combination. Each unit names a slice
+by the index its manifest planned, so nothing is re-partitioned and the resumed queue runs exactly
+the slices that are missing.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>queue<span class="w"> </span>--run-dir<span class="w"> </span><span class="s1">'runs/*-slow'</span><span class="w"> </span>--out<span class="w"> </span>queues/slow_r1<span class="w"> </span>--per-task<span class="w"> </span><span class="m">3</span><span class="w"> </span>--pending
+<span class="m">3</span><span class="w"> </span>sweeps,<span class="w"> </span><span class="m">3</span><span class="w"> </span>pending<span class="w"> </span>units,<span class="w"> </span><span class="m">3</span><span class="w"> </span>per<span class="w"> </span>array<span class="w"> </span>element,<span class="w"> </span><span class="m">1</span><span class="w"> </span>queue<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span>
+
+submit<span class="w"> </span>with:
+<span class="w">  </span>sbatch<span class="w"> </span>--array<span class="o">=</span><span class="m">1</span>-1<span class="w"> </span>&lt;your<span class="w"> </span>queue<span class="w"> </span>script&gt;<span class="w"> </span>queues/slow_r1.01.units<span class="w"> </span><span class="m">3</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Write a resumed queue under a <strong>new</strong> stem, and only once the old array has finished. An element
+reads its block from the file when it <em>starts</em>, so rewriting a queue that still has pending elements
+hands them another queue’s blocks, meaning that some slices would run twice, while others would never run.
+<code class="docutils literal notranslate"><span class="pre">queue</span></code> refuses to overwrite an existing queue unless given <code class="docutils literal notranslate"><span class="pre">--force</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>queue<span class="w"> </span>--run-dir<span class="w"> </span><span class="s1">'runs/*-slow'</span><span class="w"> </span>--out<span class="w"> </span>queues/slow<span class="w"> </span>--per-task<span class="w"> </span><span class="m">3</span>
+queues/slow.01.units<span class="w"> </span>exists.<span class="w"> </span>Give<span class="w"> </span>this<span class="w"> </span>queue<span class="w"> </span>a<span class="w"> </span>new<span class="w"> </span>stem<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span>slow_r1<span class="o">)</span>,<span class="w"> </span>or<span class="w"> </span>rewrite<span class="w"> </span>it<span class="w"> </span>with<span class="w"> </span>--force<span class="w"> </span><span class="o">(</span><span class="nv">force</span><span class="o">=</span>True<span class="o">)</span><span class="w"> </span>only<span class="w"> </span>once<span class="w"> </span>no<span class="w"> </span>array<span class="w"> </span>is<span class="w"> </span>still<span class="w"> </span>reading<span class="w"> </span>it
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">collect</span></code> over many sweeps collects each one, and exits non-zero if any has no results yet.</p>
+</section>
+<section id="elements-that-ran-twice">
+<h2>Elements that ran twice<a class="headerlink" href="#elements-that-ran-twice" title="Link to this heading"></a></h2>
+<p>When a node stops answering, a scheduler can re-queue an element while the original is still running.
+The block then runs twice, from two nodes, both appending to the same part files, and on network
+storage that leaves runs of NUL bytes and lines spliced together. The damage is not confined to the
+lines <code class="docutils literal notranslate"><span class="pre">collect</span></code> reports as malformed since a valid line written after the NULs is linked to them, and a
+resumed task appends its new line to the damaged file, also linked, so the slice never
+finishes.</p>
+<p>Both array templates set <code class="docutils literal notranslate"><span class="pre">--no-requeue</span></code> to prevent this. If it happens anyway, set the elements’
+results aside whole, part files and artefacts, and queue them again:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>sweep_demo.py<span class="w"> </span>quarantine<span class="w"> </span>--units<span class="w"> </span>queues/slow.01.units<span class="w"> </span>--per-task<span class="w"> </span><span class="m">3</span><span class="w"> </span>--elements<span class="w"> </span><span class="m">1</span>
+<span class="m">1</span><span class="w"> </span>element<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>of<span class="w"> </span>queues/slow.01.units:<span class="w"> </span><span class="m">3</span><span class="w"> </span>units,<span class="w"> </span><span class="m">3</span><span class="w"> </span>part<span class="w"> </span>files,<span class="w"> </span><span class="m">0</span><span class="w"> </span>damaged<span class="w"> </span>part<span class="w"> </span>files,<span class="w"> </span><span class="m">0</span><span class="w"> </span>artefacts
+nothing<span class="w"> </span>changed.<span class="w"> </span>With<span class="w"> </span>--apply,<span class="w"> </span>the<span class="w"> </span>part<span class="w"> </span>files<span class="w"> </span>and<span class="w"> </span>artefacts<span class="w"> </span>are<span class="w"> </span>renamed<span class="w"> </span>*.quarantined
+</pre></div>
+</div>
+<p>Without <code class="docutils literal notranslate"><span class="pre">--apply</span></code>, the command only counts. With <code class="docutils literal notranslate"><span class="pre">--apply</span></code>, every file is renamed with a <code class="docutils literal notranslate"><span class="pre">.quarantined</span></code>
+suffix and <code class="docutils literal notranslate"><span class="pre">queue</span> <span class="pre">--pending</span></code> then finds the slices missing. Recomputing them reproduces the lost results
+only as far as the evaluation is deterministic, so rerun them on the same kind of node as the rest of
+the campaign.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sweeps.html" class="btn btn-neutral float-left" title="Parameter sweeps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cluster.html" class="btn btn-neutral float-right" title="Cluster jobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

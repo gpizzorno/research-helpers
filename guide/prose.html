@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Numbers in the prose &mdash; Research Helpers v1.4</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9172181d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Several documents" href="documents.html" />
+    <link rel="prev" title="Adding a generated table" href="generated-table.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#documents"><code class="docutils literal notranslate"><span class="pre">documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#without-the-manuscript">Without the manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#publishing-the-floats-without-the-paper">8. Publishing the floats without the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Numbers in the prose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#register-a-sentence">Register a sentence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-discrepancies">Known discrepancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#find-untracked-values">Find untracked values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in-a-test-suite">In a test suite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-than-one-document">More than one document</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="documents.html">Several documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="documents.html#configure-the-second-document">Configure the second document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="documents.html#one-document-per-manuscript">One <code class="docutils literal notranslate"><span class="pre">Document</span></code> per manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="queues.html">Many sweeps through few arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="queues.html#plan-the-campaign">Plan the campaign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="queues.html#write-the-queue">Write the queue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="queues.html#run-it">Run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="queues.html#resume">Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="queues.html#elements-that-ran-twice">Elements that ran twice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#other-libraries">Other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/build.html#research_helpers.build.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/prose.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.normalise_prose"><code class="docutils literal notranslate"><span class="pre">normalise_prose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseNumber"><code class="docutils literal notranslate"><span class="pre">ProseNumber</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.Mismatch"><code class="docutils literal notranslate"><span class="pre">Mismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseCheck"><code class="docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.Occurrence"><code class="docutils literal notranslate"><span class="pre">Occurrence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.ProseRegistry"><code class="docutils literal notranslate"><span class="pre">ProseRegistry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.audit"><code class="docutils literal notranslate"><span class="pre">audit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/prose.html#research_helpers.prose.audit_report"><code class="docutils literal notranslate"><span class="pre">audit_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.unused"><code class="docutils literal notranslate"><span class="pre">unused()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.build_units"><code class="docutils literal notranslate"><span class="pre">build_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.chunk"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.expand_run_dirs"><code class="docutils literal notranslate"><span class="pre">expand_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.quarantine"><code class="docutils literal notranslate"><span class="pre">quarantine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_plan_list"><code class="docutils literal notranslate"><span class="pre">read_plan_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_units"><code class="docutils literal notranslate"><span class="pre">read_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.select_run_dirs"><code class="docutils literal notranslate"><span class="pre">select_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.shuffled"><code class="docutils literal notranslate"><span class="pre">shuffled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.write_queues"><code class="docutils literal notranslate"><span class="pre">write_queues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/sweep.html#research-helpers-sweep-queue"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Guides</a></li>
+      <li class="breadcrumb-item active">Numbers in the prose</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/guide/prose.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="numbers-in-the-prose">
+<h1>Numbers in the prose<a class="headerlink" href="#numbers-in-the-prose" title="Link to this heading"></a></h1>
+<p>This <a class="reference internal" href="../api/prose.html#module-research_helpers.prose" title="research_helpers.prose"><code class="xref py py-mod docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a> module is a registry for typed numbers. Each number the prose
+states is registered as the fragment of the sentence that carries it, with <code class="docutils literal notranslate"><span class="pre">{}</span></code> where the number goes,
+together with a function that computes the number from the data. The check reads the document and
+reports every fragment that no longer says what the data contains.</p>
+<section id="register-a-sentence">
+<h2>Register a sentence<a class="headerlink" href="#register-a-sentence" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Every number the documents state in prose."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">research_helpers.prose</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProseRegistry</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">report</span><span class="w"> </span><span class="kn">import</span> <span class="n">sources</span>
+
+<span class="n">prose</span> <span class="o">=</span> <span class="n">ProseRegistry</span><span class="p">()</span>
+
+
+<span class="nd">@prose</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">'mean-k'</span><span class="p">,</span> <span class="s1">'OSLOM finds </span><span class="si">{}</span><span class="s1"> communities on average'</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">'abstract'</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'runs/oslom.json'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_k</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sources</span><span class="o">.</span><span class="n">oslom</span><span class="p">()[</span><span class="s1">'mean_k'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,)</span>
+
+
+<span class="nd">@prose</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">'debris'</span><span class="p">,</span> <span class="s1">'of which </span><span class="si">{}</span><span class="s1"> per cent are debris'</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">'abstract'</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">'runs/oslom.json'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">debris</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sources</span><span class="o">.</span><span class="n">oslom</span><span class="p">()[</span><span class="s1">'debris_pct'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">prose</span><span class="o">.</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The function returns the numbers <em>as printed</em>, formatted, one per <code class="docutils literal notranslate"><span class="pre">{}</span></code>. The template is the
+fragment as it appears in the <code class="docutils literal notranslate"><span class="pre">.tex</span></code> source, so LaTeX goes in as written, and a literal brace is
+doubled: <code class="docutils literal notranslate"><span class="pre">'\\(Q_{{ov}}</span> <span class="pre">=</span> <span class="pre">{}\\)'</span></code>. Whitespace does not matter: the template and the document are
+both compared with every run of whitespace collapsed to one space, so a sentence that wraps across
+lines in the source still matches.</p>
+<p><code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">section</span></code> indicate where the number comes from, and where the sentence is.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Keep every file read in one module, as <code class="docutils literal notranslate"><span class="pre">report.sources</span></code> does here, and have the registry call it
+rather than opening files itself. This ensures that a missing result fails with the name of
+whatever produces it.</p>
+</div>
+</section>
+<section id="check">
+<h2>Check<a class="headerlink" href="#check" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>report.prose
+stale<span class="w"> </span><span class="o">[</span>abstract<span class="o">]</span><span class="w"> </span>mean-k:
+<span class="w">    </span>prints<span class="w">         </span>OSLOM<span class="w"> </span>finds<span class="w"> </span><span class="m">143</span><span class="w"> </span>communities<span class="w"> </span>on<span class="w"> </span>average
+<span class="w">    </span>data<span class="w"> </span>contains<span class="w">  </span>OSLOM<span class="w"> </span>finds<span class="w"> </span><span class="m">148</span>.6<span class="w"> </span>communities<span class="w"> </span>on<span class="w"> </span>average
+<span class="m">3</span><span class="w"> </span>checked.<span class="w"> </span>To<span class="w"> </span>fix:<span class="w"> </span>correct<span class="w"> </span>the<span class="w"> </span>text,<span class="w"> </span>or<span class="w"> </span>list<span class="w"> </span>the<span class="w"> </span>entry<span class="w"> </span>as<span class="w"> </span>a<span class="w"> </span>known<span class="w"> </span>discrepancy
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">check</span></code> is the default action, and it exits with 1 when it finds anything, so it can gate CI alongside
+the table and figure checks. A stale entry shows what the document prints in place of what the data
+constains. Other things it reports:</p>
+<ul class="simple">
+<li><p><strong>not found:</strong> the sentence itself is no longer in the document: it was rewritten, moved, or cut.
+Update the template to the sentence as it now reads, or remove the entry.</p></li>
+<li><p><strong>could not compute:</strong> the entry’s function raised, usually because the result it reads has not
+been produced. The check continues with the other entries.</p></li>
+</ul>
+<p>A sentence that has been commented out does not count as printed.</p>
+</section>
+<section id="known-discrepancies">
+<h2>Known discrepancies<a class="headerlink" href="#known-discrepancies" title="Link to this heading"></a></h2>
+<p>Sometimes the text is knowingly wrong for a while, <em>e.g.</em>, while a re-run is checked before the prose
+is revised. List those entries, with what the data contains:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prose</span><span class="o">.</span><span class="n">known_discrepancies</span><span class="p">[</span><span class="s1">'debris'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'the data contains 7.9; corrected in the next revision'</span>
+</pre></div>
+</div>
+<p>The check then requires two things of such an entry: the sentence must still be there, and it must
+still be wrong: once the text is corrected, the check fails until the entry leaves the list (to
+prevent a list of discrepancies outliving the discrepancies themselves).</p>
+<p><code class="docutils literal notranslate"><span class="pre">untraced</span></code> is the companion list, for numbers that have no source to compute them from (a value
+quoted from the literature, a figure from a catalogue), and it is not checked.</p>
+</section>
+<section id="find-untracked-values">
+<h2>Find untracked values<a class="headerlink" href="#find-untracked-values" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>report.prose<span class="w"> </span>--audit
+<span class="c1"># Prose-number audit: paper</span>
+
+<span class="m">4</span><span class="w"> </span>numeric<span class="w"> </span>tokens<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>prose:<span class="w"> </span>**1**<span class="w"> </span>untraced,<span class="w"> </span>**0**<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>float<span class="w"> </span>the<span class="w"> </span>paragraph<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>cite,<span class="w"> </span>**0**<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>float<span class="w"> </span>the<span class="w"> </span>paragraph<span class="w"> </span>cites,<span class="w"> </span>**1**<span class="w"> </span>a<span class="w"> </span>parameter<span class="w"> </span>or<span class="w"> </span>a<span class="w"> </span>formula<span class="w"> </span>constant,<span class="w"> </span>**2**<span class="w"> </span>registered.
+
+<span class="c1">## Untraced</span>
+
+<span class="p">|</span><span class="w"> </span>Line<span class="w"> </span><span class="p">|</span><span class="w"> </span>Token<span class="w"> </span><span class="p">|</span><span class="w"> </span>Detail<span class="w"> </span><span class="p">|</span><span class="w"> </span>Context<span class="w"> </span><span class="p">|</span>
+<span class="p">|</span>---<span class="p">|</span>---<span class="p">|</span>---<span class="p">|</span>---<span class="p">|</span>
+<span class="p">|</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="sb">`</span><span class="m">20</span><span class="sb">`</span><span class="w"> </span><span class="p">|</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>which<span class="w"> </span><span class="m">7</span>.7<span class="w"> </span>per<span class="w"> </span>cent<span class="w"> </span>are<span class="w"> </span>debris.<span class="w"> </span><span class="se">\e</span>nd<span class="o">{</span>abstract<span class="o">}</span><span class="w"> </span>Covers<span class="w"> </span>were<span class="w"> </span>drawn<span class="w"> </span>over<span class="w"> </span><span class="m">20</span><span class="w"> </span>seeds<span class="w"> </span>at<span class="w"> </span><span class="se">\(\m</span>u<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>.4<span class="se">\)</span>,<span class="w"> </span>see<span class="w"> </span>Table~<span class="se">\r</span>ef<span class="o">{</span>tab:shape<span class="o">}</span><span class="w"> </span><span class="p">|</span>
+</pre></div>
+</div>
+<p>The audit classifies every numeric token in the body of the document, from the abstract on, and
+lists untracked ones first. Each token falls in the first category that applies:</p>
+<ol class="arabic simple">
+<li><p><strong>Registered:</strong> it sits inside a registered fragment.</p></li>
+<li><p><strong>A parameter or a formula constant:</strong> it is a constant of an inline formula (<code class="docutils literal notranslate"><span class="pre">\(6/7\)</span></code>), or the
+value of a declared parameter (<code class="docutils literal notranslate"><span class="pre">\(\mu</span> <span class="pre">=</span> <span class="pre">0.4\)</span></code>). Not a result.</p></li>
+<li><p><strong>In a float the paragraph cites:</strong> a generated table the same paragraph refers to carries it.</p></li>
+<li><p><strong>In a float the paragraph does not cite:</strong> some generated table carries it, but this paragraph
+does not point there. Worth a look.</p></li>
+<li><p><strong>Untraced:</strong> everything else. These are the numbers to register.</p></li>
+</ol>
+<p>Numbers in the preamble, comments, display math, citations, labels, and references are skipped.
+<code class="docutils literal notranslate"><span class="pre">--out</span> <span class="pre">audit.md</span></code> writes the report to a file instead of printing it.</p>
+<p>An assignment in inline math reads as a <em>result</em> unless its symbol is declared a parameter.
+Declare the symbols that set up an experiment rather than report on it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prose</span> <span class="o">=</span> <span class="n">ProseRegistry</span><span class="p">(</span><span class="n">parameter_symbols</span><span class="o">=</span><span class="p">[</span><span class="sa">r</span><span class="s1">'\mu'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'\tau'</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="in-a-test-suite">
+<h2>In a test suite<a class="headerlink" href="#in-a-test-suite" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">--check</span></code> is enough for CI. To see one failure per sentence in <code class="docutils literal notranslate"><span class="pre">pytest</span></code> instead, parametrize over the
+registry:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">report.prose</span><span class="w"> </span><span class="kn">import</span> <span class="n">prose</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">'module'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">found</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">prose</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s1">'entry'</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">prose</span><span class="p">),</span> <span class="n">ids</span><span class="o">=</span><span class="k">lambda</span> <span class="n">entry</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_the_prose_states_what_the_data_contains</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">found</span><span class="p">):</span>
+    <span class="n">mismatched</span> <span class="o">=</span> <span class="p">{</span><span class="n">mismatch</span><span class="o">.</span><span class="n">key</span><span class="p">:</span> <span class="n">mismatch</span> <span class="k">for</span> <span class="n">mismatch</span> <span class="ow">in</span> <span class="n">found</span><span class="o">.</span><span class="n">stale</span> <span class="o">+</span> <span class="n">found</span><span class="o">.</span><span class="n">vanished</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">entry</span><span class="o">.</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mismatched</span><span class="p">,</span> <span class="n">mismatched</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="more-than-one-document">
+<h2>More than one document<a class="headerlink" href="#more-than-one-document" title="Link to this heading"></a></h2>
+<p>Each entry names the document that prints it, <code class="docutils literal notranslate"><span class="pre">paper</span></code> by default. A sentence repeated by
+another document has to be registered once for each:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@prose</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">'mean-k-note'</span><span class="p">,</span> <span class="s1">'OSLOM finds </span><span class="si">{}</span><span class="s1"> communities on average'</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="s1">'note'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_k_note</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">mean_k</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Documents other than the paper are configured under <code class="docutils literal notranslate"><span class="pre">[tool.research-helpers.documents]</span></code>, see
+<a class="reference internal" href="documents.html"><span class="std std-doc">several documents</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generated-table.html" class="btn btn-neutral float-left" title="Adding a generated table" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="documents.html" class="btn btn-neutral float-right" title="Several documents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
