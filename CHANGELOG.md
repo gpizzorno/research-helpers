@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] — 2026-10-26
+
+### Changed
+
+- **Any rule alone in a body row is written as a rule.** `latex.table` wrote `['\\midrule']`,
+  `['\\toprule']` and `['\\bottomrule']` without a row terminator and nothing else. A one-cell row
+  holding `\\cmidrule(lr){1-3}`, `\\specialrule`, `\\addlinespace`, `\\morecmidrules` or `\\hline` is
+  now written the same way, so a thin rule can separate groups of rows inside a table.
+
 ## [1.4.0] — 2026-10-23
 
 ### Added
