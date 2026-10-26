@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-helpers"
-version = "1.4.0"
+version = "1.4.1"
 description = "Utilities for code-intensive research projects and the papers they produce"
 readme = "README.md"
 license = "MIT"
