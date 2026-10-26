@@ -106,6 +106,20 @@ def test_a_bare_rule_row_gets_no_row_terminator():
     assert '\\midrule \\\\' not in latex
 
 
+def test_any_rule_command_alone_in_a_row_is_a_bare_rule():
+    latex = table(
+        spec='ll',
+        header_rows=[['h', 'i']],
+        body_rows=[['a', '1'], ['\\cmidrule(lr){1-2}'], ['b', '2'], ['\\addlinespace[2pt]'], ['c', '3']],
+        caption='c',
+        label='tab:t',
+    )
+
+    assert '  \\cmidrule(lr){1-2}\n  b & 2 \\\\' in latex
+    assert '  \\addlinespace[2pt]\n  c & 3 \\\\' in latex
+    assert '{1-2} \\\\' not in latex
+
+
 def test_setup_and_style_land_inside_the_float():
     latex = minimal(setup='\\setlength{\\tabcolsep}{3pt}', style='\\rmfamily\\small')
 
