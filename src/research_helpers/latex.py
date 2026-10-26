@@ -36,6 +36,9 @@ CHKTEX_SUPPRESSION = '% chktex 24'
 # a header cell shorter than this collapses to its content width
 SHORT_HEADER = 5
 
+# a body row of one cell holding only one of these is a rule between rows, not a row
+RULE_ROW = re.compile(r'\\(?:toprule|midrule|bottomrule|cmidrule|specialrule|addlinespace|morecmidrules|hline)\b')
+
 BARE_ZERO = re.compile(r'(?<![\d.])0\.')
 
 
@@ -60,7 +63,8 @@ def table(  # noqa: PLR0913
     Arguments:
         spec: column specification, e.g. 'LRRCC' for tabulary or 'Xllrr' for tabularx.
         header_rows: one list of already-formatted cells per header line.
-        body_rows: the data rows, cells already formatted as strings.
+        body_rows: the data rows, cells already formatted as strings. A row of one cell holding only a rule,
+            e.g. ['\\midrule'] or ['\\cmidrule(lr){1-3}'], is written as that rule between the rows around it.
         caption: caption text, as LaTeX.
         label: the '\\label' value, e.g. 'tab:morph-curve'. Also the table's identity.
         wide: use 'table*', spanning both columns.
@@ -103,7 +107,7 @@ def table(  # noqa: PLR0913
             lines += ['  ' + line for line in prologue]
     lines.append('  \\midrule')
     for row in body_rows:
-        bare_rule = len(row) == 1 and row[0].strip() in {'\\midrule', '\\bottomrule', '\\toprule'}
+        bare_rule = len(row) == 1 and RULE_ROW.match(row[0].strip()) is not None
         lines.append('  ' + ' & '.join(row) + ('' if bare_rule else ' \\\\'))
     lines += [
         '  \\bottomrule',
