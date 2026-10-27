@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import re
 from decimal import ROUND_HALF_UP, Decimal
+from importlib.resources import files
 
+from research_helpers import textmath
 from research_helpers.project import current_project, resolve
 
 __all__ = [
@@ -13,6 +15,7 @@ __all__ = [
     'dash_range',
     'half_up',
     'header',
+    'packages',
     'table',
 ]
 
@@ -57,6 +60,7 @@ def table(  # noqa: PLR0913
     setup: str | None = None,
     style: str = DEFAULT_STYLE,
     chktex: bool = True,
+    text_math: bool | None = None,
 ) -> str:
     r"""Assemble one table as a LaTeX float.
 
@@ -75,14 +79,26 @@ def table(  # noqa: PLR0913
         setup: raw commands emitted inside the float, before the tabular begins.
         style: font commands applied inside the float.
         chktex: emit the chktex suppression comment after the label.
+        text_math: set the inline maths of the cells and the caption as text in the table's own typeface
+            (:mod:`research_helpers.textmath`), which needs the 'rhtextmath' package. Defaults to the
+            project's 'latex.text-math'.
 
     Returns:
         The complete float, ending in a newline.
+
+    Raises:
+        ValueError: if the label is empty.
+        UnsupportedMathError: if maths that is to be set as text uses anything the converter does not support.
 
     """
     if not label:
         msg = 'a table needs a label: it is the name of the file written and what the paper inputs'
         raise ValueError(msg)
+
+    if resolve(current_project().latex, text_math=text_math).text_math:
+        header_rows = [[textmath.convert(cell) for cell in row] for row in header_rows]
+        body_rows = [[textmath.convert(cell) for cell in row] for row in body_rows]
+        caption = textmath.convert(caption)
 
     float_environment = 'table*' if wide else 'table'
     position = WIDE_POSITION if wide else NARROW_POSITION
@@ -175,3 +191,17 @@ def dash_range(text: str, dash: str = '--') -> str:
 
     """
     return text.replace('-', dash)
+
+
+def packages() -> dict[str, str]:
+    """Return the LaTeX packages that research-helpers' output needs, for copying beside a manuscript.
+
+    ``research-helpers sty`` installs them and reports a copy that no longer matches.
+
+    Returns:
+        Each package's file name, e.g. 'rhtextmath.sty', mapped to its source.
+
+    """
+    folder = files('research_helpers') / 'tex'
+    shipped = sorted((entry for entry in folder.iterdir() if entry.name.endswith('.sty')), key=lambda entry: entry.name)
+    return {entry.name: entry.read_text(encoding='utf-8') for entry in shipped}
