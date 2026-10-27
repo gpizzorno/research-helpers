@@ -1,0 +1,67 @@
+%% rhtextmath.sty -- text-mode maths for floats set in their own typeface.
+%%
+%% Part of research-helpers <https://github.com/gpizzorno/research-helpers>, MIT licence.
+%% research_helpers.textmath writes the markup this package sets. Copy the package beside a manuscript with
+%% `research-helpers sty`, which also reports a copy that has fallen behind the installed research-helpers.
+%%
+%% A float set in a sans-serif face takes its maths from the document's math font, drawn for the serif text.
+%% These commands set the same expressions in whatever font surrounds them instead:
+%%
+%%   \tmsup{-4} \tmsub{1}      digits and signs, from the font's own superior and inferior glyphs (OpenType
+%%                             'sups' and 'subs'), drawn at the right weight; scaled if the font has none
+%%   \tmsupx{..} \tmsubx{..}   anything else in a script, at \tmscriptscale of the size around it
+%%   \tmscripts{sub}{sup}      both scripts on one base, stacked as TeX stacks them
+%%   \tmthin \tmmed \tmthick   the spaces TeX puts between atoms: 3, 4 and 5 mu, in ems of the text font
+%%   \tmbar{..}                an overbar
+%%
+%% Tunable after \usepackage{rhtextmath}, with \renewcommand:
+%%   \tmscriptscale   size of a scaled script, relative to the text around it   default 0.78
+%%   \tmsubdrop       how far a scaled subscript drops below the baseline        default 0.28ex
+%%   \tmsuprise       how far a scaled superscript rises above it                default 0.6ex
+%% A scale relative to the surrounding size is what lets one setting serve a heading and a body of different sizes.
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\ProvidesPackage{rhtextmath}[2026/10/27 research-helpers text-mode maths]
+\RequirePackage{iftex}
+\RequireTUTeX
+\RequirePackage{fontspec}
+
+\newcommand*\tmscriptscale{0.78}
+\newcommand*\tmsubdrop{0.28ex}
+\newcommand*\tmsuprise{0.6ex}
+
+\DeclareRobustCommand\tmthin{\nobreak\kern0.1667em\relax}
+\DeclareRobustCommand\tmmed{\nobreak\kern0.2222em\relax}
+\DeclareRobustCommand\tmthick{\nobreak\kern0.2778em\relax}
+
+\newcommand\tm@scaled[1]{\fontsize{\fpeval{\tmscriptscale*\f@size}}{\z@}\selectfont #1}
+\DeclareRobustCommand\tmsupx[1]{\raisebox{\tmsuprise}{\tm@scaled{#1}}}
+\DeclareRobustCommand\tmsubx[1]{\raisebox{-\tmsubdrop}{\tm@scaled{#1}}}
+
+\ExplSyntaxOn
+\DeclareRobustCommand \tmsup [1]
+{
+  \fontspec_if_feature:nTF { sups }
+  { { \addfontfeatures { VerticalPosition = Superior } #1 } }
+  { \tmsupx { #1 } }
+}
+\DeclareRobustCommand \tmsub [1]
+{
+  \fontspec_if_feature:nTF { subs }
+  { { \addfontfeatures { VerticalPosition = Inferior } #1 } }
+  { \tmsubx { #1 } }
+}
+\ExplSyntaxOff
+
+\newsavebox\tm@subbox
+\newsavebox\tm@supbox
+\DeclareRobustCommand\tmscripts[2]{%
+  \sbox\tm@subbox{#1}\sbox\tm@supbox{#2}%
+  \ifdim\wd\tm@subbox>\wd\tm@supbox
+  \rlap{\usebox\tm@supbox}\usebox\tm@subbox
+  \else
+  \rlap{\usebox\tm@subbox}\usebox\tm@supbox
+\fi}
+
+\DeclareRobustCommand\tmbar[1]{\ensuremath{\overline{\mbox{#1}}}}
+
+\endinput
