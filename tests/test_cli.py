@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -364,3 +365,35 @@ def test_textmath_prints_the_maths_as_text(capsys):
 def test_textmath_refuses_maths_it_cannot_set(capsys):
     assert main(['textmath', r'\frac{a}{b}']) == 1
     assert 'is not supported' in capsys.readouterr().err
+
+
+def _one_log(*args, cwd=None):
+    """Run the command line with stdout and stderr in one pipe, as a CI log or `2>&1` collects them.
+
+    Run in a subprocess because buffering is the interpreter's: in a pipe, stdout is block-buffered and
+    stderr is not, so a line printed to stdout without a flush reaches the pipe only at exit, after
+    whatever stderr took in the meantime. PYTHONUNBUFFERED would hide exactly that, so it is removed.
+    """
+    environment = {name: value for name, value in os.environ.items() if name != 'PYTHONUNBUFFERED'}
+    result = subprocess.run(
+        [sys.executable, '-m', 'research_helpers.cli', *args],
+        cwd=cwd,
+        env=environment,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
+    )
+    return result.stdout
+
+
+def test_sty_check_prints_its_hint_after_the_copies_it_names(project):
+    log = _one_log('sty', '--check', cwd=project)
+
+    assert log.index('missing  tex/rhtextmath.sty') < log.index('to fix:'), log
+
+
+def test_textmath_prints_a_refusal_after_the_maths_it_has_set():
+    log = _one_log('textmath', 'Q_{ov}', r'\frac{a}{b}')
+
+    assert log.index(r'\textit{Q}') < log.index('is not supported'), log

@@ -85,7 +85,8 @@ def sty(args: argparse.Namespace) -> int:
         elif state is None:
             path.write_text(source, encoding='utf-8')
             state = 'written'
-        print(f'{state:<8} {_relative(path, project.root)}')
+        # flushed: Python buffers stdout in a pipe, and the hint on stderr would land above these lines
+        print(f'{state:<8} {_relative(path, project.root)}', flush=True)
     if behind:
         print(f'\nto fix: research-helpers sty --document {args.document}', file=sys.stderr)
     return 1 if behind else 0
@@ -95,7 +96,8 @@ def textmath_command(args: argparse.Namespace) -> int:
     """Print maths rewritten as text, for a caption or a cell written by hand."""
     try:
         for expression in args.expressions:
-            print(textmath.to_text(expression))
+            # flushed, as in sty
+            print(textmath.to_text(expression), flush=True)
     except textmath.UnsupportedMathError as error:
         print(error, file=sys.stderr)
         return 1
