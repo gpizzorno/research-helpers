@@ -536,3 +536,28 @@ def test_the_array_width_defaults_to_a_thousand_and_is_configurable(tmp_path):
     project = _documents(tmp_path, '[tool.research-helpers.sweep]\nmax-array = 500\n')
 
     assert project.sweep.max_array == 500
+
+
+# --- latex ----------------------------------------------------------------------------------------------
+
+
+def test_text_math_is_off_unless_a_project_switches_it_on(tmp_path):
+    (tmp_path / 'pyproject.toml').write_text('[project]\nname = "paper"\n', encoding='utf-8')
+    assert Project.from_pyproject(tmp_path).latex.text_math is False
+
+    (tmp_path / 'pyproject.toml').write_text('[tool.research-helpers.latex]\ntext-math = true\n', encoding='utf-8')
+    _load.cache_clear()
+    project = Project.from_pyproject(tmp_path)
+
+    assert project.latex.text_math is True
+    assert project.sources['latex.text_math'] == 'pyproject'
+    assert 'latex.text_math' in project.doctor()
+
+
+def test_text_math_takes_only_a_bool(tmp_path):
+    (tmp_path / 'pyproject.toml').write_text('[tool.research-helpers.latex]\ntext-math = "yes"\n', encoding='utf-8')
+
+    with pytest.warns(ConfigWarning, match='latex.text-math must be a bool'):
+        project = Project.from_pyproject(tmp_path)
+
+    assert project.latex.text_math is False

@@ -11,6 +11,7 @@ import pytest
 
 from research_helpers import arxiv as arxiv_module
 from research_helpers.cli import main
+from research_helpers.latex import packages
 from research_helpers.project import _load
 
 PAPER = r"""
@@ -313,3 +314,53 @@ def test_a_failed_check_fails_under_dry_run_too(project, capsys):
 
     assert status == 1
     assert '(dry run' not in capsys.readouterr().out, 'the problems are the result, not an aside'
+
+
+# --- sty and textmath ------------------------------------------------------------------------------
+
+
+def test_sty_copies_the_packages_beside_the_manuscript(project, capsys):
+    assert main(['sty']) == 0
+
+    installed = project / 'tex' / 'rhtextmath.sty'
+    assert installed.read_text(encoding='utf-8') == packages()['rhtextmath.sty']
+    assert 'written  tex/rhtextmath.sty' in capsys.readouterr().out
+
+
+def test_sty_check_reports_a_copy_that_is_missing_or_stale(project, capsys):
+    assert main(['sty', '--check']) == 1
+    assert 'missing  tex/rhtextmath.sty' in capsys.readouterr().out
+
+    main(['sty'])
+    assert main(['sty', '--check']) == 0
+    assert 'current  tex/rhtextmath.sty' in capsys.readouterr().out
+
+    (project / 'tex' / 'rhtextmath.sty').write_text('% from an older research-helpers\n', encoding='utf-8')
+    assert main(['sty', '--check']) == 1
+    output = capsys.readouterr()
+    assert 'stale    tex/rhtextmath.sty' in output.out
+    assert 'research-helpers sty --document paper' in output.err
+
+
+def test_sty_needs_a_manuscript_to_copy_beside(project, capsys):
+    (project / 'pyproject.toml').write_text('[tool.research-helpers.paper]\nmanuscript = false\n', encoding='utf-8')
+    _load.cache_clear()
+
+    assert main(['sty']) == 1
+    assert 'without a manuscript' in capsys.readouterr().err
+
+
+@pytest.mark.usefixtures('project')
+def test_sty_names_a_document_that_is_not_configured(capsys):
+    assert main(['sty', '--document', 'note']) == 1
+    assert "no document named 'note'" in capsys.readouterr().err
+
+
+def test_textmath_prints_the_maths_as_text(capsys):
+    assert main(['textmath', 'Q_{ov}', r'\mu = 0.5']) == 0
+    assert capsys.readouterr().out == '\\textit{Q}\\tmsubx{\\textit{ov}}\n\\textit{\u03bc}\\tmthick{}=\\tmthick{}0.5\n'
+
+
+def test_textmath_refuses_maths_it_cannot_set(capsys):
+    assert main(['textmath', r'\frac{a}{b}']) == 1
+    assert 'is not supported' in capsys.readouterr().err

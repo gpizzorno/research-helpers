@@ -446,3 +446,16 @@ def test_the_tarball_is_byte_reproducible(project):
     second = pack(project / 'dist', project / 'second.tar.gz').read_bytes()
 
     assert first == second
+
+
+def test_the_manifest_uploads_a_package_loaded_from_beside_the_manuscript(project):
+    loading = '\\usepackage{rhtextmath, amsmath}\n% \\usepackage{commented}\n\\begin{document}'
+    (project / 'tex' / 'paper.tex').write_text(PAPER.replace('\\begin{document}', loading), encoding='utf-8')
+    for name in ('rhtextmath', 'commented'):
+        (project / 'tex' / f'{name}.sty').write_text('% a package\n', encoding='utf-8')
+
+    files = manifest()
+
+    assert files['rhtextmath.sty'] == project / 'tex' / 'rhtextmath.sty'
+    assert 'amsmath.sty' not in files  # TeX Live's, not the manuscript's
+    assert 'commented.sty' not in files  # loaded only in a comment

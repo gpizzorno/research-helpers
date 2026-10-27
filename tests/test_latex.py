@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from research_helpers.latex import bare, dash_range, half_up, header, table
+from research_helpers.latex import bare, dash_range, half_up, header, packages, table
 from research_helpers.project import _load
 
 
@@ -205,3 +205,39 @@ def test_bare_drops_the_leading_zero(text, expected):
 
 def test_dash_range_typesets_a_span():
     assert dash_range('1337-1362') == '1337--1362'
+
+
+# --- maths set as text -----------------------------------------------------------------------------
+
+
+def test_maths_is_left_as_maths_by_default():
+    assert r'\caption{At \(\mu \le 0.5\).}' in minimal(caption=r'At \(\mu \le 0.5\).')
+
+
+def test_text_math_converts_the_headers_the_cells_and_the_caption():
+    latex = minimal(
+        header_rows=[[r'\(Q_{ov}\)', 'F1']],
+        body_rows=[['ITTB', r'\(-0.5\)']],
+        caption=r'At \(\mu \le 0.5\).',
+        text_math=True,
+    )
+
+    assert r'\textit{Q}\tmsubx{\textit{ov}} & F1 \\' in latex
+    assert 'ITTB & \u22120.5 \\\\' in latex
+    assert '\\caption{At \\textit{\u03bc}\\tmthick{}\u2264\\tmthick{}0.5.}' in latex
+    assert r'\(' not in latex
+
+
+def test_the_project_switches_text_math_on_for_every_table(tmp_path, monkeypatch):
+    root = tmp_path / 'project'
+    root.mkdir()
+    (root / 'pyproject.toml').write_text('[tool.research-helpers.latex]\ntext-math = true\n', encoding='utf-8')
+    monkeypatch.chdir(root)
+    _load.cache_clear()
+
+    assert r'\caption{\textit{k}}' in minimal(caption=r'\(k\)')
+    assert r'\caption{\(k\)}' in minimal(caption=r'\(k\)', text_math=False)
+
+
+def test_the_package_the_converted_maths_needs_is_shipped():
+    assert '\\ProvidesPackage{rhtextmath}' in packages()['rhtextmath.sty']
