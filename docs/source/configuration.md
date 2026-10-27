@@ -69,6 +69,9 @@ engine     = "xelatex"
 texlive    = 2025
 bbl-format = "3.3"
 
+[tool.research-helpers.latex]
+text-math = true                 # tables' maths set as text (needs rhtextmath.sty)
+
 [tool.research-helpers.documents.note]
 main = "tex/note/note.tex"       # additional document (besides paper)
 ```
@@ -167,6 +170,12 @@ reports its numbers as optimistic and lists instructions on how to measure the f
 | `texlive` | int | `2025` | The TeX Live year selected on arXiv. Used in diagnostic messages. |
 | `bbl-format` | str | `3.3` | The *biblatex* `.bbl` format version that TeX Live year reads. |
 | `markers` | list of str | `[]` | Text that must not reach a submission, such as `"[PAGE]"`. The check reports each one it finds outside a comment in an uploaded TeX file, the `.bbl` included. See [arXiv and Zenodo](guide/submission.md#what-the-check-finds). |
+
+### `latex`
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `text-math` | bool | `false` | Set the inline maths of every generated table, in its headers, cells, and caption, as text in the table's own typeface. The manuscript then loads the `rhtextmath` package, which `research-helpers sty` copies beside it. See [Maths in the table's typeface](guide/tables.md#maths-in-the-tables-typeface). |
 
 ### `documents`
 

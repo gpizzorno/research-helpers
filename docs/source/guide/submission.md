@@ -56,7 +56,9 @@ ready to upload: select xelatex and TeX Live 2025
 
 A float read in some other way, *e.g.,* through a macro, is also omitted, and `--preview`
 shows that the submission cannot compile without it. To include them, write the reference out, 
-or pass the file to {py:func}`~research_helpers.arxiv.manifest` in `extra`.
+or pass the file to {py:func}`~research_helpers.arxiv.manifest` in `extra`. A package that the manuscript
+loads from its own directory, such as the `rhtextmath.sty` that `research-helpers sty` copies there, is
+uploaded with it.
 
 ### A second document
 
