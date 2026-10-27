@@ -10,6 +10,7 @@ project
 build
 prose
 latex
+textmath
 display
 figures
 arxiv
