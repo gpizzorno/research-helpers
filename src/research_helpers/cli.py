@@ -7,6 +7,7 @@ import sys
 from typing import TYPE_CHECKING
 
 from research_helpers import arxiv as arxiv_module
+from research_helpers import latex, textmath
 from research_helpers.project import PAPER_DOCUMENT, Project, ProjectRootNotFoundError, current_project
 
 if TYPE_CHECKING:
@@ -59,6 +60,48 @@ def arxiv(args: argparse.Namespace) -> int:
     return 0
 
 
+def sty(args: argparse.Namespace) -> int:
+    """Copy the LaTeX packages generated tables need beside the manuscript, or check the copies there."""
+    project = current_project()
+    try:
+        document = project.document(args.document)
+    except KeyError as error:
+        print(error.args[0], file=sys.stderr)
+        return 1
+    if not document.manuscript:
+        print(
+            f'the {args.document} is configured without a manuscript, so there is nowhere to copy to',
+            file=sys.stderr,
+        )
+        return 1
+
+    behind = 0
+    for name, source in latex.packages().items():
+        path = document.main.parent / name
+        state = 'current' if path.is_file() and path.read_text(encoding='utf-8') == source else None
+        if state is None and args.check:
+            state = 'stale' if path.exists() else 'missing'
+            behind += 1
+        elif state is None:
+            path.write_text(source, encoding='utf-8')
+            state = 'written'
+        print(f'{state:<8} {_relative(path, project.root)}')
+    if behind:
+        print(f'\nto fix: research-helpers sty --document {args.document}', file=sys.stderr)
+    return 1 if behind else 0
+
+
+def textmath_command(args: argparse.Namespace) -> int:
+    """Print maths rewritten as text, for a caption or a cell written by hand."""
+    try:
+        for expression in args.expressions:
+            print(textmath.to_text(expression))
+    except textmath.UnsupportedMathError as error:
+        print(error, file=sys.stderr)
+        return 1
+    return 0
+
+
 def _relative(path: Path, root: Path) -> Path:
     """Return 'path' relative to the project root, if it lies inside it."""
     return path.relative_to(root) if path.is_relative_to(root) else path
@@ -89,6 +132,25 @@ def main(argv: list[str] | None = None) -> int:
     submission.add_argument('--tar', action='store_true', help='also pack the submission as a tarball')
     submission.add_argument('--preview', action='store_true', help='also compile it with the engine arXiv will use')
     submission.set_defaults(handler=arxiv)
+
+    packages = subcommands.add_parser('sty', help=sty.__doc__)
+    packages.add_argument(
+        '--document',
+        default=PAPER_DOCUMENT,
+        metavar='NAME',
+        help=f'the document whose manuscript directory receives them (default: {PAPER_DOCUMENT})',
+    )
+    packages.add_argument('--check', action='store_true', help='report copies that are missing or stale, write nothing')
+    packages.set_defaults(handler=sty)
+
+    maths = subcommands.add_parser('textmath', help=textmath_command.__doc__)
+    maths.add_argument(
+        'expressions',
+        nargs='+',
+        metavar='EXPRESSION',
+        help="maths without its delimiters, e.g. 'Q_{ov}'",
+    )
+    maths.set_defaults(handler=textmath_command)
 
     args = parser.parse_args(argv)
     return int(args.handler(args))
