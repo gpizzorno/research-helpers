@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "research-helpers"
-version = "1.4.1"
+version = "1.5.0"
 description = "Utilities for code-intensive research projects and the papers they produce"
 readme = "README.md"
 license = "MIT"
@@ -91,7 +91,7 @@ Issues = "https://github.com/gpizzorno/research-helpers/issues"
 Changelog = "https://github.com/gpizzorno/research-helpers/blob/main/CHANGELOG.md"
 
 [tool.setuptools.package-data]
-research_helpers = ["py.typed", "templates/*"]
+research_helpers = ["py.typed", "templates/*", "tex/*.sty"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
