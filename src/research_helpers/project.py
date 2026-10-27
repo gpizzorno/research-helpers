@@ -29,6 +29,7 @@ __all__ = [
     'ArxivSettings',
     'ConfigWarning',
     'FigureSettings',
+    'LatexSettings',
     'LogSettings',
     'PaperSettings',
     'Project',
@@ -152,7 +153,17 @@ class ArxivSettings:
     markers: tuple[str, ...] = ()
 
 
-Settings = PaperSettings | FigureSettings | LogSettings | SweepSettings | ArxivSettings
+@dataclass(frozen=True)
+class LatexSettings:
+    """LaTeX-related settings for the project."""
+
+    # set the inline maths of every generated table as text in the table's own typeface, with
+    # 'research_helpers.textmath'
+    # the manuscript then needs the 'rhtextmath' package ('research-helpers sty')
+    text_math: bool = False
+
+
+Settings = PaperSettings | FigureSettings | LogSettings | SweepSettings | ArxivSettings | LatexSettings
 SettingsT = TypeVar('SettingsT', bound='DataclassInstance')
 
 SECTIONS: Mapping[str, type[Settings]] = MappingProxyType(
@@ -162,6 +173,7 @@ SECTIONS: Mapping[str, type[Settings]] = MappingProxyType(
         'log': LogSettings,
         'sweep': SweepSettings,
         'arxiv': ArxivSettings,
+        'latex': LatexSettings,
     },
 )
 
@@ -176,6 +188,7 @@ class Project:
     log: LogSettings = LogSettings()
     sweep: SweepSettings = SweepSettings()
     arxiv: ArxivSettings = ArxivSettings()
+    latex: LatexSettings = LatexSettings()
     pyproject: Path | None = None  # the file the settings were read from, or None if they are pure defaults
     sources: Mapping[str, str] = field(
         default_factory=lambda: MappingProxyType({}),
@@ -214,7 +227,7 @@ class Project:
 
         Arguments:
             start: directory to search upward from. Defaults to the current working directory.
-            **overrides: settings objects ('paper', 'figures', 'arxiv') replacing what was loaded.
+            **overrides: settings objects ('paper', 'figures', 'arxiv', 'latex', ...) replacing what was loaded.
 
         Returns:
             The project, with every path made absolute against the root.
@@ -366,6 +379,7 @@ def _load(root: Path) -> Project:
     log = LogSettings(**read('log', LogSettings))
     sweep = SweepSettings(**read('sweep', SweepSettings))
     arxiv = ArxivSettings(**read('arxiv', ArxivSettings))
+    latex = LatexSettings(**read('latex', LatexSettings))
     documents = _documents(table.get(DOCUMENTS_TABLE), paper, path, sources)
 
     return Project(
@@ -375,6 +389,7 @@ def _load(root: Path) -> Project:
         log=_resolve(log, root),
         sweep=_resolve(sweep, root),
         arxiv=_resolve(arxiv, root),
+        latex=_resolve(latex, root),
         pyproject=path if table else None,
         sources=MappingProxyType(sources),
         documents=MappingProxyType({name: _resolve(settings, root) for name, settings in documents.items()}),
