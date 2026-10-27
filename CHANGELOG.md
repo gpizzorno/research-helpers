@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] — 2026-10-27
+
+### Fixed
+
+- **A line on stderr no longer arrives before the output it follows.** Where both streams go to one pipe, as
+  in a CI log or under `2>&1`, Python buffers stdout but writes stderr a line at a time.
+  `research-helpers sty --check` therefore printed its `to fix:` hint above the copies it named, and
+  `research-helpers textmath` printed a refusal above the maths it had already set. Both now flush each line
+  of stdout as they print it, as the sweep runner already did.
+
 ## [1.5.0] — 2026-10-27
 
 ### Added
