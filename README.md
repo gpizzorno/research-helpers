@@ -19,6 +19,7 @@ and [Zenodo](https://zenodo.org), structured logging, and a parameter-sweep engi
 - **Numbers in the Prose**: Track every number a sentence states back to the data that supports it, and audit the prose for any untracked values
 - **Several Documents**: Give a technical note or a supplement its own generated tables, figures, and checks
 - **LaTeX Assembly**: Compose tables for LaTeX and also display them in Jupyter
+- **Maths in the Table's Typeface**: Set a sans-serif table's maths as text in its own font, with the font's designed superiors and TeX's spacing
 - **Shared Figure Styling**: Consistent look across LaTeX and Jupyter
 - **Submission Packaging**: Automatic preparation and pre-checking for arXiv and Zenodo
 - **Parameter Sweeps**: Plan a grid, run it as a scheduler job array, resume if necessary, and collect the results
@@ -120,6 +121,25 @@ $ echo $?
 ```
 
 For a full example, see [adding a generated table](https://gpizzorno.github.io/research-helpers/guide/generated-table.html).
+
+### Set a table's maths in its own typeface
+
+A table set in a sans-serif face takes its maths from the document's math font, which is drawn for the serif
+text. To set the maths of every generated table as text in the table's own font instead:
+
+```toml
+[tool.research-helpers.latex]
+text-math = true
+```
+
+```bash
+$ research-helpers sty     # then \usepackage{rhtextmath} in the preamble
+written  tex/rhtextmath.sty
+```
+
+A header written `\(Q_{ov}\)` is then set as `\textit{Q}\tmsubx{\textit{ov}}`, and the exponent of
+`9.8\times 10^{-4}` takes the font's own superior figures. `research-helpers textmath '\mu = 0.5'` prints the
+same for a caption written by hand. It needs XeLaTeX or LuaLaTeX.
 
 ### Style a figure for the page
 
