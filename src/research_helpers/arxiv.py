@@ -37,6 +37,10 @@ LISTED_LINES = 10
 # an '\includegraphics' option list, which may hold one level of braces
 GRAPHICS_OPTIONS = r'(?:\[(?:[^\]{}]|\{[^{}]*\})*\]\s*)*'
 
+# a package the manuscript loads
+# uploaded if it sits beside the manuscript
+PACKAGE_REFERENCE = re.compile(r'\\(?:usepackage|RequirePackage)\s*(?:\[[^\]]*\]\s*)?\{([^}]*)\}')
+
 DEFAULT_PATTERNS = ('*.tex', '*.png', '*.pdf')
 DEFAULT_PASSES = 3
 
@@ -54,6 +58,8 @@ def manifest(
     'tables/scores.tex' and resolves the same way on arXiv. Only the tables and figures that
     the manuscript reads are uploaded ('\input' and '\includegraphics' outside a comment).
     A name with no file behind it is listed as written, so that 'check' reports it missing.
+    A package the manuscript loads from its own directory, such as the 'rhtextmath.sty' that
+    'research-helpers sty' copies there, is uploaded beside it.
 
     Arguments:
         patterns: glob patterns a file in the tables and figures directories must match.
@@ -78,6 +84,11 @@ def manifest(
         for name in sorted(_references(text, written_as)):
             for path in _resolve(directory / name, patterns) or [directory / name]:
                 files[(written_as / path.relative_to(directory)).as_posix()] = path
+    for names in PACKAGE_REFERENCE.findall(text):
+        for name in filter(None, (part.strip() for part in names.split(','))):
+            package = settings.main.parent / f'{name}.sty'
+            if package.is_file():
+                files[package.name] = package
     files.update({name: Path(path) for name, path in (extra or {}).items()})
     return files
 
