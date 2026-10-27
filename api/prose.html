@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>research_helpers.prose &mdash; Research Helpers v1.5</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=44dfd65d"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="research_helpers.latex" href="latex.html" />
+    <link rel="prev" title="research_helpers.build" href="build.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#latex"><code class="docutils literal notranslate"><span class="pre">latex</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#documents"><code class="docutils literal notranslate"><span class="pre">documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#without-the-manuscript">Without the manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#publishing-the-floats-without-the-paper">8. Publishing the floats without the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/prose.html">Numbers in the prose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#register-a-sentence">Register a sentence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#known-discrepancies">Known discrepancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#find-untracked-values">Find untracked values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#in-a-test-suite">In a test suite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/prose.html#more-than-one-document">More than one document</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/documents.html">Several documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/documents.html#configure-the-second-document">Configure the second document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/documents.html#one-document-per-manuscript">One <code class="docutils literal notranslate"><span class="pre">Document</span></code> per manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#maths-in-the-table-s-typeface">Maths in the table’s typeface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/queues.html">Many sweeps through few arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/queues.html#plan-the-campaign">Plan the campaign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/queues.html#write-the-queue">Write the queue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/queues.html#run-it">Run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/queues.html#resume">Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/queues.html#elements-that-ran-twice">Elements that ran twice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#other-libraries">Other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.LatexSettings"><code class="docutils literal notranslate"><span class="pre">LatexSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="build.html#research_helpers.build.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.normalise_prose"><code class="docutils literal notranslate"><span class="pre">normalise_prose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.ProseNumber"><code class="docutils literal notranslate"><span class="pre">ProseNumber</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.Mismatch"><code class="docutils literal notranslate"><span class="pre">Mismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.ProseCheck"><code class="docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.Occurrence"><code class="docutils literal notranslate"><span class="pre">Occurrence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.ProseRegistry"><code class="docutils literal notranslate"><span class="pre">ProseRegistry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.audit"><code class="docutils literal notranslate"><span class="pre">audit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#research_helpers.prose.audit_report"><code class="docutils literal notranslate"><span class="pre">audit_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="latex.html#research_helpers.latex.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="textmath.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.textmath</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="textmath.html#research_helpers.textmath.UnsupportedMathError"><code class="docutils literal notranslate"><span class="pre">UnsupportedMathError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="textmath.html#research_helpers.textmath.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="textmath.html#research_helpers.textmath.to_text"><code class="docutils literal notranslate"><span class="pre">to_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="textmath.html#research_helpers.textmath.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.unused"><code class="docutils literal notranslate"><span class="pre">unused()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.build_units"><code class="docutils literal notranslate"><span class="pre">build_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.chunk"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.expand_run_dirs"><code class="docutils literal notranslate"><span class="pre">expand_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.quarantine"><code class="docutils literal notranslate"><span class="pre">quarantine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_plan_list"><code class="docutils literal notranslate"><span class="pre">read_plan_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_units"><code class="docutils literal notranslate"><span class="pre">read_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.select_run_dirs"><code class="docutils literal notranslate"><span class="pre">select_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.shuffled"><code class="docutils literal notranslate"><span class="pre">shuffled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.write_queues"><code class="docutils literal notranslate"><span class="pre">write_queues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sweep.html#research-helpers-sweep-queue"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/gpizzorno/research-helpers/blob/main/docs/source/api/prose.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="research-helpers-prose">
+<h1><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code><a class="headerlink" href="#research-helpers-prose" title="Link to this heading"></a></h1>
+<p>This module tracks every number a document states in prose and links it to the data that supports it, as well as auditing the
+prose for untracked numbers. See <a class="reference internal" href="../guide/prose.html"><span class="std std-doc">numbers in the prose</span></a>.</p>
+<dl class="py function" id="module-research_helpers.prose">
+<dt class="sig sig-object py" id="research_helpers.prose.normalise_prose">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">normalise_prose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#normalise_prose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.normalise_prose" title="Link to this definition"></a></dt>
+<dd><p>Return a manuscript as the registry matches against it: comments removed, whitespace collapsed.</p>
+<p>A sentence that has been commented out no longer counts as printed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseNumber">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">ProseNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'paper'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseNumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseNumber" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One fragment of a sentence as the document prints it, and how to compute its numbers.</p>
+<p>‘template’ is the fragment with ‘{}’ where each number goes and doubled braces for literal
+ones, so ‘(Q_{{ov}} = {})’. Whitespace is immaterial: the fragment and the document are
+both compared with every run of whitespace collapsed to one space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>template</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.15)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>section</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>document</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseNumber.placeholders">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">placeholders</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#research_helpers.prose.ProseNumber.placeholders" title="Link to this definition"></a></dt>
+<dd><p>Return the count of numbers the template takes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseNumber.expected">
+<span class="sig-name descname"><span class="pre">expected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseNumber.expected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseNumber.expected" title="Link to this definition"></a></dt>
+<dd><p>Return the fragment with the numbers from the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – if the values do not fill the template exactly.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseNumber.pattern">
+<span class="sig-name descname"><span class="pre">pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseNumber.pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseNumber.pattern" title="Link to this definition"></a></dt>
+<dd><p>Return a pattern matching the fragment whatever numbers it carries.</p>
+<p>Used to find what the document prints when it does not print what the data contains. A number
+is matched as a run without whitespace, so a sentence that now says something else entirely
+does not pass for the same sentence with different numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/re.html#re.Pattern" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pattern</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseNumber.longest_literal">
+<span class="sig-name descname"><span class="pre">longest_literal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseNumber.longest_literal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseNumber.longest_literal" title="Link to this definition"></a></dt>
+<dd><p>Return the longest stretch of fixed text, which must appear for the sentence to count as there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.prose.Mismatch">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">Mismatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#Mismatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.Mismatch" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>A fragment the document does not print as is in the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>section</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>expected</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>printed</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.Mismatch.key">
+<span class="sig-name descname"><span class="pre">key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#research_helpers.prose.Mismatch.key" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.Mismatch.section">
+<span class="sig-name descname"><span class="pre">section</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#research_helpers.prose.Mismatch.section" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.Mismatch.expected">
+<span class="sig-name descname"><span class="pre">expected</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#research_helpers.prose.Mismatch.expected" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.Mismatch.printed">
+<span class="sig-name descname"><span class="pre">printed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><a class="headerlink" href="#research_helpers.prose.Mismatch.printed" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">ProseCheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vanished</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orphaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_discrepancies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseCheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseCheck" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>What a check of the registry against its documents found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>checked</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>)</p></li>
+<li><p><strong>stale</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference internal" href="#research_helpers.prose.Mismatch" title="research_helpers.prose.Mismatch"><em>Mismatch</em></a><em>]</em>)</p></li>
+<li><p><strong>vanished</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference internal" href="#research_helpers.prose.Mismatch" title="research_helpers.prose.Mismatch"><em>Mismatch</em></a><em>]</em>)</p></li>
+<li><p><strong>fixed</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em>)</p></li>
+<li><p><strong>orphaned</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em>)</p></li>
+<li><p><strong>failed</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>open_discrepancies</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.checked">
+<span class="sig-name descname"><span class="pre">checked</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.checked" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.stale">
+<span class="sig-name descname"><span class="pre">stale</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#research_helpers.prose.Mismatch" title="research_helpers.prose.Mismatch"><span class="pre">Mismatch</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.stale" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.vanished">
+<span class="sig-name descname"><span class="pre">vanished</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#research_helpers.prose.Mismatch" title="research_helpers.prose.Mismatch"><span class="pre">Mismatch</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.vanished" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.fixed">
+<span class="sig-name descname"><span class="pre">fixed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.fixed" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.orphaned">
+<span class="sig-name descname"><span class="pre">orphaned</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.orphaned" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.failed">
+<span class="sig-name descname"><span class="pre">failed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.failed" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseCheck.open_discrepancies">
+<span class="sig-name descname"><span class="pre">open_discrepancies</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></span><a class="headerlink" href="#research_helpers.prose.ProseCheck.open_discrepancies" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.prose.Occurrence">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">Occurrence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#Occurrence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.Occurrence" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One numeric token in a document’s prose, and what accounts for it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>)</p></li>
+<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>detail</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">ProseRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_discrepancies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">untraced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_symbols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The numbers a project’s documents state in prose, and their checks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>known_discrepancies</strong> (<em>Mapping</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>untraced</strong> (<em>Mapping</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>parameter_symbols</strong> (<em>Collection</em><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">entries</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.add" title="Link to this definition"></a></dt>
+<dd><p>Register entries built directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – if a key is already registered.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entries</strong> (<a class="reference internal" href="#research_helpers.prose.ProseNumber" title="research_helpers.prose.ProseNumber"><em>ProseNumber</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAPER_DOCUMENT</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.register" title="Link to this definition"></a></dt>
+<dd><p>Register the decorated function that computes the numbers of a fragment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – a short, unique name for the entry.</p></li>
+<li><p><strong>template</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – the fragment as printed, ‘{}’ for each number.</p></li>
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">''</span></code>) – where the numbers come from.</p></li>
+<li><p><strong>section</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">''</span></code>) – where the sentence is.</p></li>
+<li><p><strong>document</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">PAPER_DOCUMENT</span></code>) – the document.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">ValuesT</span></code>, bound= Callable[[], Sequence[Any]])], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">ValuesT</span></code>, bound= Callable[[], Sequence[Any]])]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The decorator, which returns the function unchanged.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.documents">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">documents</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#research_helpers.prose.ProseRegistry.documents" title="Link to this definition"></a></dt>
+<dd><p>Return the documents the entries name, in the order first named.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.check" title="Link to this definition"></a></dt>
+<dd><p>Compare every entry against the document that prints it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – document name to manuscript, for any document not to be taken from the project’s wiring.</p></li>
+<li><p><strong>document</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – check only the entries this document prints.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#research_helpers.prose.ProseCheck" title="research_helpers.prose.ProseCheck"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>What was found or falsy when every entry holds.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#FileNotFoundError" title="(in Python v3.15)"><strong>FileNotFoundError</strong></a> – if a manuscript does not exist, or a document is configured without one.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.15)"><strong>KeyError</strong></a> – if an entry names a document the project does not configure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">found</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.report" title="Link to this definition"></a></dt>
+<dd><p>Return a description of what the check found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>found</strong> (<a class="reference internal" href="#research_helpers.prose.ProseCheck" title="research_helpers.prose.ProseCheck"><em>ProseCheck</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PAPER_DOCUMENT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.audit" title="Link to this definition"></a></dt>
+<dd><p>Classify every numeric token in a document’s prose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">PAPER_DOCUMENT</span></code>) – target document.</p></li>
+<li><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – its manuscript, if not to be taken from the project’s wiring.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#research_helpers.prose.Occurrence" title="research_helpers.prose.Occurrence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Occurrence</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Every token, in document order.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#FileNotFoundError" title="(in Python v3.15)"><strong>FileNotFoundError</strong></a> – if no ‘path’ is given and the document is configured without a manuscript.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="research_helpers.prose.ProseRegistry.main">
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#ProseRegistry.main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.ProseRegistry.main" title="Link to this definition"></a></dt>
+<dd><p>Run the prose command line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>argv</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – command line arguments, or None to read ‘sys.argv’.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>A process exit status</em> – 0 on success, 1 if the check found anything.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="research_helpers.prose.audit">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tables_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_symbols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.audit" title="Link to this definition"></a></dt>
+<dd><p>Classify every numeric token in a manuscript’s prose.</p>
+<p>Each token falls in the first category that accounts for it:</p>
+<ol class="arabic simple">
+<li><p><strong>registered</strong>: it lies inside a fragment one of the entries describes.</p></li>
+<li><p><strong>notation</strong>: it is a constant of an inline formula, or a parameter’s value in one that
+assigns a declared parameter symbol. Not a result.</p></li>
+<li><p><strong>cited-float</strong>: it appears in a generated table the same paragraph cites, which carries it.</p></li>
+<li><p><strong>other-float</strong>: it appears in a generated table the paragraph does not cite.</p></li>
+<li><p><strong>untraced</strong>: none of the above. These are the numbers to pin.</p></li>
+</ol>
+<p>Numbers in the preamble, comments, display math, citations, labels, references and the
+arguments of ‘input’ and ‘includegraphics’ are not prose and are skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – the manuscript, as written.</p></li>
+<li><p><strong>entries</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference internal" href="#research_helpers.prose.ProseNumber" title="research_helpers.prose.ProseNumber"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProseNumber</span></code></a>]</span>, default: <code class="docutils literal notranslate"><span class="pre">()</span></code>) – the registry entries for this manuscript.</p></li>
+<li><p><strong>tables_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – where its generated tables are, named by label without the ‘tab:’ prefix.</p></li>
+<li><p><strong>parameter_symbols</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Collection" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>, default: <code class="docutils literal notranslate"><span class="pre">()</span></code>) – see ‘ProseRegistry’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="#research_helpers.prose.Occurrence" title="research_helpers.prose.Occurrence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Occurrence</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Every token, in document order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="research_helpers.prose.audit_report">
+<span class="sig-prename descclassname"><span class="pre">research_helpers.prose.</span></span><span class="sig-name descname"><span class="pre">audit_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occurrences</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Prose-number</span> <span class="pre">audit'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/research_helpers/prose.html#audit_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#research_helpers.prose.audit_report" title="Link to this definition"></a></dt>
+<dd><p>Render an audit as Markdown, untraced numbers first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>occurrences</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference internal" href="#research_helpers.prose.Occurrence" title="research_helpers.prose.Occurrence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Occurrence</span></code></a>]</span>) – what ‘audit’ found.</p></li>
+<li><p><strong>title</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>, default: <code class="docutils literal notranslate"><span class="pre">'Prose-number</span> <span class="pre">audit'</span></code>) – the heading.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The report.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="build.html" class="btn btn-neutral float-left" title="research_helpers.build" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="latex.html" class="btn btn-neutral float-right" title="research_helpers.latex" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

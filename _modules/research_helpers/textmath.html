@@ -1,0 +1,1149 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>research_helpers.textmath &mdash; Research Helpers v1.5</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=b93aa178" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=44dfd65d"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Research Helpers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#three-layers-of-resolution">Three layers of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#complete-example">Complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#subsections">Subsections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#paper"><code class="docutils literal notranslate"><span class="pre">paper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#figures"><code class="docutils literal notranslate"><span class="pre">figures</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#log"><code class="docutils literal notranslate"><span class="pre">log</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#sweep"><code class="docutils literal notranslate"><span class="pre">sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#arxiv"><code class="docutils literal notranslate"><span class="pre">arxiv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#latex"><code class="docutils literal notranslate"><span class="pre">latex</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#documents"><code class="docutils literal notranslate"><span class="pre">documents</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration.html#without-the-manuscript">Without the manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#checking-settings-resolution">Checking settings resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#overriding-the-root">Overriding the root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../configuration.html#reading-settings">Reading settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/generated-table.html">Adding a generated table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#wire-the-project">1. Wire the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#write-the-emitter">2. Write the emitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#reference-the-table-from-the-paper">3. Reference the table from the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#build-the-table">4. Build the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#install-the-table">5. Install the table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#scenarios-covered-by-the-check">6. Scenarios covered by the check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#the-check-can-be-used-in-ci">7. The check can be used in CI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#publishing-the-floats-without-the-paper">8. Publishing the floats without the paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/generated-table.html#figures-work-the-same-way">Figures work the same way</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/prose.html">Numbers in the prose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#register-a-sentence">Register a sentence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#known-discrepancies">Known discrepancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#find-untracked-values">Find untracked values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#in-a-test-suite">In a test suite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/prose.html#more-than-one-document">More than one document</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/documents.html">Several documents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/documents.html#configure-the-second-document">Configure the second document</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/documents.html#one-document-per-manuscript">One <code class="docutils literal notranslate"><span class="pre">Document</span></code> per manuscript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/figures.html">Figures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#scoped-styling">Scoped styling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#saving-versus-rendering">Saving versus rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#long-tick-labels">Long tick labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/figures.html#checking-current-settings">Checking current settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/tables.html">LaTeX tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#assembling">Assembling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#the-helpers">The helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#maths-in-the-table-s-typeface">Maths in the table’s typeface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/tables.html#reading-a-table-back">Reading a table back</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/sweeps.html">Parameter sweeps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#define-the-sweep">Define the sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#configure-the-grid">Configure the grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#run">Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#collect">Collect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#artefacts">Artefacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#aggregating-several-runs">Aggregating several runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#sizing-the-array">Sizing the array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/sweeps.html#submitting">Submitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/queues.html">Many sweeps through few arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#plan-the-campaign">Plan the campaign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#write-the-queue">Write the queue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#run-it">Run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#resume">Resume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/queues.html#elements-that-ran-twice">Elements that ran twice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/cluster.html">Cluster jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#what-the-templates-handle">What the templates handle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#single-jobs">Single jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/cluster.html#resubmitting">Resubmitting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/submission.html">arXiv and Zenodo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/submission.html#arxiv">arXiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/submission.html#reproducible-archives">Reproducible archives</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/logging.html">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#console-and-file-levels">Console and file levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#other-libraries">Other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#colour">Colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#multiple-concurrent-log-files">Multiple concurrent log files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../guide/logging.html#progress-bars">Progress bars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/project.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.project</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ConfigWarning"><code class="docutils literal notranslate"><span class="pre">ConfigWarning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ProjectRootNotFoundError"><code class="docutils literal notranslate"><span class="pre">ProjectRootNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.PaperSettings"><code class="docutils literal notranslate"><span class="pre">PaperSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.FigureSettings"><code class="docutils literal notranslate"><span class="pre">FigureSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.LogSettings"><code class="docutils literal notranslate"><span class="pre">LogSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.SweepSettings"><code class="docutils literal notranslate"><span class="pre">SweepSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.ArxivSettings"><code class="docutils literal notranslate"><span class="pre">ArxivSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.LatexSettings"><code class="docutils literal notranslate"><span class="pre">LatexSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.current_project"><code class="docutils literal notranslate"><span class="pre">current_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/project.html#research_helpers.project.find_project_root"><code class="docutils literal notranslate"><span class="pre">find_project_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/build.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.build</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Kind"><code class="docutils literal notranslate"><span class="pre">Kind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Artefact"><code class="docutils literal notranslate"><span class="pre">Artefact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Drift"><code class="docutils literal notranslate"><span class="pre">Drift</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Registry"><code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/build.html#research_helpers.build.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/prose.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.prose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.normalise_prose"><code class="docutils literal notranslate"><span class="pre">normalise_prose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseNumber"><code class="docutils literal notranslate"><span class="pre">ProseNumber</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.Mismatch"><code class="docutils literal notranslate"><span class="pre">Mismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseCheck"><code class="docutils literal notranslate"><span class="pre">ProseCheck</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.Occurrence"><code class="docutils literal notranslate"><span class="pre">Occurrence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.ProseRegistry"><code class="docutils literal notranslate"><span class="pre">ProseRegistry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.audit"><code class="docutils literal notranslate"><span class="pre">audit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/prose.html#research_helpers.prose.audit_report"><code class="docutils literal notranslate"><span class="pre">audit_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/latex.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.latex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.header"><code class="docutils literal notranslate"><span class="pre">header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.half_up"><code class="docutils literal notranslate"><span class="pre">half_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.bare"><code class="docutils literal notranslate"><span class="pre">bare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.dash_range"><code class="docutils literal notranslate"><span class="pre">dash_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/latex.html#research_helpers.latex.packages"><code class="docutils literal notranslate"><span class="pre">packages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/textmath.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.textmath</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/textmath.html#research_helpers.textmath.UnsupportedMathError"><code class="docutils literal notranslate"><span class="pre">UnsupportedMathError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/textmath.html#research_helpers.textmath.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/textmath.html#research_helpers.textmath.to_text"><code class="docutils literal notranslate"><span class="pre">to_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/textmath.html#research_helpers.textmath.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/display.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.display</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.Row"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/display.html#research_helpers.display.show"><code class="docutils literal notranslate"><span class="pre">show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/figures.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.figures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.current_settings"><code class="docutils literal notranslate"><span class="pre">current_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.apply_style"><code class="docutils literal notranslate"><span class="pre">apply_style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.style"><code class="docutils literal notranslate"><span class="pre">style()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/figures.html#research_helpers.figures.fit_x"><code class="docutils literal notranslate"><span class="pre">fit_x()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/arxiv.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.arxiv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.manifest"><code class="docutils literal notranslate"><span class="pre">manifest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.unused"><code class="docutils literal notranslate"><span class="pre">unused()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.bbl_format"><code class="docutils literal notranslate"><span class="pre">bbl_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.pack"><code class="docutils literal notranslate"><span class="pre">pack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/arxiv.html#research_helpers.arxiv.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/archive.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.archive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.digest"><code class="docutils literal notranslate"><span class="pre">digest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.normalise"><code class="docutils literal notranslate"><span class="pre">normalise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.write_archive"><code class="docutils literal notranslate"><span class="pre">write_archive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.archive_directory"><code class="docutils literal notranslate"><span class="pre">archive_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/archive.html#research_helpers.archive.write_checksums"><code class="docutils literal notranslate"><span class="pre">write_checksums()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/log.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.log</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.reset_logging"><code class="docutils literal notranslate"><span class="pre">reset_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.set_log_file"><code class="docutils literal notranslate"><span class="pre">set_log_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.MultiFileHandler"><code class="docutils literal notranslate"><span class="pre">MultiFileHandler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.LoggingTqdm"><code class="docutils literal notranslate"><span class="pre">LoggingTqdm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/log.html#research_helpers.log.progress"><code class="docutils literal notranslate"><span class="pre">progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/sweep.html"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.aggregate_runs"><code class="docutils literal notranslate"><span class="pre">aggregate_runs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.array_spec"><code class="docutils literal notranslate"><span class="pre">array_spec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.collect_results"><code class="docutils literal notranslate"><span class="pre">collect_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.leading_columns"><code class="docutils literal notranslate"><span class="pre">leading_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.missing_task_indices"><code class="docutils literal notranslate"><span class="pre">missing_task_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_parts"><code class="docutils literal notranslate"><span class="pre">read_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.run_status"><code class="docutils literal notranslate"><span class="pre">run_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.combination_id"><code class="docutils literal notranslate"><span class="pre">combination_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.expand_grid"><code class="docutils literal notranslate"><span class="pre">expand_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.restore_tuples"><code class="docutils literal notranslate"><span class="pre">restore_tuples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.slice_bounds"><code class="docutils literal notranslate"><span class="pre">slice_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Unit"><code class="docutils literal notranslate"><span class="pre">Unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.build_units"><code class="docutils literal notranslate"><span class="pre">build_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.chunk"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.expand_run_dirs"><code class="docutils literal notranslate"><span class="pre">expand_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.quarantine"><code class="docutils literal notranslate"><span class="pre">quarantine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_plan_list"><code class="docutils literal notranslate"><span class="pre">read_plan_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_units"><code class="docutils literal notranslate"><span class="pre">read_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.select_run_dirs"><code class="docutils literal notranslate"><span class="pre">select_run_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.shuffled"><code class="docutils literal notranslate"><span class="pre">shuffled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.write_queues"><code class="docutils literal notranslate"><span class="pre">write_queues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.artefact_path"><code class="docutils literal notranslate"><span class="pre">artefact_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.completed_ids"><code class="docutils literal notranslate"><span class="pre">completed_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.jsonable"><code class="docutils literal notranslate"><span class="pre">jsonable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_artefact"><code class="docutils literal notranslate"><span class="pre">read_artefact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.run_slice"><code class="docutils literal notranslate"><span class="pre">run_slice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.task_index_from_env"><code class="docutils literal notranslate"><span class="pre">task_index_from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.confidence_interval"><code class="docutils literal notranslate"><span class="pre">confidence_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.student_t_quantile"><code class="docutils literal notranslate"><span class="pre">student_t_quantile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.Sweep"><code class="docutils literal notranslate"><span class="pre">Sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.estimate_runtime"><code class="docutils literal notranslate"><span class="pre">estimate_runtime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research_helpers.sweep.read_config"><code class="docutils literal notranslate"><span class="pre">read_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#module-research_helpers.sweep.stats"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.stats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/sweep.html#research-helpers-sweep-queue"><code class="docutils literal notranslate"><span class="pre">research_helpers.sweep.queue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Research Helpers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">research_helpers.textmath</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for research_helpers.textmath</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Set a float's inline maths as text, in the float's own typeface."""</span>
+
+<span class="c1"># avoid ruff complaining about the glyphs</span>
+<span class="c1"># ruff: noqa: RUF001, RUF002</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoReturn</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'COMMANDS'</span><span class="p">,</span> <span class="s1">'DESIGNED_SCRIPT'</span><span class="p">,</span> <span class="s1">'PACKAGE'</span><span class="p">,</span> <span class="s1">'UnsupportedMathError'</span><span class="p">,</span> <span class="s1">'convert'</span><span class="p">,</span> <span class="s1">'to_text'</span><span class="p">]</span>
+
+<span class="c1"># the LaTeX package, without its '.sty'</span>
+<span class="n">PACKAGE</span> <span class="o">=</span> <span class="s1">'rhtextmath'</span>
+
+<span class="c1"># every command defined by the package, which the output can use</span>
+<span class="n">COMMANDS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'tmbar'</span><span class="p">,</span> <span class="s1">'tmmed'</span><span class="p">,</span> <span class="s1">'tmscripts'</span><span class="p">,</span> <span class="s1">'tmsub'</span><span class="p">,</span> <span class="s1">'tmsubx'</span><span class="p">,</span> <span class="s1">'tmsup'</span><span class="p">,</span> <span class="s1">'tmsupx'</span><span class="p">,</span> <span class="s1">'tmthick'</span><span class="p">,</span> <span class="s1">'tmthin'</span><span class="p">)</span>
+
+<span class="c1"># designed superiors and inferiors (OpenType 'sups' and 'subs')</span>
+<span class="n">DESIGNED_SCRIPT</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="s1">'0123456789−+=()'</span><span class="p">)</span>
+
+
+<span class="n">NUMBER</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">'\d+(?:\{,\}\d+)*(?:\.\d*)?|\.\d+'</span><span class="p">)</span>
+<span class="n">COMMAND</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">'[A-Za-z]+'</span><span class="p">)</span>
+
+<span class="n">GREEK_LOWER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'alpha'</span><span class="p">:</span> <span class="s1">'α'</span><span class="p">,</span> <span class="s1">'beta'</span><span class="p">:</span> <span class="s1">'β'</span><span class="p">,</span> <span class="s1">'gamma'</span><span class="p">:</span> <span class="s1">'γ'</span><span class="p">,</span> <span class="s1">'delta'</span><span class="p">:</span> <span class="s1">'δ'</span><span class="p">,</span> <span class="s1">'epsilon'</span><span class="p">:</span> <span class="s1">'ϵ'</span><span class="p">,</span> <span class="s1">'varepsilon'</span><span class="p">:</span> <span class="s1">'ε'</span><span class="p">,</span> <span class="s1">'zeta'</span><span class="p">:</span> <span class="s1">'ζ'</span><span class="p">,</span>
+    <span class="s1">'eta'</span><span class="p">:</span> <span class="s1">'η'</span><span class="p">,</span> <span class="s1">'theta'</span><span class="p">:</span> <span class="s1">'θ'</span><span class="p">,</span> <span class="s1">'vartheta'</span><span class="p">:</span> <span class="s1">'ϑ'</span><span class="p">,</span> <span class="s1">'iota'</span><span class="p">:</span> <span class="s1">'ι'</span><span class="p">,</span> <span class="s1">'kappa'</span><span class="p">:</span> <span class="s1">'κ'</span><span class="p">,</span> <span class="s1">'lambda'</span><span class="p">:</span> <span class="s1">'λ'</span><span class="p">,</span> <span class="s1">'mu'</span><span class="p">:</span> <span class="s1">'μ'</span><span class="p">,</span> <span class="s1">'nu'</span><span class="p">:</span> <span class="s1">'ν'</span><span class="p">,</span>
+    <span class="s1">'xi'</span><span class="p">:</span> <span class="s1">'ξ'</span><span class="p">,</span> <span class="s1">'pi'</span><span class="p">:</span> <span class="s1">'π'</span><span class="p">,</span> <span class="s1">'varpi'</span><span class="p">:</span> <span class="s1">'ϖ'</span><span class="p">,</span> <span class="s1">'rho'</span><span class="p">:</span> <span class="s1">'ρ'</span><span class="p">,</span> <span class="s1">'varrho'</span><span class="p">:</span> <span class="s1">'ϱ'</span><span class="p">,</span> <span class="s1">'sigma'</span><span class="p">:</span> <span class="s1">'σ'</span><span class="p">,</span> <span class="s1">'varsigma'</span><span class="p">:</span> <span class="s1">'ς'</span><span class="p">,</span> <span class="s1">'tau'</span><span class="p">:</span> <span class="s1">'τ'</span><span class="p">,</span>
+    <span class="s1">'upsilon'</span><span class="p">:</span> <span class="s1">'υ'</span><span class="p">,</span> <span class="s1">'phi'</span><span class="p">:</span> <span class="s1">'ϕ'</span><span class="p">,</span> <span class="s1">'varphi'</span><span class="p">:</span> <span class="s1">'φ'</span><span class="p">,</span> <span class="s1">'chi'</span><span class="p">:</span> <span class="s1">'χ'</span><span class="p">,</span> <span class="s1">'psi'</span><span class="p">:</span> <span class="s1">'ψ'</span><span class="p">,</span> <span class="s1">'omega'</span><span class="p">:</span> <span class="s1">'ω'</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+<span class="n">GREEK_UPPER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'Gamma'</span><span class="p">:</span> <span class="s1">'Γ'</span><span class="p">,</span> <span class="s1">'Delta'</span><span class="p">:</span> <span class="s1">'Δ'</span><span class="p">,</span> <span class="s1">'Theta'</span><span class="p">:</span> <span class="s1">'Θ'</span><span class="p">,</span> <span class="s1">'Lambda'</span><span class="p">:</span> <span class="s1">'Λ'</span><span class="p">,</span> <span class="s1">'Xi'</span><span class="p">:</span> <span class="s1">'Ξ'</span><span class="p">,</span> <span class="s1">'Pi'</span><span class="p">:</span> <span class="s1">'Π'</span><span class="p">,</span> <span class="s1">'Sigma'</span><span class="p">:</span> <span class="s1">'Σ'</span><span class="p">,</span>
+    <span class="s1">'Upsilon'</span><span class="p">:</span> <span class="s1">'Υ'</span><span class="p">,</span> <span class="s1">'Phi'</span><span class="p">:</span> <span class="s1">'Φ'</span><span class="p">,</span> <span class="s1">'Psi'</span><span class="p">:</span> <span class="s1">'Ψ'</span><span class="p">,</span> <span class="s1">'Omega'</span><span class="p">:</span> <span class="s1">'Ω'</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+
+<span class="c1"># command -&gt; (class, text). The classes are TeX's: ord, op, bin, rel, open, close, punct.</span>
+<span class="n">SYMBOLS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="n">glyph</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="p">{</span>
+        <span class="s1">'le'</span><span class="p">:</span> <span class="s1">'≤'</span><span class="p">,</span> <span class="s1">'leq'</span><span class="p">:</span> <span class="s1">'≤'</span><span class="p">,</span> <span class="s1">'ge'</span><span class="p">:</span> <span class="s1">'≥'</span><span class="p">,</span> <span class="s1">'geq'</span><span class="p">:</span> <span class="s1">'≥'</span><span class="p">,</span> <span class="s1">'ne'</span><span class="p">:</span> <span class="s1">'≠'</span><span class="p">,</span> <span class="s1">'neq'</span><span class="p">:</span> <span class="s1">'≠'</span><span class="p">,</span> <span class="s1">'approx'</span><span class="p">:</span> <span class="s1">'≈'</span><span class="p">,</span> <span class="s1">'sim'</span><span class="p">:</span> <span class="s1">'∼'</span><span class="p">,</span>
+        <span class="s1">'simeq'</span><span class="p">:</span> <span class="s1">'≃'</span><span class="p">,</span> <span class="s1">'equiv'</span><span class="p">:</span> <span class="s1">'≡'</span><span class="p">,</span> <span class="s1">'in'</span><span class="p">:</span> <span class="s1">'∈'</span><span class="p">,</span> <span class="s1">'notin'</span><span class="p">:</span> <span class="s1">'∉'</span><span class="p">,</span> <span class="s1">'propto'</span><span class="p">:</span> <span class="s1">'∝'</span><span class="p">,</span> <span class="s1">'ll'</span><span class="p">:</span> <span class="s1">'≪'</span><span class="p">,</span> <span class="s1">'gg'</span><span class="p">:</span> <span class="s1">'≫'</span><span class="p">,</span>
+        <span class="s1">'subset'</span><span class="p">:</span> <span class="s1">'⊂'</span><span class="p">,</span> <span class="s1">'subseteq'</span><span class="p">:</span> <span class="s1">'⊆'</span><span class="p">,</span> <span class="s1">'to'</span><span class="p">:</span> <span class="s1">'→'</span><span class="p">,</span> <span class="s1">'rightarrow'</span><span class="p">:</span> <span class="s1">'→'</span><span class="p">,</span> <span class="s1">'mid'</span><span class="p">:</span> <span class="s1">'∣'</span><span class="p">,</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="n">glyph</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="p">{</span>
+        <span class="s1">'times'</span><span class="p">:</span> <span class="s1">'×'</span><span class="p">,</span> <span class="s1">'cdot'</span><span class="p">:</span> <span class="s1">'·'</span><span class="p">,</span> <span class="s1">'pm'</span><span class="p">:</span> <span class="s1">'±'</span><span class="p">,</span> <span class="s1">'mp'</span><span class="p">:</span> <span class="s1">'∓'</span><span class="p">,</span> <span class="s1">'div'</span><span class="p">:</span> <span class="s1">'÷'</span><span class="p">,</span> <span class="s1">'ast'</span><span class="p">:</span> <span class="s1">'∗'</span><span class="p">,</span> <span class="s1">'circ'</span><span class="p">:</span> <span class="s1">'∘'</span><span class="p">,</span>
+        <span class="s1">'cup'</span><span class="p">:</span> <span class="s1">'∪'</span><span class="p">,</span> <span class="s1">'cap'</span><span class="p">:</span> <span class="s1">'∩'</span><span class="p">,</span> <span class="s1">'setminus'</span><span class="p">:</span> <span class="s1">'∖'</span><span class="p">,</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">glyph</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="p">{</span>
+        <span class="s1">'infty'</span><span class="p">:</span> <span class="s1">'∞'</span><span class="p">,</span> <span class="s1">'ldots'</span><span class="p">:</span> <span class="s1">'…'</span><span class="p">,</span> <span class="s1">'dots'</span><span class="p">:</span> <span class="s1">'…'</span><span class="p">,</span> <span class="s1">'cdots'</span><span class="p">:</span> <span class="s1">'⋯'</span><span class="p">,</span> <span class="s1">'prime'</span><span class="p">:</span> <span class="s1">'′'</span><span class="p">,</span> <span class="s1">'partial'</span><span class="p">:</span> <span class="s1">'∂'</span><span class="p">,</span> <span class="s1">'ell'</span><span class="p">:</span> <span class="s1">'ℓ'</span><span class="p">,</span>
+        <span class="s1">'emptyset'</span><span class="p">:</span> <span class="s1">'∅'</span><span class="p">,</span> <span class="s1">'vert'</span><span class="p">:</span> <span class="s1">'|'</span><span class="p">,</span> <span class="s1">'lvert'</span><span class="p">:</span> <span class="s1">'|'</span><span class="p">,</span> <span class="s1">'rvert'</span><span class="p">:</span> <span class="s1">'|'</span><span class="p">,</span> <span class="s1">'Vert'</span><span class="p">:</span> <span class="s1">'‖'</span><span class="p">,</span> <span class="s1">'lVert'</span><span class="p">:</span> <span class="s1">'‖'</span><span class="p">,</span> <span class="s1">'rVert'</span><span class="p">:</span> <span class="s1">'‖'</span><span class="p">,</span>
+        <span class="s1">'|'</span><span class="p">:</span> <span class="s1">'‖'</span><span class="p">,</span> <span class="s1">'%'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">%'</span><span class="p">,</span> <span class="s1">'#'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">#'</span><span class="p">,</span> <span class="s1">'&amp;'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">&amp;'</span><span class="p">,</span> <span class="s1">'$'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">$'</span><span class="p">,</span> <span class="s1">'_'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">_'</span><span class="p">,</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="s1">'langle'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="s1">'⟨'</span><span class="p">),</span> <span class="s1">'rangle'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">'⟩'</span><span class="p">),</span> <span class="s1">'{'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">{'</span><span class="p">),</span> <span class="s1">'}'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">}'</span><span class="p">),</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+<span class="n">OPERATORS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+    <span class="s1">'arg'</span><span class="p">,</span> <span class="s1">'cos'</span><span class="p">,</span> <span class="s1">'det'</span><span class="p">,</span> <span class="s1">'exp'</span><span class="p">,</span> <span class="s1">'inf'</span><span class="p">,</span> <span class="s1">'lim'</span><span class="p">,</span> <span class="s1">'ln'</span><span class="p">,</span> <span class="s1">'log'</span><span class="p">,</span> <span class="s1">'max'</span><span class="p">,</span> <span class="s1">'min'</span><span class="p">,</span> <span class="s1">'sin'</span><span class="p">,</span> <span class="s1">'sup'</span><span class="p">,</span> <span class="s1">'tan'</span><span class="p">,</span>
+<span class="p">})</span>  <span class="c1"># fmt: skip</span>
+
+<span class="c1"># every command that is one atom: name -&gt; (class, text, italic)</span>
+<span class="n">ATOMS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">glyph</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="n">GREEK_LOWER</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">glyph</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">glyph</span> <span class="ow">in</span> <span class="n">GREEK_UPPER</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">glyph</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">glyph</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SYMBOLS</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="s1">'op'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="s1">textup</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">OPERATORS</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># characters written directly: char -&gt; (class, text)</span>
+<span class="n">CHARACTERS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'+'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'+'</span><span class="p">),</span> <span class="s1">'-'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'−'</span><span class="p">),</span> <span class="s1">'*'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'∗'</span><span class="p">),</span> <span class="s1">'='</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">),</span> <span class="s1">'&lt;'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'&lt;'</span><span class="p">),</span>
+    <span class="s1">'&gt;'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'&gt;'</span><span class="p">),</span> <span class="s1">':'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">':'</span><span class="p">),</span> <span class="s1">'('</span><span class="p">:</span> <span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="s1">'('</span><span class="p">),</span> <span class="s1">'['</span><span class="p">:</span> <span class="p">(</span><span class="s1">'open'</span><span class="p">,</span> <span class="s1">'['</span><span class="p">),</span> <span class="s1">')'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">')'</span><span class="p">),</span>
+    <span class="s1">']'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">']'</span><span class="p">),</span> <span class="s1">'!'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">'!'</span><span class="p">),</span> <span class="s1">'?'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'close'</span><span class="p">,</span> <span class="s1">'?'</span><span class="p">),</span> <span class="s1">'|'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'|'</span><span class="p">),</span> <span class="s1">'/'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">),</span>
+    <span class="s1">'.'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'.'</span><span class="p">),</span> <span class="s1">','</span><span class="p">:</span> <span class="p">(</span><span class="s1">'punct'</span><span class="p">,</span> <span class="s1">','</span><span class="p">),</span> <span class="s1">';'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'punct'</span><span class="p">,</span> <span class="s1">';'</span><span class="p">),</span> <span class="s2">"'"</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'′'</span><span class="p">),</span>
+    <span class="s1">'−'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'−'</span><span class="p">),</span> <span class="s1">'×'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'×'</span><span class="p">),</span> <span class="s1">'·'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'·'</span><span class="p">),</span> <span class="s1">'±'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'±'</span><span class="p">),</span> <span class="s1">'≤'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'≤'</span><span class="p">),</span>
+    <span class="s1">'≥'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'≥'</span><span class="p">),</span> <span class="s1">'≠'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'≠'</span><span class="p">),</span> <span class="s1">'≈'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'≈'</span><span class="p">),</span> <span class="s1">'∞'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'∞'</span><span class="p">),</span> <span class="s1">'…'</span><span class="p">:</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'…'</span><span class="p">),</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+
+<span class="c1"># explicit spacing commands, written as text-mode spacing</span>
+<span class="n">SPACES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">','</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmthin</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">':'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmmed</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">'&gt;'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmmed</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">';'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmthick</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">' '</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1"> '</span><span class="p">,</span>
+    <span class="s1">'quad'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">quad</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="s1">'qquad'</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">qquad</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+<span class="c1"># commands whose argument is text, set upright, italic, or bold</span>
+<span class="n">TEXT_COMMANDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'text'</span><span class="p">:</span> <span class="s1">'textup'</span><span class="p">,</span> <span class="s1">'textrm'</span><span class="p">:</span> <span class="s1">'textup'</span><span class="p">,</span> <span class="s1">'textup'</span><span class="p">:</span> <span class="s1">'textup'</span><span class="p">,</span> <span class="s1">'textnormal'</span><span class="p">:</span> <span class="s1">'textup'</span><span class="p">,</span> <span class="s1">'mathrm'</span><span class="p">:</span> <span class="s1">'textup'</span><span class="p">,</span>
+    <span class="s1">'textit'</span><span class="p">:</span> <span class="s1">'textit'</span><span class="p">,</span> <span class="s1">'mathit'</span><span class="p">:</span> <span class="s1">'textit'</span><span class="p">,</span> <span class="s1">'textbf'</span><span class="p">:</span> <span class="s1">'textbf'</span><span class="p">,</span> <span class="s1">'mathbf'</span><span class="p">:</span> <span class="s1">'textbf'</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># fmt: skip</span>
+<span class="n">ACCENTS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'bar'</span><span class="p">:</span> <span class="s1">'tmbar'</span><span class="p">,</span> <span class="s1">'overline'</span><span class="p">:</span> <span class="s1">'tmbar'</span><span class="p">}</span>
+<span class="c1"># sizing commands that mean nothing in text: the delimiter after them is kept</span>
+<span class="n">IGNORED</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s1">'left'</span><span class="p">,</span> <span class="s1">'right'</span><span class="p">,</span> <span class="s1">'big'</span><span class="p">,</span> <span class="s1">'Big'</span><span class="p">,</span> <span class="s1">'bigl'</span><span class="p">,</span> <span class="s1">'bigr'</span><span class="p">,</span> <span class="s1">'Bigl'</span><span class="p">,</span> <span class="s1">'Bigr'</span><span class="p">,</span> <span class="s1">'displaystyle'</span><span class="p">,</span> <span class="s1">'textstyle'</span><span class="p">})</span>
+
+<span class="c1"># the space TeX puts between adjacent atoms: 0 none, 1 thin, 2 medium, 3 thick.</span>
+<span class="c1"># a bracketed amount is not used</span>
+<span class="n">CLASSES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">'op'</span><span class="p">,</span> <span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'open'</span><span class="p">,</span> <span class="s1">'close'</span><span class="p">,</span> <span class="s1">'punct'</span><span class="p">)</span>
+<span class="n">SPACING_TABLE</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="s2">         ord   op    bin   rel   open  close punct</span>
+<span class="s2">ord      0     1     (2)   (3)   0     0     0</span>
+<span class="s2">op       1     1     0     (3)   0     0     0</span>
+<span class="s2">bin      (2)   (2)   0     0     (2)   0     0</span>
+<span class="s2">rel      (3)   (3)   0     0     (3)   0     0</span>
+<span class="s2">open     0     0     0     0     0     0     0</span>
+<span class="s2">close    0     1     (2)   (3)   0     0     0</span>
+<span class="s2">punct    (1)   (1)   0     (1)   (1)   (1)   (1)</span>
+<span class="s2">"""</span>
+<span class="c1"># ended by '{}' rather than a space, which would also swallow a space written after the maths</span>
+<span class="n">SPACE_COMMANDS</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmthin</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmmed</span><span class="si">{}</span><span class="s1">'</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">tmthick</span><span class="si">{}</span><span class="s1">'</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_spacing_table</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Read 'SPACING_TABLE' into (left, right) -&gt; (amount)."""</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">SPACING_TABLE</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]]</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right</span><span class="p">):</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">'()'</span><span class="p">)),</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'('</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span>
+        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">CLASSES</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">}</span>
+
+
+<span class="n">SPACING</span> <span class="o">=</span> <span class="n">_spacing_table</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="UnsupportedMathError">
+<a class="viewcode-back" href="../../api/textmath.html#research_helpers.textmath.UnsupportedMathError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UnsupportedMathError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised for maths outside the subset that can be set as text."""</span></div>
+
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Atom</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""One of TeX's atoms: class, text, and scripts attached to it."""</span>
+
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">italic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># letters to be set in one \textit with their italic neighbours</span>
+    <span class="n">sub</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sup</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scripted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">sup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Glue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""An explicit space, kept where it was written and ignored by the spacing between atoms."""</span>
+
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="n">Item</span> <span class="o">=</span> <span class="n">_Atom</span> <span class="o">|</span> <span class="n">_Glue</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Parser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Recursive descent over one expression."""</span>
+
+    <span class="n">expression</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Raise the error for this expression."""</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'cannot set </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="si">!r}</span><span class="s1"> as text: </span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s1">'</span>
+        <span class="k">raise</span> <span class="n">UnsupportedMathError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the next character, or '' at the end."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">skip_spaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Skip whitespace, which TeX ignores in maths."""</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Parse to the end of the expression or the group the parser is in."""</span>
+        <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skip_spaces</span><span class="p">()</span>
+            <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">group</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'a group is not closed'</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">items</span>
+            <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">'}'</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'a "}" closes no group'</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">return</span> <span class="n">items</span>
+            <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="s1">'_^'</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">script</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'a script inside a script cannot be set as text'</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Parse one token, or one group."""</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="n">NUMBER</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">number</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">number</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'{,}'</span><span class="p">,</span> <span class="s1">','</span><span class="p">))]</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">'{'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">'~'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Glue</span><span class="p">(</span><span class="s1">'~'</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="p">(</span><span class="n">char</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">character</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">char</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Atom</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the atom a character directly produces."""</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">char</span><span class="o">.</span><span class="n">isascii</span><span class="p">()</span> <span class="ow">and</span> <span class="n">char</span><span class="o">.</span><span class="n">isalpha</span><span class="p">())</span> <span class="ow">or</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">GREEK_LOWER</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="n">italic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">GREEK_UPPER</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">char</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CHARACTERS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">char</span><span class="si">!r}</span><span class="s1"> is not supported'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="o">*</span><span class="n">CHARACTERS</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Parse a command."""</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ATOMS</span><span class="p">:</span>
+            <span class="n">kind</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">italic</span> <span class="o">=</span> <span class="n">ATOMS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Atom</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">italic</span><span class="o">=</span><span class="n">italic</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">SPACES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Glue</span><span class="p">(</span><span class="n">SPACES</span><span class="p">[</span><span class="n">name</span><span class="p">])]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">IGNORED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skip_spaces</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'.'</span><span class="p">:</span>  <span class="c1"># the null delimiter of \left. or \right.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">with_argument</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Atom</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the atom produced by a command with an argument."""</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">'operatorname'</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'op'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="s1">textup</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_argument</span><span class="p">()</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">TEXT_COMMANDS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="si">{</span><span class="n">TEXT_COMMANDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_argument</span><span class="p">()</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ACCENTS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> is not supported'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="si">{</span><span class="n">ACCENTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">),</span><span class="w"> </span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">command_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Read a command's name."""</span>
+        <span class="n">letters</span> <span class="o">=</span> <span class="n">COMMAND</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">letters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">letters</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">letters</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'it ends in a backslash'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">char</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Parse one argument as maths."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_spaces</span><span class="p">()</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'an argument is missing'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">'{'</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>  <span class="c1"># TeX takes one token: x_10 is x_1 followed by 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="n">char</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">raw_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Read one argument as text, without interpreting it."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_spaces</span><span class="p">()</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">peek</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'an argument is missing'</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">!=</span> <span class="s1">'{'</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">char</span>
+        <span class="n">depth</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">):</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="p">{</span><span class="s1">'{'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'}'</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s1">'a group is not closed'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">which</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Attach a script to the atom before it, or to an empty one if there is none."""</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">items</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">_Atom</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">_Atom</span><span class="p">(</span><span class="s1">'ord'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">slot</span> <span class="o">=</span> <span class="s1">'sub'</span> <span class="k">if</span> <span class="n">which</span> <span class="o">==</span> <span class="s1">'_'</span> <span class="k">else</span> <span class="s1">'sup'</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">slot</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="sa">f</span><span class="s1">'a double </span><span class="si">{</span><span class="s2">"subscript"</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">slot</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"sub"</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">"superscript"</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">slot</span><span class="p">,</span> <span class="n">_script</span><span class="p">(</span><span class="n">render</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">slot</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_script</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">slot</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return a rendered script in the macro that sets it, using designed glyphs where possible, else scaled."""</span>
+    <span class="n">designed</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">DESIGNED_SCRIPT</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="s1">tm</span><span class="si">{</span><span class="n">slot</span><span class="si">}{</span><span class="s2">""</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">designed</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">"x"</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_classify</span><span class="p">(</span><span class="n">atoms</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">_Atom</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Turn a binary operator with nothing to operate on into an ordinary atom."""</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">index</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">'bin'</span> <span class="ow">and</span> <span class="p">(</span><span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">'bin'</span><span class="p">,</span> <span class="s1">'op'</span><span class="p">,</span> <span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'open'</span><span class="p">,</span> <span class="s1">'punct'</span><span class="p">}):</span>
+            <span class="n">atom</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="s1">'ord'</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">'rel'</span><span class="p">,</span> <span class="s1">'close'</span><span class="p">,</span> <span class="s1">'punct'</span><span class="p">}</span> <span class="ow">and</span> <span class="n">previous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">previous</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">'bin'</span><span class="p">:</span>
+            <span class="n">previous</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="s1">'ord'</span>
+    <span class="k">if</span> <span class="n">atoms</span> <span class="ow">and</span> <span class="n">atoms</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">'bin'</span><span class="p">:</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="s1">'ord'</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_merge</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Join runs of italic letters into one atom, so that they share one \textit and kern as a word."""</span>
+    <span class="n">merged</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">merged</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">_Atom</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">_Atom</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">italic</span> <span class="ow">and</span> <span class="n">last</span><span class="o">.</span><span class="n">italic</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">last</span><span class="o">.</span><span class="n">scripted</span><span class="p">:</span>
+            <span class="n">last</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span>
+            <span class="n">last</span><span class="o">.</span><span class="n">sub</span><span class="p">,</span> <span class="n">last</span><span class="o">.</span><span class="n">sup</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">sub</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">sup</span>
+            <span class="k">continue</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">merged</span>
+
+
+<div class="viewcode-block" id="render">
+<a class="viewcode-back" href="../../api/textmath.html#research_helpers.textmath.render">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">script</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return parsed items as text, with TeX's spacing between atoms.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        items: the list of parsed items.</span>
+<span class="sd">        script: whether the items are part of a script, affecting spacing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The text-mode LaTeX.</span>
+
+<span class="sd">    """</span>
+    <span class="n">_classify</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">_Atom</span><span class="p">)])</span>
+    <span class="n">pieces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">previous</span><span class="p">:</span> <span class="n">_Atom</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_merge</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">_Glue</span><span class="p">):</span>
+            <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">previous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">amount</span><span class="p">,</span> <span class="n">everywhere</span> <span class="o">=</span> <span class="n">SPACING</span><span class="p">[</span><span class="n">previous</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">kind</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">amount</span> <span class="ow">and</span> <span class="p">(</span><span class="n">everywhere</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">script</span><span class="p">):</span>
+                <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SPACE_COMMANDS</span><span class="p">[</span><span class="n">amount</span><span class="p">])</span>
+        <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_body</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_body</span><span class="p">(</span><span class="n">atom</span><span class="p">:</span> <span class="n">_Atom</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return one atom as text, scripts included."""</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\\</span><span class="s1">textit</span><span class="se">{{</span><span class="si">{</span><span class="n">atom</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span> <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">italic</span> <span class="k">else</span> <span class="n">atom</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">sub</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">atom</span><span class="o">.</span><span class="n">sup</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\\</span><span class="s1">tmscripts</span><span class="se">{{</span><span class="si">{</span><span class="n">atom</span><span class="o">.</span><span class="n">sub</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">atom</span><span class="o">.</span><span class="n">sup</span><span class="si">}</span><span class="se">}}</span><span class="s1">'</span>
+    <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">sub</span> <span class="ow">or</span> <span class="s1">''</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">sup</span> <span class="ow">or</span> <span class="s1">''</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="to_text">
+<a class="viewcode-back" href="../../api/textmath.html#research_helpers.textmath.to_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_text</span><span class="p">(</span><span class="n">expression</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Rewrite one maths expression as text set by ``rhtextmath.sty``.</span>
+
+<span class="sd">    The supported subset: Latin letters, numbers (with ``{,}`` as a thousands separator), Greek letters, the</span>
+<span class="sd">    common relations (``= &lt; &gt; \le \ge \ne \approx \sim \in \propto``, and a few more), binary operators</span>
+<span class="sd">    (``+ - \times \cdot \pm``), operator names (``\log \max \min \exp``, ``\operatorname{...}``), text</span>
+<span class="sd">    (``\text \mathrm \mathit \mathbf``), one level of sub- and superscript, ``\bar``, absolute-value bars,</span>
+<span class="sd">    brackets, and explicit spacing. ``\left`` and ``\right`` are dropped and their delimiters kept.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        expression: the maths, without its delimiters, e.g. ``'Q_{ov}'`` or ``'9.8\times 10^{-4}'``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Text-mode LaTeX, e.g. ``'\textit{Q}\tmsubx{\textit{ov}}'`` or ``'9.8\tmmed{}×\tmmed{}10\tmsup{−4}'``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        UnsupportedMathError: if the expression uses anything outside the subset.</span>
+
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">_Parser</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">script</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">script</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert">
+<a class="viewcode-back" href="../../api/textmath.html#research_helpers.textmath.convert">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span><span class="n">latex</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Rewrite every inline maths expression in a piece of LaTeX as text.</span>
+
+<span class="sd">    Both ``\(...\)`` and ``$...$`` are converted. A backslash is read with the character after it, as TeX</span>
+<span class="sd">    reads it, so an escaped ``\$`` or the ``\\`` of a line break before a parenthesis opens no maths. Display</span>
+<span class="sd">    maths is left alone.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        latex: a cell, a caption, or a whole float.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The same LaTeX, with no inline maths left in it.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        UnsupportedMathError: if any expression uses anything outside the subset 'to_text' supports, or is not closed.</span>
+
+<span class="sd">    """</span>
+    <span class="n">pieces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">latex</span><span class="p">):</span>
+        <span class="n">pair</span> <span class="o">=</span> <span class="n">latex</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pair</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">'</span><span class="se">\\</span><span class="s1">('</span><span class="p">,</span> <span class="s1">'$$'</span><span class="p">}</span> <span class="ow">or</span> <span class="n">latex</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'$'</span><span class="p">:</span>
+            <span class="n">opening</span> <span class="o">=</span> <span class="n">pair</span> <span class="k">if</span> <span class="n">pair</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">'</span><span class="se">\\</span><span class="s1">('</span><span class="p">,</span> <span class="s1">'$$'</span><span class="p">}</span> <span class="k">else</span> <span class="s1">'$'</span>
+            <span class="n">closing</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'</span><span class="se">\\</span><span class="s1">('</span><span class="p">:</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">)'</span><span class="p">,</span> <span class="s1">'$$'</span><span class="p">:</span> <span class="s1">'$$'</span><span class="p">,</span> <span class="s1">'$'</span><span class="p">:</span> <span class="s1">'$'</span><span class="p">}[</span><span class="n">opening</span><span class="p">]</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">position</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">opening</span><span class="p">)</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">_closing</span><span class="p">(</span><span class="n">latex</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">closing</span><span class="p">)</span>
+            <span class="n">expression</span> <span class="o">=</span> <span class="n">latex</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+            <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">latex</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">closing</span><span class="p">)]</span> <span class="k">if</span> <span class="n">opening</span> <span class="o">==</span> <span class="s1">'$$'</span> <span class="k">else</span> <span class="n">to_text</span><span class="p">(</span><span class="n">expression</span><span class="p">))</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">end</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">closing</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">latex</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">'</span><span class="p">:</span>
+            <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>  <span class="c1"># a command's backslash, an escaped character, or a line break</span>
+            <span class="n">position</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">latex</span><span class="p">[</span><span class="n">position</span><span class="p">])</span>
+            <span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_closing</span><span class="p">(</span><span class="n">latex</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return the position where the maths expression starting at 'start' closes."""</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="k">while</span> <span class="n">position</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">latex</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">latex</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">position</span>
+        <span class="n">position</span> <span class="o">+=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">latex</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'</span><span class="se">\\</span><span class="s1">'</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'cannot set </span><span class="si">{</span><span class="n">latex</span><span class="p">[</span><span class="n">start</span><span class="p">:]</span><span class="si">!r}</span><span class="s1"> as text: the maths is not closed'</span>
+    <span class="k">raise</span> <span class="n">UnsupportedMathError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Gabe Pizzorno.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
