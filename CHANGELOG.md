@@ -4,6 +4,28 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] — 2026-10-27
+
+### Added
+
+- **Maths set as text, in a float's own typeface.** `research_helpers.textmath` rewrites the subset of TeX 
+  maths that tables and captions often use as text, which the new `rhtextmath` package sets in the surrounding 
+  font: variables italic, numbers and operator names upright, TeX's spacing around relations and operators, 
+  and digits and signs in a script from the font's own superior and inferior glyphs, drawn at the right weight. 
+  Anything outside the subset raises `UnsupportedMathError` rather than being set wrongly. `to_text` converts one 
+  expression, and `convert` every `\(...\)` and `$...$` in a piece of LaTeX.
+- **`text-math` under `[tool.research-helpers.latex]`**, and `latex.table(text_math=...)` to override it for one
+  table. When it is set, `table` converts the maths in every header, cell, and caption. New: `LatexSettings`.
+- **`research-helpers sty`** copies the LaTeX packages that generated tables need beside the manuscript.
+  `--check` reports a copy that is missing, or that no longer matches the installed research-helpers.
+  `latex.packages()` returns their sources.
+- **`research-helpers textmath EXPRESSION`** prints maths as text, for a caption written by hand.
+
+### Changed
+
+- **`arxiv.manifest` uploads a package that the manuscript loads from its own directory**, such as the
+  `rhtextmath.sty` that `research-helpers sty` copies there.
+
 ## [1.4.1] — 2026-10-26
 
 ### Changed
